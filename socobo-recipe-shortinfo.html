@@ -50,7 +50,7 @@
   <template>
     <paper-material class="recipe_short_info" elevation="0">
       <paper-checkbox></paper-checkbox>
-      <span class="recipe_name">Test name</span>
+      <span class="recipe_name">{{name}}</span>
       <span class="edit"><iron-icon icon="create"></iron-icon></span>
       <span class="delete"><iron-icon icon="delete"></iron-icon></span>
     </paper-material>
@@ -64,10 +64,9 @@
     is: 'socobo-recipe-shortinfo',
 
     properties: {
-      socobo: {
-        type: String,
-        value: 'socobo-recipe-shortinfo',
-        notify: true
+      name : {
+        type : String,
+        value : ""
       }
     }
   });

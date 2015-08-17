@@ -11,15 +11,35 @@
   <style>
     :host{
     }
+
     #recipe_list{
+      margin-top: 20px;
+    }
+
+    #recipe_list:first-child{
       border-top: 1px solid #F4F0EC;
     }
+
+    #no_recipes{
+      font-size: 40px;
+      text-align: center;
+      font-family: sans-serif;
+      font-weight: 100;
+      color: #F4F0EC;
+      line-height: 80px;
+    }
+
   </style>
 
   <template>
     <div id="recipe_list">
-      <content>
-      </content>
+      <template is="dom-if" if="{{!recipes.length}}">
+        <p id="no_recipes">no recipes<br>available</p>
+      </template>
+      <template is="dom-repeat" items="{{recipes}}">
+        <socobo-recipe-shortinfo name="{{item.name}}"></socobo-recipe-shortinfo>
+      </template>
+
     </div>
   </template>
 
@@ -31,10 +51,11 @@
     is: 'socobo-recipe-overview',
 
     properties: {
-      socobo: {
-        type: String,
-        value: 'socobo-recipe-overview',
-        notify: true
+      recipes : {
+        type : Array,
+        value : [{name : "Käsekuchen"},
+          {name : "Wurstgulash"},
+          {name : "Melonenbällchen"}]
       }
     }
   });
