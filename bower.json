@@ -1,9 +1,9 @@
 {
-  "name": "socobo-element-template",
-  "version": "0.0.4",
-  "description": "Template Element for Socobo-Frontend",
+  "name": "socobo-recipe-overview",
+  "version": "0.0.1",
+  "description": "Element to view a overview of all recipes",
   "author": [
-    "flashback2k14"
+    "hetec"
   ],
   "keywords": [
     "web-components",
@@ -12,11 +12,11 @@
     "socobo",
     "frontend"
   ],
-  "main": "socobo-element-template.html",
+  "main": "socobo-recipe-overview.html",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/flashback2k14/socobo-element-template"
+    "url": "https://github.com/hetec/socobo-recipe-overview.git"
   },
   "license": "",
   "homepage": "",

@@ -106,6 +106,8 @@
   });
 })();
 
+
+
 function trackCheckedBoxes() {
   if(checkedBoxes > 0){
     switchButton("clear","add");
@@ -114,9 +116,9 @@ function trackCheckedBoxes() {
   }
 }
 
-  function switchButton(enableButton, disableButton){
-    var disabled = document.getElementById(disableButton).style.display = "none";
-    document.getElementById(enableButton).style.display = "block";
-  }
+function switchButton(enableButton, disableButton){
+  var disabled = document.getElementById(disableButton).style.display = "none";
+  document.getElementById(enableButton).style.display = "block";
+}
 
 </script>
