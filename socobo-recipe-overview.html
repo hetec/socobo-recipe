@@ -11,6 +11,7 @@
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
+      background-color: red;
     }
 
     #recipe_list{
@@ -38,21 +39,30 @@
 
     paper-fab#add{
       display: block;
+      --paper-fab-background: green;
+      --paper-fab-keyboard-focus-background: green;
     }
 
     paper-fab#clear{
       display: none;
+      --paper-fab-background: red;
+      --paper-fab-keyboard-focus-background: red;
     }
 
   </style>
 
-  <template>
+  <template fullbleed>
     <div id="recipe_list">
       <template is="dom-if" if="{{!recipes.length}}">
         <p id="no_recipes">no recipes<br>available</p>
       </template>
       <template is="dom-repeat" items="{{recipes}}">
-        <socobo-recipe-shortinfo name="{{item.name}}"></socobo-recipe-shortinfo>
+        <socobo-recipe-shortinfo
+          name="{{item.name}}"
+          isChecked="{{valueOfCheckBox}}"
+          on-check="handleCheck"
+          on-uncheck="handleUncheck">
+        </socobo-recipe-shortinfo>
       </template>
     </div>
     <paper-fab id="add" icon="add">
@@ -64,6 +74,9 @@
 </dom-module>
 
 <script>
+
+  var checkedBoxes = 0;
+
 (function() {
   Polymer({
     is: 'socobo-recipe-overview',
@@ -73,9 +86,37 @@
         type : Array,
         value : [{name : "Käsekuchen"},
           {name : "Wurstgulash"},
+          {name : "Melonenbällchen"},{name : "Käsekuchen"},
+          {name : "Wurstgulash"},
           {name : "Melonenbällchen"}]
       }
+    },
+    valueOfCheckBox : {
+      type : Boolean,
+      value : false
+    },
+    handleCheck : function(){
+      checkedBoxes++;
+      trackCheckedBoxes();
+    },
+    handleUncheck : function(){
+      checkedBoxes--;
+      trackCheckedBoxes();
     }
   });
 })();
+
+function trackCheckedBoxes() {
+  if(checkedBoxes > 0){
+    switchButton("clear","add");
+  }else{
+    switchButton("add", "clear");
+  }
+}
+
+  function switchButton(enableButton, disableButton){
+    var disabled = document.getElementById(disableButton).style.display = "none";
+    document.getElementById(enableButton).style.display = "block";
+  }
+
 </script>

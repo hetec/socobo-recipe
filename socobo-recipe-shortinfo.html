@@ -26,25 +26,25 @@
 
     paper-checkbox {
       position: absolute;
-      left: 10px;
+      left: 30px;
       --paper-checkbox-unchecked-color: #8A7F80;
       --paper-checkbox-checked-color: #77DD77;
     }
 
     .recipe_name{
       position: absolute;
-      left: 10%;
+      left: 15%;
       font-family: sans-serif;
     }
 
     .delete{
       position: absolute;
-      right: 10px;
+      right: 30px;
     }
 
     .edit{
       position: absolute;
-      right: 40px;
+      right: 70px;
     }
 
     iron-icon:hover{
@@ -55,7 +55,7 @@
 
   <template>
     <paper-material class="recipe_short_info" elevation="0">
-      <paper-checkbox></paper-checkbox>
+      <paper-checkbox checked="{{isChecked}}" on-click="changeValue"></paper-checkbox>
       <span class="recipe_name">{{name}}</span>
       <span class="edit"><iron-icon icon="create"></iron-icon></span>
       <span class="delete"><iron-icon icon="delete"></iron-icon></span>
@@ -74,6 +74,17 @@
       name : {
         type : String,
         value : ""
+      },
+      isChecked : {
+        type : Boolean,
+        value : false
+      }
+    },
+    changeValue : function(){
+      if(this.isChecked == true){
+        this.fire("check");
+      }else{
+        this.fire("uncheck");
       }
     }
   });
