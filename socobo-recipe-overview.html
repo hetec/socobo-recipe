@@ -4,6 +4,7 @@
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
 <!-- Todo: Add your Polymer Element Imports here: -->
 <link rel="import" href="socobo-recipe-shortinfo.html">
 
@@ -29,6 +30,20 @@
       line-height: 80px;
     }
 
+    paper-fab{
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+    }
+
+    paper-fab#add{
+      display: block;
+    }
+
+    paper-fab#clear{
+      display: none;
+    }
+
   </style>
 
   <template>
@@ -39,8 +54,11 @@
       <template is="dom-repeat" items="{{recipes}}">
         <socobo-recipe-shortinfo name="{{item.name}}"></socobo-recipe-shortinfo>
       </template>
-
     </div>
+    <paper-fab id="add" icon="add">
+    </paper-fab>
+    <paper-fab id="clear" icon="clear">
+    </paper-fab>
   </template>
 
 </dom-module>

@@ -4,6 +4,7 @@
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-material/paper-material.html">
+
 <!-- Todo: Add your Polymer Element Imports here: -->
 
 
@@ -27,7 +28,7 @@
       position: absolute;
       left: 10px;
       --paper-checkbox-unchecked-color: #8A7F80;
-      --paper-checkbox-checked-color: #8A7F80;
+      --paper-checkbox-checked-color: #77DD77;
     }
 
     .recipe_name{
@@ -45,6 +46,11 @@
       position: absolute;
       right: 40px;
     }
+
+    iron-icon:hover{
+      color: #77DD77;
+    }
+
   </style>
 
   <template>
@@ -54,6 +60,7 @@
       <span class="edit"><iron-icon icon="create"></iron-icon></span>
       <span class="delete"><iron-icon icon="delete"></iron-icon></span>
     </paper-material>
+
   </template>
 
 </dom-module>
