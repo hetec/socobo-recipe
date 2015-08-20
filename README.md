@@ -21,3 +21,6 @@
 - [Polymer Project] (https://www.polymer-project.org/1.0/docs/start/getting-the-code.html)
 - [Polycast](https://www.youtube.com/watch?v=p7Q1mQtFGM8&list=PLOU2XLYxmsII5c3Mgw6fNYCzaWrsM3sMN&index=9)
 - [Firebase](https://www.firebase.com/docs/web/)
+- [Unit Testing](https://medium.com/@granze/polymer-unit-testing-d6a69910dc31)
+- [Flexbox Layout](http://open-elements.org/guides/flex-layout)
+- [Neon Animation](http://open-elements.org/guides/using-neon-animations)

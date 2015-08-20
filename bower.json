@@ -1,7 +1,7 @@
 {
   "name": "socobo-element-template",
-  "version": "0.0.4",
-  "description": "Template Element for Socobo-Frontend",
+  "version": "0.0.5",
+  "description": "Template Element for Socobo-Project",
   "author": [
     "flashback2k14"
   ],
@@ -10,7 +10,7 @@
     "web-component",
     "polymer",
     "socobo",
-    "frontend"
+    "project"
   ],
   "main": "socobo-element-template.html",
   "private": true,
@@ -18,8 +18,8 @@
     "type": "git",
     "url": "git://github.com/flashback2k14/socobo-element-template"
   },
-  "license": "",
-  "homepage": "",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/flashback2k14/socobo-element-template/",
   "ignore": [],
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
