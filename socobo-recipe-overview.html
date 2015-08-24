@@ -6,12 +6,11 @@
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-fab/paper-fab.html">
 <!-- Todo: Add your Polymer Element Imports here: -->
-<link rel="import" href="socobo-recipe-shortinfo.html">
+<link rel="import" href="../socobo-element-list-item/socobo-element-list-item.html">
 
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
-      background-color: red;
     }
 
     #recipe_list{
@@ -19,7 +18,7 @@
     }
 
     #recipe_list:first-child{
-      border-top: 1px solid #F4F0EC;
+      border-top: 2px solid #F4F0EC;
     }
 
     #no_recipes{
@@ -57,12 +56,13 @@
         <p id="no_recipes">no recipes<br>available</p>
       </template>
       <template is="dom-repeat" items="{{recipes}}">
-        <socobo-recipe-shortinfo
-          name="{{item.name}}"
+        <socobo-element-list-item
+          obj="{{item}}"
           isChecked="{{valueOfCheckBox}}"
           on-check="handleCheck"
-          on-uncheck="handleUncheck">
-        </socobo-recipe-shortinfo>
+          on-uncheck="handleUncheck"
+          on-show_request="clicked">
+        </socobo-element-list-item>
       </template>
     </div>
     <paper-fab id="add" icon="add">
@@ -75,20 +75,19 @@
 
 <script>
 
-  var checkedBoxes = 0;
-
 (function() {
+
   Polymer({
     is: 'socobo-recipe-overview',
-
+    recipes : [],
     properties: {
       recipes : {
         type : Array,
-        value : [{name : "Käsekuchen"},
-          {name : "Wurstgulash"},
-          {name : "Melonenbällchen"},{name : "Käsekuchen"},
-          {name : "Wurstgulash"},
-          {name : "Melonenbällchen"}]
+        value : []
+      },
+      checkedBoxes : {
+        type : Number,
+        value :  0
       }
     },
     valueOfCheckBox : {
@@ -96,29 +95,47 @@
       value : false
     },
     handleCheck : function(){
-      checkedBoxes++;
-      trackCheckedBoxes();
+      this.checkedBoxes++;
+      this.trackCheckedBoxes();
     },
     handleUncheck : function(){
-      checkedBoxes--;
-      trackCheckedBoxes();
+      this.checkedBoxes--;
+      this.trackCheckedBoxes();
+    },
+    trackCheckedBoxes : function () {
+      if(this.checkedBoxes > 0){
+        switchButton(this.$.clear,this.$.add);
+      }else{
+        switchButton(this.$.add, this.$.clear);
+      }
+    },
+    clicked : function (){
+    },
+    getRecipes: function(){
+      var that = this;
+      var dataRef = new Firebase("https://luminous-inferno-5751.firebaseio.com/Franky/Recipes");
+      var arr = [];
+      dataRef.on("child_added", function(snapshot) {
+          var p = new Promise(function(resolve, reject) {
+            resolve(snapshot.val());
+          }).then(function(val){
+              console.log(val);
+              that.push('recipes', val);
+            })
+        });
+      }
+    ,
+    ready : function(){
+      this.getRecipes();
     }
+
   });
 })();
 
-
-
-function trackCheckedBoxes() {
-  if(checkedBoxes > 0){
-    switchButton("clear","add");
-  }else{
-    switchButton("add", "clear");
-  }
-}
-
 function switchButton(enableButton, disableButton){
-  var disabled = document.getElementById(disableButton).style.display = "none";
-  document.getElementById(enableButton).style.display = "block";
+  disableButton.style.display = "none";
+  enableButton.style.display = "block";
 }
+
 
 </script>
