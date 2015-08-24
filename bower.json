@@ -1,9 +1,9 @@
 {
-  "name": "socobo-element-template",
-  "version": "0.0.5",
-  "description": "Template Element for Socobo-Project",
+  "name": "socobo-recipe",
+  "version": "0.0.1",
+  "description": "Container element for recipes",
   "author": [
-    "flashback2k14"
+    "hetec"
   ],
   "keywords": [
     "web-components",
@@ -12,21 +12,22 @@
     "socobo",
     "project"
   ],
-  "main": "socobo-element-template.html",
+  "main": "socobo-recipe.html",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/flashback2k14/socobo-element-template"
+    "url": "git://github.com/hetec/socobo-recipe.git"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/flashback2k14/socobo-element-template/",
+  "homepage": "https://github.com/hetec/socobo-recipe.git",
   "ignore": [],
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#1.0.0",
-    "paper-elements": "PolymerElements/paper-elements#1.0.1",
-    "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
+    "iron-elements": "PolymerElements/iron-elements#1.0.2",
+    "paper-elements": "PolymerElements/paper-elements#1.0.2",
+    "platinum-elements": "PolymerElements/platinum-elements#1.1.1",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "socobo-recipe-overview": "hetec/socobo-recipe-overview#master"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
