@@ -5,7 +5,8 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-fab/paper-fab.html">
-
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-animation/animations/scale-down-animation.html">
 <link rel="import" href="../socobo-element-list-item/socobo-element-list-item.html">
 
 <dom-module id="socobo-recipe-overview">
@@ -65,9 +66,9 @@
         </socobo-element-list-item>
       </template>
     </div>
-    <paper-fab id="add" icon="add">
+    <paper-fab id="add" icon="add" on-click="buttonAni">
     </paper-fab>
-    <paper-fab id="clear" icon="clear">
+    <paper-fab id="clear" icon="clear" on-click="buttonAni">
     </paper-fab>
   </template>
 
@@ -79,7 +80,9 @@
 
   Polymer({
     is: 'socobo-recipe-overview',
-    recipes : [],
+    behaviors: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],
     properties: {
       recipes : {
         type : Array,
@@ -88,6 +91,26 @@
       checkedBoxes : {
         type : Number,
         value :  0
+      },
+      animationConfig: {
+        value: function() {
+          return {
+            // provided by neon-animation/animations/scale-down-animation.html
+            entry : [{
+              name: 'scale-down-animation',
+              node: this.$.add,
+              timing : {
+                duration : 100
+              }
+            },{
+              name: 'scale-down-animation',
+              node: this.$.clear,
+              timing : {
+                duration : 100
+              }
+            }]
+          }
+        }
       }
     },
     valueOfCheckBox : {
@@ -110,6 +133,9 @@
       }
     },
     clicked : function (){
+    },
+    buttonAni : function (){
+      this.playAnimation('entry');
     },
     getRecipes: function(){
       var that = this;
