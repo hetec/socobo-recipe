@@ -1,5 +1,9 @@
 # socobo-recipe
 
-Represents a wrapper element for everything in terms of recipes
+Meta component which embraces all components for managing a users recipes
 
+Contains:
+
+- socobo-recipe-overview
+- socobo-element-list-item
 
