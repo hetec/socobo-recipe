@@ -9,6 +9,8 @@
 <link rel="import" href="../neon-animation/animations/scale-down-animation.html">
 <link rel="import" href="../socobo-element-list-item/socobo-element-list-item.html">
 
+<script src="RecipeDao.js"></script>
+
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
@@ -88,6 +90,16 @@
         type : Array,
         value : []
       },
+      user : {
+        type : Object,
+        value : {
+          userId : "Franky"
+        }
+      },
+      firebaseBaseUrl : {
+        type : String,
+        value : "https://luminous-inferno-5751.firebaseio.com"
+      },
       checkedBoxes : {
         type : Number,
         value :  0
@@ -95,7 +107,6 @@
       animationConfig: {
         value: function() {
           return {
-            // provided by neon-animation/animations/scale-down-animation.html
             entry : [{
               name: 'scale-down-animation',
               node: this.$.add,
@@ -138,6 +149,9 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
+      var dao = new RecipeDao(this);
+      dao.getRecipes();
+      /*
       var that = this;
       var dataRef = new Firebase("https://luminous-inferno-5751.firebaseio.com/Franky/Recipes");
       var arr = [];
@@ -149,6 +163,7 @@
               that.push('recipes', val);
             })
         });
+        */
       }
     ,
     ready : function(){
