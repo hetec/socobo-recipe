@@ -1,22 +1,71 @@
-function RecipeDao (component){
-  var that = component;
+var RecipeDao = (function(){
+  function RecipeDao(component){
+    var that = component;
 
-  function getUserUrl(){
-    var id = that.user.userId;
-    return that.firebaseBaseUrl + "/" + id + "/Recipes";
-  };
+    var userUrl = getUserUrl();
 
-  this.getRecipes = function(){
-    var dataRef = new Firebase(getUserUrl());
-    dataRef.on("child_added", function(snapshot) {
-      var p = new Promise(function(resolve, reject) {
-        resolve(snapshot.val());
-      }).then(function(val){
-          console.log(val);
-          that.push('recipes', val);
-        })
-    });
+    function getUserUrl(){
+      var id = that.user.userId;
+      return that.firebaseBaseUrl + "/" + id + "/Recipes";
+    };
+
+    this.getAndObserveRecipes = function(){
+      var dataRef = new Firebase(userUrl);
+      dataRef.on("child_added", function(snapshot) {
+        var p = new Promise(function(resolve, reject) {
+          resolve(snapshot.val());
+        }).then(function(val){
+            var recipe = {};
+            recipe.ref = snapshot.ref();
+            recipe.desc = val.desc;
+            recipe.info = val.info;
+            console.log("Desc: " + recipe.desc + ", info: " + recipe.info + ", ref: " + recipe.ref);
+            that.push('recipes', recipe);
+          })
+      });
+    }
+    this.removeRecipe = function(obj, succ, err) {
+      if (typeof succ === 'undefined') { succ = function(){
+        console.log('Synchronization succeeded');
+      }
+      }
+      if (typeof err === 'undefined') { err = function(){
+        console.log('Synchronization failed');
+      }
+      }
+      if(typeof succ !== 'function'){
+        throw "The callback for success in removeRecipe() is not a function";
+      }
+      if(typeof err !== 'function'){
+        throw "The callback for errors in removeRecipe() is not a function";
+      }
+      obj.ref.remove(function (error) {
+        if (error) {
+          err();
+        } else {
+          succ();
+
+        }
+      });
+    }
   }
-}
+
+  var instance;
+  return {
+    getInstance : function(component){
+      if(instance == null){
+        instance = new RecipeDao(component);
+        instance.constructor = null;
+      }
+      return instance;
+    }
+  }
+
+})();
+
+
+
+
+
 
 

@@ -64,7 +64,8 @@
           isChecked="{{valueOfCheckBox}}"
           on-check="handleCheck"
           on-uncheck="handleUncheck"
-          on-show_request="clicked">
+          on-show_request="clicked"
+          on-delete_request="removeRecipe">
         </socobo-element-list-item>
       </template>
     </div>
@@ -124,6 +125,9 @@
         }
       }
     },
+    getDAO : function (){
+      return new RecipeDao(this);
+    },
     valueOfCheckBox : {
       type : Boolean,
       value : false
@@ -144,28 +148,17 @@
       }
     },
     clicked : function (){
+      alert("clicked");
     },
     buttonAni : function (){
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      var dao = new RecipeDao(this);
-      dao.getRecipes();
-      /*
-      var that = this;
-      var dataRef = new Firebase("https://luminous-inferno-5751.firebaseio.com/Franky/Recipes");
-      var arr = [];
-      dataRef.on("child_added", function(snapshot) {
-          var p = new Promise(function(resolve, reject) {
-            resolve(snapshot.val());
-          }).then(function(val){
-              console.log(val);
-              that.push('recipes', val);
-            })
-        });
-        */
-      }
-    ,
+      RecipeDao.getInstance(this).getAndObserveRecipes();
+    },
+    removeRecipe : function (e){
+      RecipeDao.getInstance(this).removeRecipe(e.detail);
+    },
     ready : function(){
       this.getRecipes();
     }
