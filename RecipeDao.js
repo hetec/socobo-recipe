@@ -9,7 +9,7 @@ var RecipeDao = (function(){
       return that.firebaseBaseUrl + "/" + id + "/Recipes";
     };
 
-    this.getAndObserveRecipes = function(){
+    this.getAndUpdateRecipes = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function(snapshot) {
         var p = new Promise(function(resolve, reject) {
@@ -21,10 +21,15 @@ var RecipeDao = (function(){
             recipe.info = val.info;
             console.log("Desc: " + recipe.desc + ", info: " + recipe.info + ", ref: " + recipe.ref);
             that.push('recipes', recipe);
-          })
+          }).catch(function(err){
+            console.log(err);
+          });
+      }, function(err){
+        console.log(err);
       });
     }
-    this.removeRecipe = function(obj, succ, err) {
+
+    this.removeAndUpdateRecipe = function(obj, succ, err) {
       if (typeof succ === 'undefined') { succ = function(){
         console.log('Synchronization succeeded');
       }
@@ -43,10 +48,19 @@ var RecipeDao = (function(){
         if (error) {
           err();
         } else {
+          updateAfterDeletion(obj, that.recipes, 'recipes');
           succ();
 
         }
       });
+    }
+
+    function updateAfterDeletion(el, arr, pathToProperty){
+      for(var i = 0; i < arr.length; i++){
+        if(arr[i].ref == el.ref){
+          that.splice(pathToProperty, i, 1);
+        }
+      }
     }
   }
 

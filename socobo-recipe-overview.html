@@ -154,10 +154,10 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      RecipeDao.getInstance(this).getAndObserveRecipes();
+      RecipeDao.getInstance(this).getAndUpdateRecipes();
     },
     removeRecipe : function (e){
-      RecipeDao.getInstance(this).removeRecipe(e.detail);
+      RecipeDao.getInstance(this).removeAndUpdateRecipe(e.detail);
     },
     ready : function(){
       this.getRecipes();
