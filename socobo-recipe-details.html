@@ -1,5 +1,6 @@
 <link rel="import" href="socobo-recipe-overview.html">
 <link rel="import" href="socobo-recipe-details-step.html">
+<link rel="import" href="socobo-recipe-details-incredient.html">
 <dom-module id="socobo-recipe-details">
   <style>
     :host {
@@ -7,7 +8,8 @@
     }
 
     .wrapper {
-      width: 70%;
+
+      //width: 70%;
       min-width: 700px;
       color: var(--primary-text-color);
       font-family: sans-serif;
@@ -31,11 +33,13 @@
     }
 
     .wrapper h1 {
-      padding: 30px;
+      padding: 20px;
+      padding-left: 30px;
       margin: 0;
       font-weight: 100;
       letter-spacing: -1px;
-      color: var(--default-primary-color)
+      color: var(--default-primary-color);
+      border-bottom: 2px solid whitesmoke;
     }
 
     .recipeImg {
@@ -43,6 +47,7 @@
       width: 280px;
       height: 280px;
     }
+
 
     .text {
       vertical-align: text-top;
@@ -58,19 +63,21 @@
 
   </style>
   <template>
+    <div class="background">
+
+    </div>
     <div>
       <paper-material elevation="4" class="wrapper">
         <h1>Das ist der Titel</h1>
         <div class="content">
           <div class="leftColumn">
-            <div class="recipeImg">
+            <paper-material elevation="1" class="recipeImg">
 
-            </div>
+            </paper-material>
             <div class="ingredients">
-              <p>Ingredient 1</p>
-              <p>Ingredient 2</p>
-              <p>Ingredient 3</p>
-              <p>Ingredient 4</p>
+              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
+              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
+              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
             </div>
           </div>
           <div class="rightColumn">
