@@ -10,8 +10,12 @@
       @apply(--layout-center);
       width: 100%;
       margin-top: 20px;
-      overflow: hidden;
+      border-bottom-left-radius:25px;
+      border-top-left-radius: 25px;
+    }
 
+    .wrapper:hover{
+      background-color: lightgray;
     }
 
     .stepNumber {
@@ -42,7 +46,7 @@
   </style>
   <template>
     <div class="wrapper">
-      <div class="stepNumber">{{step.number}}</div>
+      <paper-material elevation="1" class="stepNumber">{{step.number}}</paper-material>
       <p class="stepDesc">{{step.desc}}</p>
     </div>
   </template>
