@@ -4,10 +4,31 @@
       display: block;
     }
 
+    .wrapper {
+      width: 260px;
+      font-family: sans-serif;
+      @apply(--layout-horizontal);
+      @apply(--layout-top);
+      padding: 10px;
+    }
+
+    .desc {
+      @apply(--layout-flex);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .unit, .amount {
+      margin-left: 10px;
+    }
 
   </style>
   <template>
-
+    <paper-material elevation="1" class="wrapper">
+      <span class="desc">{{incredient.desc}}</span>
+      <span class="amount">{{incredient.amount}}</span>
+      <span class="unit">{{incredient.unit}}</span>
+    </paper-material>
   </template>
 
 </dom-module>
@@ -17,15 +38,13 @@
     Polymer({
       is: 'socobo-recipe-details-incredient',
       properties: {
-        incredients : {
-          type : Array,
-          value : [
-            {
-              desc : "Apfel",
-              amount: 10,
-              unit: "stk"
-            }
-          ]
+        incredient: {
+          type: Object,
+          value: {
+            desc: "sjdflsjfklsajfkldsajfklsdajfklsjflksjfklsjfklsaj",
+            amount: 10,
+            unit: "stk"
+          }
         }
       }
     });
