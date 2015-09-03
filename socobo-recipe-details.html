@@ -1,34 +1,31 @@
 <link rel="import" href="socobo-recipe-overview.html">
-
+<link rel="import" href="socobo-recipe-details-step.html">
 <dom-module id="socobo-recipe-details">
   <style>
     :host {
       display: block;
     }
 
+    .wrapper {
+      width: 70%;
+      min-width: 700px;
+    }
     .content {
       @apply(--layout-horizontal);
-      @apply(--layout-flex);
-    }
-
-    .leftColumn , .rightColumn{
-      @apply(--layout-vertical);
     }
 
     .leftColumn {
+      background-color: rosybrown;
       width: 300px;
       padding: 10px;
-      margin-right: 20px;
     }
 
     .rightColumn {
-      width : 100%;
+      background-color: #00e5ff;
+      width: 100%;
+      margin-right: 0px;
       padding: 10px;
-    }
-
-    .heading {
-      margin-bottom: 15px;
-      padding: 10px;
+      overflow: hidden;
     }
 
     .heading h1 {
@@ -42,40 +39,48 @@
     }
 
     .text {
+      vertical-align: text-top;
       height: 280px;
       background-color: #90caf9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step {
+      width: 100%;
     }
 
   </style>
   <template>
-    <div id="wrapper">
-      <paper-material elevation="4" class="heading"><h1>Reissuppe</h1></paper-material>
-      <paper-material elevation="4" class="content">
-        <div class="leftColumn">
-          <div class="recipeImg">
+    <div>
+      <paper-material elevation="4" class="wrapper">
+        <h1>Das ist der Titel</h1>
+        <div class="content">
+          <div class="leftColumn">
+            <div class="recipeImg">
 
+            </div>
+            <div class="ingredients">
+              <p>Ingredient 1</p>
+              <p>Ingredient 2</p>
+              <p>Ingredient 3</p>
+              <p>Ingredient 4</p>
+            </div>
           </div>
-          <div class="ingredients">
-            <p>Ingredient 1</p>
-            <p>Ingredient 2</p>
-            <p>Ingredient 3</p>
-            <p>Ingredient 4</p>
+          <div class="rightColumn">
+            <div class="text">
+              The detailed description of the recipe will be placed in this location!
+            </div>
+            <div class="steps">
+              <socobo-recipe-details-step class="step"></socobo-recipe-details-step>
+            </div>
+          </div>
+          <div class="buttonPanel">
+            <paper-button>
+            </paper-button>
           </div>
         </div>
-        <div class="rightColumn">
-          <div class="text">
-            <p>The detailed description of the recipe will be placed in this location!</p>
-          </div>
-          <div class="steps">
-            <p>Step 1</p>
-            <p>Step 2</p>
-            <p>Step 3</p>
-          </div>
-        </div>
-        <div class="buttonPanel">
-          <paper-button>
-          </paper-button>
-        </div>
+
       </paper-material>
     </div>
   </template>
