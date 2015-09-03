@@ -1,0 +1,80 @@
+<dom-module id="socobo-recipe-details-step">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .wrapper {
+      font-family: sans-serif;
+      @apply(--layout-horizontal);
+      @apply(--layout-top);
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-bottom-left-radius:25px;
+      border-top-left-radius: 25px;
+    }
+
+    .wrapper:hover{
+      background-color: whitesmoke;
+    }
+
+    .wrapper:hover .stepNumber{
+      background-color: var(--default-primary-color);
+      color: var(--light-primary-color)
+    }
+
+    .stepNumber {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary-background-color);
+      text-align: center;
+      color: var(--light-primary-color);
+      font-size: 25px;
+      line-height: 50px;
+    }
+
+
+    .stepDesc {
+      @apply(--layout-flex);
+      margin:0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 20px;
+      line-height: 50px;
+      color: var(--primary-text-color);
+    }
+
+    .seperater {
+      width: 30%;
+      border: 1px solid whitesmoke;
+    }
+
+  </style>
+  <template>
+    <div class="wrapper">
+      <paper-material elevation="1" class="stepNumber">{{step.number}}</paper-material>
+      <p class="stepDesc">{{step.desc}}</p>
+    </div>
+    <hr class="seperater">
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-recipe-details-step',
+      properties : {
+        step : {
+          type : Object,
+          value : {}
+        }
+      }
+    });
+  })();
+</script>
+
+
+
