@@ -12,6 +12,7 @@
       color: var(--primary-text-color);
       font-family: sans-serif;
       border-radius: 10px;
+      line-height: 2;
     }
     .content {
       @apply(--layout-horizontal);
@@ -19,20 +20,18 @@
 
     .leftColumn {
       width: 300px;
-      padding: 10px;
+      padding: 30px;
     }
 
     .rightColumn {
       width: 100%;
       margin-right: 0px;
-      padding: 10px;
+      padding: 30px;
       overflow: hidden;
     }
 
     .wrapper h1 {
-      padding: 10px;
-      padding-top: 20px;
-      padding-bottom: 20px;
+      padding: 30px;
       margin: 0;
       font-weight: 100;
       letter-spacing: -1px;
@@ -47,10 +46,10 @@
 
     .text {
       vertical-align: text-top;
-      height: 280px;
+      margin-bottom: 40px;
+      text-align: justify;
       overflow: hidden;
       text-overflow: ellipsis;
-      line-height: 2;
     }
 
     .step {
@@ -76,10 +75,15 @@
           </div>
           <div class="rightColumn">
             <div class="text">
-              The detailed description of the recipe will be placed in this location!
+              Über 30 Vitamine und Spurenelemente, 100 bis 180 Milligramm Kalium und viele andere wertvolle Mineralstoffe wie Phosphor, Kalzium, Magnesium oder Eisen trägt ein durchschnittlich großer Apfel in und unter seiner Schale. Dabei besteht er zu 85 Prozent aus Wasser und hat nur rund 60 Kilokalorien. Er ist gut zu Zähnen und Darm, Trauben- und Fruchtzucker liefern schnell Energie
+
+              Mehr zum Thema: http://www.gesundheit.de/ernaehrung/lebensmittel/obst/apfel
+
             </div>
             <div class="steps">
-              <socobo-recipe-details-step class="step"></socobo-recipe-details-step>
+              <template is="dom-repeat" items="{{steps}}">
+                <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
+              </template>
             </div>
           </div>
           <div class="buttonPanel">
@@ -97,7 +101,29 @@
 <script>
   (function() {
     Polymer({
-      is: 'socobo-recipe-details'
+      is: 'socobo-recipe-details',
+      properties: {
+        steps : {
+          type : Array,
+          value : [
+            {
+              number : 1,
+              desc : "Nimm dir ein Brettchen und eine Messer"
+            },
+            {
+              number: 2,
+              desc : "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
+              "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!" +
+              "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
+              "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!"
+            },
+            {
+              number: 3,
+              desc : "Schneide den Apfel in Stücke"
+            }
+          ]
+        }
+      }
     });
   })();
 </script>
