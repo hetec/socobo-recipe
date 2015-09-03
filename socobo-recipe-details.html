@@ -9,41 +9,48 @@
     .wrapper {
       width: 70%;
       min-width: 700px;
+      color: var(--primary-text-color);
+      font-family: sans-serif;
+      border-radius: 10px;
     }
     .content {
       @apply(--layout-horizontal);
     }
 
     .leftColumn {
-      background-color: rosybrown;
       width: 300px;
       padding: 10px;
     }
 
     .rightColumn {
-      background-color: #00e5ff;
       width: 100%;
       margin-right: 0px;
       padding: 10px;
       overflow: hidden;
     }
 
-    .heading h1 {
+    .wrapper h1 {
+      padding: 10px;
+      padding-top: 20px;
+      padding-bottom: 20px;
       margin: 0;
+      font-weight: 100;
+      letter-spacing: -1px;
+      color: var(--default-primary-color)
     }
 
     .recipeImg {
+      background-color: gainsboro;
       width: 280px;
       height: 280px;
-      background-color: indianred;
     }
 
     .text {
       vertical-align: text-top;
       height: 280px;
-      background-color: #90caf9;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 2;
     }
 
     .step {
