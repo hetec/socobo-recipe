@@ -53,6 +53,29 @@
       --paper-fab-keyboard-focus-background: var(--accent-color);
     }
 
+    #blocker {
+      z-index: 20;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: none;
+      margin: 0px;
+      background-color: darkgray;
+      height: 100vh;
+      width: 100%;
+      opacity: 0.5;
+    }
+
+    #details {
+      z-index: 21;
+      display: none;
+      width: 80%;
+      position: absolute;
+      top:50px;
+      margin-bottom: 50px;
+      left: 10%;
+    }
+
   </style>
 
   <template fullbleed>
