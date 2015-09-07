@@ -24,9 +24,10 @@
     }
 
     #dialog{
-      margin-top : 40px;
+      margin-top : 20px;
       margin-bottom: 0;
       top: 20px;
+      min-height: 85vh;
     }
     .content {
       @apply(--layout-horizontal);
@@ -35,24 +36,23 @@
     .leftColumn {
       width: 300px;
       padding: 30px;
+      padding-top: 0;
     }
 
     .rightColumn {
       width: 100%;
       margin-right: 0px;
       padding: 30px;
+      padding-top: 0;
       overflow: hidden;
     }
 
     .wrapper h1 {
       z-index: 15;
-      position: fixed;
-      top: -17px;
-      padding: 30px;
-      padding-bottom: 0;
+      padding-left: 30px;
       margin: 0;
       letter-spacing: -1px;
-      color: white;
+      color: grey;
       font-weight: 400;
       font-size: 30px;
     }
@@ -84,7 +84,7 @@
     #exit{
       z-index: 15;
       position: fixed;
-      top:0px;
+      top:-20px;
       right: -15px;
       color: white;
       font-weight: 100;

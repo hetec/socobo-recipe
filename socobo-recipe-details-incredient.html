@@ -22,13 +22,19 @@
       margin-left: 10px;
     }
 
+    .seperator {
+      border: solid 1px #F4F0EC;
+      width: 30%;
+    }
+
   </style>
   <template>
-    <paper-material elevation="1" class="wrapper">
+    <paper-material elevation="0" class="wrapper">
       <span class="desc">{{incredient.desc}}</span>
       <span class="amount">{{incredient.amount}}</span>
       <span class="unit">{{incredient.unit}}</span>
     </paper-material>
+    <hr class="seperator">
   </template>
 
 </dom-module>
