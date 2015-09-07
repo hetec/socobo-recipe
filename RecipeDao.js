@@ -19,6 +19,14 @@ var RecipeDao = (function(){
             recipe.ref = snapshot.ref();
             recipe.desc = val.desc;
             recipe.info = val.info;
+            recipe.incredients = [];
+            recipe.steps = [];
+            for(k in val.incredients){
+              recipe.incredients.push(val.incredients[k])
+            }
+            for(k in val.steps){
+              recipe.steps.push(val.steps[k])
+            }
             console.log("Desc: " + recipe.desc + ", info: " + recipe.info + ", ref: " + recipe.ref);
             that.push('recipes', recipe);
           }).catch(function(err){
