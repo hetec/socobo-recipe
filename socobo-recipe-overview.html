@@ -3,6 +3,7 @@
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-fab/paper-fab.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
@@ -17,6 +18,7 @@
     }
 
     #recipe_list{
+      z-index: 19;
       margin-top: 20px;
     }
 
@@ -51,28 +53,46 @@
       --paper-fab-keyboard-focus-background: var(--accent-color);
     }
 
+    #blocker {
+      z-index: 20;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: none;
+      margin: 0px;
+      background-color: darkgray;
+      height: 100vh;
+      width: 100%;
+      opacity: 0.5;
+    }
+
+
+
   </style>
 
   <template fullbleed>
-    <div id="recipe_list">
-      <template is="dom-if" if="{{!recipes.length}}">
-        <p id="no_recipes">no recipes<br>available</p>
-      </template>
-      <template is="dom-repeat" items="{{recipes}}">
-        <socobo-element-list-item
-          obj="{{item}}"
-          isChecked="{{valueOfCheckBox}}"
-          on-check="handleCheck"
-          on-uncheck="handleUncheck"
-          on-show_request="clicked"
-          on-delete_request="removeRecipe">
-        </socobo-element-list-item>
-      </template>
-    </div>
-    <paper-fab id="add" icon="add" on-click="buttonAni">
-    </paper-fab>
-    <paper-fab id="clear" icon="clear" on-click="buttonAni">
-    </paper-fab>
+    <div id="blocker">
+      </div>
+      <div id="recipe_list">
+        <template is="dom-if" if="{{!recipes.length}}">
+          <p id="no_recipes">no recipes<br>available</p>
+        </template>
+        <template is="dom-repeat" items="{{recipes}}">
+          <socobo-element-list-item
+            obj="{{item}}"
+            isChecked="{{valueOfCheckBox}}"
+            on-check="handleCheck"
+            on-uncheck="handleUncheck"
+            on-show_request="clicked"
+            on-delete_request="removeRecipe">
+          </socobo-element-list-item>
+        </template>
+      </div>
+      <paper-fab id="add" icon="add" on-click="buttonAni">
+      </paper-fab>
+      <paper-fab id="clear" icon="clear" on-click="buttonAni">
+      </paper-fab>
+      <socobo-recipe-details id="dia"></socobo-recipe-details>
   </template>
 
 </dom-module>
@@ -148,7 +168,13 @@
       }
     },
     clicked : function (){
-      alert("clicked");
+      //this.$.details.style.display = "block";
+      //this.$.blocker.style.display = "block";
+      this.$.dia.toggleDialog();
+    },
+    closeDetails : function () {
+      this.$.details.style.display = "none";
+      this.$.blocker.style.display = "none";
     },
     buttonAni : function (){
       this.playAnimation('entry');

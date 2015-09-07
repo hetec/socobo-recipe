@@ -1,6 +1,12 @@
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="socobo-recipe-overview.html">
 <link rel="import" href="socobo-recipe-details-step.html">
 <link rel="import" href="socobo-recipe-details-incredient.html">
+<link rel="import" href="../neon-animation/neon-animations.html">
 <dom-module id="socobo-recipe-details">
   <style>
     :host {
@@ -8,13 +14,19 @@
     }
 
     .wrapper {
-
-      //width: 70%;
+      background-color: white;
       min-width: 700px;
       color: var(--primary-text-color);
       font-family: sans-serif;
-      border-radius: 10px;
+      border-radius: 5px;
       line-height: 2;
+      padding: 0;
+    }
+
+    #dialog{
+      margin-top : 40px;
+      margin-bottom: 0;
+      top: 20px;
     }
     .content {
       @apply(--layout-horizontal);
@@ -33,13 +45,16 @@
     }
 
     .wrapper h1 {
-      padding: 20px;
-      padding-left: 30px;
+      z-index: 15;
+      position: fixed;
+      top: -17px;
+      padding: 30px;
+      padding-bottom: 0;
       margin: 0;
-      font-weight: 100;
       letter-spacing: -1px;
-      color: var(--default-primary-color);
-      border-bottom: 2px solid whitesmoke;
+      color: white;
+      font-weight: 400;
+      font-size: 30px;
     }
 
     .recipeImg {
@@ -61,13 +76,42 @@
       width: 100%;
     }
 
+    #exit iron-icon{
+      width: 40px;
+      height: 40px;
+    }
+
+    #exit{
+      z-index: 15;
+      position: fixed;
+      top:0px;
+      right: -15px;
+      color: white;
+      font-weight: 100;
+    }
+
+    #exit:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 0;
+      margin: 0;
+      padding-top: 0;
+    }
+
+
   </style>
   <template>
-    <div class="background">
 
-    </div>
-    <div>
-      <paper-material elevation="4" class="wrapper">
+      <paper-dialog elevation="0" class="wrapper" id="dialog" modal
+                    entry-animation="scale-up-animation"
+                    exit-animation="fade-out-animation"
+                    with-backdrop>
+        <paper-button id="exit" dialog-dismiss>
+          <iron-icon icon="clear"></iron-icon>
+        </paper-button>
         <h1>Das ist der Titel</h1>
         <div class="content">
           <div class="leftColumn">
@@ -75,9 +119,9 @@
 
             </paper-material>
             <div class="ingredients">
-              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
-              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
-              <socobo-recipe-details-incredient></socobo-recipe-details-incredient>
+              <template is="dom-repeat" items="{{recipe.incredients}}">
+                <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
+              </template>
             </div>
           </div>
           <div class="rightColumn">
@@ -88,7 +132,7 @@
 
             </div>
             <div class="steps">
-              <template is="dom-repeat" items="{{steps}}">
+              <template is="dom-repeat" items="{{recipe.steps}}">
                 <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
               </template>
             </div>
@@ -98,9 +142,7 @@
             </paper-button>
           </div>
         </div>
-
-      </paper-material>
-    </div>
+      </paper-dialog>
   </template>
 
 </dom-module>
@@ -110,26 +152,46 @@
     Polymer({
       is: 'socobo-recipe-details',
       properties: {
-        steps : {
-          type : Array,
-          value : [
-            {
-              number : 1,
-              desc : "Nimm dir ein Brettchen und eine Messer"
-            },
-            {
-              number: 2,
-              desc : "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
-              "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!" +
-              "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
-              "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!"
-            },
-            {
-              number: 3,
-              desc : "Schneide den Apfel in Stücke"
-            }
-          ]
-        }
+        recipe : {
+          type : Object,
+          value : {
+            steps: [
+              {
+                number: 1,
+                desc: "Nimm dir ein Brettchen und eine Messer"
+              },
+              {
+                number: 2,
+                desc: "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
+                "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!" +
+                "Öffne den Kühlschrank und nimm den Apfel aus der linken, oberen Ecke. Vorsicht der Kühlschrank ist tief!" +
+                "Wenn Sie nicht aufpassen vergreifen sie sich vielleicht!"
+              },
+              {
+                number: 3,
+                desc: "Schneide den Apfel in Stücke"
+              }
+            ],
+            incredients : [
+              {
+                desc: "Birne",
+                amount: 34,
+                unit: "stk"
+              },
+              {
+                desc: "Mehl",
+                amount: 1,
+                unit: "kg"
+              }
+            ]
+          }
+        },
+      },
+      exit : function () {
+        this.fire("exit_request");
+      },
+      toggleDialog : function(){
+        this.$.dialog.toggle();
       }
     });
   })();
