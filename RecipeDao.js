@@ -21,6 +21,7 @@ var RecipeDao = (function(){
             recipe.info = val.info;
             recipe.incredients = [];
             recipe.steps = [];
+            recipe.text = val.text;
             for(k in val.incredients){
               recipe.incredients.push(val.incredients[k])
             }

@@ -112,7 +112,7 @@
         <paper-button id="exit" dialog-dismiss>
           <iron-icon icon="clear"></iron-icon>
         </paper-button>
-        <h1>Das ist der Titel</h1>
+        <h1>{{recipe.desc}}</h1>
         <div class="content">
           <div class="leftColumn">
             <paper-material elevation="1" class="recipeImg">
@@ -125,12 +125,7 @@
             </div>
           </div>
           <div class="rightColumn">
-            <div class="text">
-              Über 30 Vitamine und Spurenelemente, 100 bis 180 Milligramm Kalium und viele andere wertvolle Mineralstoffe wie Phosphor, Kalzium, Magnesium oder Eisen trägt ein durchschnittlich großer Apfel in und unter seiner Schale. Dabei besteht er zu 85 Prozent aus Wasser und hat nur rund 60 Kilokalorien. Er ist gut zu Zähnen und Darm, Trauben- und Fruchtzucker liefern schnell Energie
-
-              Mehr zum Thema: http://www.gesundheit.de/ernaehrung/lebensmittel/obst/apfel
-
-            </div>
+            <div class="text">{{recipe.text}}</div>
             <div class="steps">
               <template is="dom-repeat" items="{{recipe.steps}}">
                 <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
