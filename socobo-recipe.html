@@ -5,16 +5,32 @@
       display: block;
     }
   </style>
+
   <template>
-    <socobo-recipe-overview></socobo-recipe-overview>
+    <socobo-recipe-overview
+      url='[[baseUrl]]' user="[[userId]]" expire="[[expireDate]]"></socobo-recipe-overview>
   </template>
 
 </dom-module>
 
 <script>
-(function() {
-  Polymer({
-    is: 'socobo-recipe'
-  });
-})();
+  (function() {
+    Polymer({
+      is: 'socobo-recipe',
+      properties : {
+        baseUrl: {
+          type : String,
+          value : "https://luminous-inferno-5751.firebaseio.com"
+        },
+        userId: {
+          type : String,
+          value: "Franky"
+        },
+        expireDate : {
+          type : Number,
+          value: 0
+        }
+      }
+    });
+  })();
 </script>

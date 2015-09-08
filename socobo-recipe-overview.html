@@ -54,8 +54,7 @@
     }
 
   </style>
-
-  <template fullbleed>
+  <template>
       <div id="recipe_list">
         <template is="dom-if" if="{{!recipes.length}}">
           <p id="no_recipes">no recipes<br>available</p>
@@ -77,63 +76,36 @@
       </paper-fab>
       <socobo-recipe-details id="dia"></socobo-recipe-details>
   </template>
-
 </dom-module>
-
 <script>
-
 (function() {
-
   Polymer({
     is: 'socobo-recipe-overview',
-    behaviors: [
-      Polymer.NeonAnimationRunnerBehavior
-    ],
     properties: {
       recipes : {
         type : Array,
         value : []
       },
       user : {
-        type : Object,
-        value : {
-          userId : "Franky"
-        }
-      },
-      firebaseBaseUrl : {
         type : String,
-        value : "https://luminous-inferno-5751.firebaseio.com"
+        value : ""
+      },
+      url : {
+        type : String,
+        value : ""
+      },
+      expire : {
+        type : Number,
+        value : 0
       },
       checkedBoxes : {
         type : Number,
         value :  0
       },
-      animationConfig: {
-        value: function() {
-          return {
-            entry : [{
-              name: 'scale-down-animation',
-              node: this.$.add,
-              timing : {
-                duration : 100
-              }
-            },{
-              name: 'scale-down-animation',
-              node: this.$.clear,
-              timing : {
-                duration : 100
-              }
-            }]
-          }
-        }
+      valueOfCheckBox : {
+        type : Boolean,
+        value : false
       }
-    },
-    getDAO : function (){
-      return new RecipeDao(this);
-    },
-    valueOfCheckBox : {
-      type : Boolean,
-      value : false
     },
     handleCheck : function(){
       this.checkedBoxes++;
@@ -145,9 +117,9 @@
     },
     trackCheckedBoxes : function () {
       if(this.checkedBoxes > 0){
-        switchButton(this.$.clear,this.$.add);
+        this.switchButton(this.$.clear,this.$.add);
       }else{
-        switchButton(this.$.add, this.$.clear);
+        this.switchButton(this.$.add, this.$.clear);
       }
     },
     clicked : function (e){
@@ -159,22 +131,18 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      RecipeDao.getInstance(this).getAndUpdateRecipes();
+      RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
     },
     removeRecipe : function (e){
-      RecipeDao.getInstance(this).removeAndUpdateRecipe(e.detail);
+      RecipeDao.getInstance(this, this.user).removeAndUpdateRecipe(e.detail);
+    },
+    switchButton : function (enableButton, disableButton){
+      disableButton.style.display = "none";
+      enableButton.style.display = "block";
     },
     ready : function(){
       this.getRecipes();
     }
-
   });
 })();
-
-function switchButton(enableButton, disableButton){
-  disableButton.style.display = "none";
-  enableButton.style.display = "block";
-}
-
-
 </script>

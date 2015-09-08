@@ -1,12 +1,11 @@
 var RecipeDao = (function(){
-  function RecipeDao(component){
+  function RecipeDao(component, userId){
     var that = component;
-
+    var id = userId;
     var userUrl = getUserUrl();
 
     function getUserUrl(){
-      var id = that.user.userId;
-      return that.firebaseBaseUrl + "/" + id + "/Recipes";
+      return url = that.url + "/" + id + "/Recipes";
     };
 
     this.getAndUpdateRecipes = function(){
@@ -75,9 +74,9 @@ var RecipeDao = (function(){
 
   var instance;
   return {
-    getInstance : function(component){
+    getInstance : function(component, userId){
       if(instance == null){
-        instance = new RecipeDao(component);
+        instance = new RecipeDao(component, userId);
         instance.constructor = null;
       }
       return instance;
