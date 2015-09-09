@@ -110,6 +110,7 @@
           <iron-icon icon="clear"></iron-icon>
         </paper-button>
         <h1>{{recipe.desc}}</h1>
+        <paper-input label="Insert title here"></paper-input>
         <div class="content">
           <div class="leftColumn">
             <paper-material elevation="1" class="recipeImg">
@@ -148,6 +149,10 @@
           type : Object,
           value : {}
         },
+        state : {
+          type: String,
+          value: "show"
+        }
       },
       exit : function () {
         this.fire("exit_request");
