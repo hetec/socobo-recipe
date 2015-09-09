@@ -7,7 +7,9 @@
 
     .wrapper {
       background-color: white;
-      min-width: 700px;
+      width: 90%;
+      min-width:700px;
+
       color: var(--primary-text-color);
       font-family: sans-serif;
       border-radius: 5px;
@@ -99,6 +101,39 @@
       padding-top: 0;
     }
 
+    .default{
+      display: block;
+    }
+
+    .input{
+      display: none;
+    }
+
+    #title_input{
+      padding: 0;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+
+    .step_input paper-input{
+      @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+
+    .step_input paper-icon-button{
+      width:40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+
+    #addStep{
+      position: relative;
+      left: 50%;
+      margin-top: 50px;
+      margin-left: -28px;
+    }
 
   </style>
   <template>
@@ -109,12 +144,11 @@
         <paper-button id="exit" dialog-dismiss>
           <iron-icon icon="clear"></iron-icon>
         </paper-button>
-        <h1>{{recipe.desc}}</h1>
-        <paper-input label="Insert title here"></paper-input>
+        <h1 id="title_default" class="default">{{recipe.desc}}</h1>
+        <paper-input id="title_input" class="input" label="Hi, my name is ... ?"></paper-input>
         <div class="content">
           <div class="leftColumn">
             <paper-material elevation="1" class="recipeImg">
-
             </paper-material>
             <div class="ingredients">
               <template is="dom-repeat" items="{{recipe.incredients}}">
@@ -123,16 +157,21 @@
             </div>
           </div>
           <div class="rightColumn">
-            <div class="text">{{recipe.text}}</div>
-            <div class="steps">
+            <div id="text_default" class="default" class="text">{{recipe.text}}</div>
+            <paper-textarea class="input" id="text_input"
+                            rows="6"
+                            label="Tell me a little bit more ..." ></paper-textarea>
+            <div class="steps" id="steps_default" class="default">
               <template is="dom-repeat" items="{{recipe.steps}}">
                 <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
               </template>
             </div>
-          </div>
-          <div class="buttonPanel">
-            <paper-button>
-            </paper-button>
+            <div class="steps" id="steps_input" class="input">
+              <template is="dom-repeat" items="{{recipe_inputs}}">
+                <socobo-recipe-details-step state="add" class="step" id="{{item}}" on-rem_step="removeStep"></socobo-recipe-details-step>
+              </template>
+            </div>
+            <paper-fab icon="add" id="addStep" on-click="addStep"></paper-fab>
           </div>
         </div>
       </paper-dialog>
@@ -144,14 +183,27 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details',
+      listeners : {
+
+      },
       properties: {
         recipe : {
           type : Object,
           value : {}
         },
+        recipe_inputs : {
+          type : Array,
+          value : [
+            "step0"
+          ]
+        },
         state : {
           type: String,
           value: "show"
+        },
+        numberOfSteps : {
+          type : Number,
+          value : 1
         }
       },
       exit : function () {
@@ -159,6 +211,34 @@
       },
       toggleDialog : function(){
         this.$.dialog.toggle();
+      },
+      addStep : function () {
+        alert("Add step");
+        this.push("recipe_inputs", "step" + this.numberOfSteps);
+        this.numberOfSteps++;
+      },
+      removeStep : function(e){
+        alert("remove");
+        var model = e.model;
+        var itemIndex = model.get('index');
+        alert(itemIndex);
+        this.cutElementOffArray(itemIndex);
+      },
+      cutElementOffArray : function (index) {
+        this.splice("recipe_inputs", index ,1);
+      },
+      chooseState :function(){
+        if(this.state === "add"){
+          this.$.title_default.style.display = "none";
+          this.$.title_input.style.display = "block";
+          this.$.text_default.style.display = "none";
+          this.$.text_input.style.display = "block";
+          this.$.steps_default.style.display = "none";
+          this.$.steps_input.style.display = "block";
+        }
+      },
+      ready : function(){
+        this.chooseState();
       }
     });
   })();

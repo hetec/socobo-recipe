@@ -1,3 +1,4 @@
+<link rel="import" href="elements.html">
 <dom-module id="socobo-recipe-details-step">
   <style>
     :host {
@@ -53,13 +54,42 @@
       border: 1px solid #F4F0EC;
     }
 
+    .steps_input{
+      width: 100%;
+      @apply(--layout-horizontal);
+    }
+
+    .steps_input paper-textarea{
+      float: left;
+      width: 80%;
+    }
+
+    .steps_input paper-icon-button{
+      float: right;
+      margin-top: 13px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+
+    #clearer{
+      clear: both;
+    }
+
+
   </style>
   <template>
-    <div class="wrapper">
-      <paper-material elevation="1" class="stepNumber">{{step.number}}</paper-material>
-      <p class="stepDesc">{{step.desc}}</p>
+    <div class="wrapper" id="steps_default">
+      <paper-material elevation="1" class="stepNumber" id="stepNumber">{{step.number}}</paper-material>
+      <p class="stepDesc" id="stepDesc">{{step.desc}}</p>
     </div>
-    <hr class="seperater">
+    <div id="steps_input" class="steps_input">
+      <paper-textarea label="New step ... " value="{{step.desc}}"></paper-textarea>
+      <paper-icon-button icon="delete" on-click="removeStep"></paper-icon-button>
+    </div>
+    <div id="clearer"></div>
+    <hr class="seperater" id="sep">
   </template>
 
 </dom-module>
@@ -72,7 +102,25 @@
         step : {
           type : Object,
           value : {}
+        },
+        state : {
+          type : String,
+          value : "show"
         }
+      },
+      chooseState :function(){
+        if(this.state === "add"){
+          this.$.steps_default.style.display = "none";
+          this.$.sep.style.display = "none";
+          this.$.steps_input.style.display = "block";
+        }
+      },
+      removeStep : function (){
+        alert("fire event");
+        this.fire("rem_step", this.step)
+      },
+      ready : function (){
+        this.chooseState();
       }
     });
   })();
