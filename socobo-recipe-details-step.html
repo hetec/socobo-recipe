@@ -34,16 +34,20 @@
       color: #8A7F80;
       font-size: 25px;
       line-height: 50px;
+      float: left;
     }
 
 
     .stepDesc {
       @apply(--layout-flex);
+      min-height: 30px;
       margin:0;
+      padding-left: 30px;
+      padding-top: 10px;
+      padding-bottom: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-left: 20px;
-      line-height: 50px;
       color: var(--primary-text-color);
       padding-right: 10px;
       text-align: justify;
@@ -114,9 +118,13 @@
           this.$.sep.style.display = "none";
           this.$.steps_input.style.display = "block";
         }
+        if(this.state === "show"){
+          this.$.steps_default.style.display = "block";
+          this.$.sep.style.display = "block";
+          this.$.steps_input.style.display = "none";
+        }
       },
       removeStep : function (){
-        alert("fire event");
         this.fire("rem_step", this.step)
       },
       ready : function (){

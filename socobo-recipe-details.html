@@ -55,6 +55,7 @@
       background-color: gainsboro;
       width: 280px;
       height: 280px;
+      margin-bottom: 20px;
     }
 
 
@@ -131,8 +132,12 @@
     #addStep, #addIncr{
       position: relative;
       left: 50%;
-      margin-top: 50px;
+      margin-top: 10px;
       margin-left: -28px;
+    }
+
+    #addIncr{
+      margin-top: 80px;
     }
 
     .buttons {
@@ -243,37 +248,43 @@
         this.fire("exit_request");
       },
       toggleDialog : function(){
+        this.chooseState();
         this.$.dialog.toggle();
       },
       addStep : function () {
-        alert("Add step");
+        //alert("Add step");
         this.push("recipe_inputs", "step" + this.numberOfSteps);
         this.numberOfSteps++;
       },
       addIncr : function () {
-        alert("Add incr");
+        //alert("Add incr");
         this.push("incredient_inputs", "incr" + this.numberOfIncr);
         this.numberOfIncr++;
       },
       removeStep : function(e){
-        alert("remove step");
+        //alert("remove step");
         var model = e.model;
         var itemIndex = model.get('index');
-        alert(itemIndex);
+        //alert(itemIndex);
         this.cutElementOffArray(itemIndex, "recipe_inputs");
       },
       removeIncr : function(e){
-        alert("remove incr");
+        //alert("remove incr");
         var model = e.model;
         var itemIndex = model.get('index');
-        alert(itemIndex);
+        //alert(itemIndex);
         this.cutElementOffArray(itemIndex, 'incredient_inputs');
       },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
       },
       chooseState :function(){
+        //alert(this.state);
         if(this.state === "add"){
+          this.$.addIncr.style.display = "block";
+          this.$.addStep.style.display = "block";
+          this.$.ok.style.display = "block";
+          this.$.abort.style.display = "block";
           this.$.title_default.style.display = "none";
           this.$.title_input.style.display = "block";
           this.$.text_default.style.display = "none";
@@ -283,9 +294,20 @@
           this.$.incr_default.style.display = "none";
           this.$.incr_input.style.display = "block";
         }
-      },
-      ready : function(){
-        this.chooseState();
+        if(this.state === "show"){
+          this.$.addIncr.style.display = "none";
+          this.$.addStep.style.display = "none";
+          this.$.ok.style.display = "none";
+          this.$.abort.style.display = "none";
+          this.$.title_default.style.display = "block";
+          this.$.title_input.style.display = "none";
+          this.$.text_default.style.display = "block";
+          this.$.text_input.style.display = "none";
+          this.$.steps_default.style.display = "block";
+          this.$.steps_input.style.display = "none";
+          this.$.incr_default.style.display = "block";
+          this.$.incr_input.style.display = "none";
+        }
       }
     });
   })();

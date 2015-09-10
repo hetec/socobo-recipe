@@ -7,28 +7,30 @@
     .wrapper {
       width: 260px;
       font-family: sans-serif;
-      @apply(--layout-horizontal);
-      @apply(--layout-top);
-      padding: 10px;
+      margin: 0;
     }
 
     .desc {
       @apply(--layout-flex);
+      float: left;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .unit, .amount {
+      float: right;
       margin-left: 10px;
     }
 
     .seperator {
+      clear: both;
+      margin-top:40px;
       border: solid 1px #F4F0EC;
       width: 30%;
     }
 
     #incr_input{
-      margin-top: 30px;
+      margin-top: 60px;
     }
 
     .desc_input{
@@ -57,18 +59,19 @@
 
   </style>
   <template>
-    <paper-material elevation="0" class="wrapper" id="incr_default">
+    <div class="wrapper" id="incr_default">
       <span class="desc">{{incredient.desc}}</span>
       <span class="amount">{{incredient.amount}}</span>
       <span class="unit">{{incredient.unit}}</span>
-    </paper-material>
+      <hr class="seperator" id="sep">
+    </div>
     <paper-material elevation="0" class="wrapper" id="incr_input">
       <paper-input label="Name" class="desc_input"  value="{{incredient.desc}}"></paper-input>
       <paper-input label="Measurement" class="amount_input" value="{{incredient.amount}}"></paper-input>
       <paper-input label="Unit" class="unit_input"  value="{{incredient.unit}}"></paper-input>
       <paper-icon-button icon="delete" on-click="removeIncr"></paper-icon-button>
     </paper-material>
-    <hr class="seperator" id="sep">
+
   </template>
 
 </dom-module>
@@ -93,6 +96,11 @@
           this.$.incr_default.style.display = "none";
           this.$.sep.style.display = "none";
           this.$.incr_input.style.display = "block";
+        }
+        if(this.state === "show"){
+          this.$.incr_default.style.display = "block";
+          this.$.sep.style.display = "block";
+          this.$.incr_input.style.display = "none";
         }
       },
       removeIncr : function(){
