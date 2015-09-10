@@ -27,14 +27,48 @@
       width: 30%;
     }
 
+    #incr_input{
+      margin-top: 30px;
+    }
+
+    .desc_input{
+      widht: 100%;
+    }
+
+    .amount_input{
+      width: 45%;
+      float: left;
+    }
+
+    .unit_input{
+      width: 25%;
+      float: left;
+      margin-left: 3%;
+    }
+
+    #incr_input paper-icon-button{
+      float: right;
+      margin-top: 13px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+
   </style>
   <template>
-    <paper-material elevation="0" class="wrapper">
+    <paper-material elevation="0" class="wrapper" id="incr_default">
       <span class="desc">{{incredient.desc}}</span>
       <span class="amount">{{incredient.amount}}</span>
       <span class="unit">{{incredient.unit}}</span>
     </paper-material>
-    <hr class="seperator">
+    <paper-material elevation="0" class="wrapper" id="incr_input">
+      <paper-input label="Name" class="desc_input"  value="{{incredient.desc}}"></paper-input>
+      <paper-input label="Measurement" class="amount_input" value="{{incredient.amount}}"></paper-input>
+      <paper-input label="Unit" class="unit_input"  value="{{incredient.unit}}"></paper-input>
+      <paper-icon-button icon="delete" on-click="removeIncr"></paper-icon-button>
+    </paper-material>
+    <hr class="seperator" id="sep">
   </template>
 
 </dom-module>
@@ -48,7 +82,24 @@
           type: Object,
           value: {
           }
+        },
+        state : {
+          type : String,
+          value : "show"
         }
+      },
+      chooseState :function(){
+        if(this.state === "add"){
+          this.$.incr_default.style.display = "none";
+          this.$.sep.style.display = "none";
+          this.$.incr_input.style.display = "block";
+        }
+      },
+      removeIncr : function(){
+        this.fire("rem_incr", this.incredient);
+      },
+      ready : function () {
+        this.chooseState();
       }
     });
   })();

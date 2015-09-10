@@ -128,11 +128,24 @@
       text-align: center;
     }
 
-    #addStep{
+    #addStep, #addIncr{
       position: relative;
       left: 50%;
       margin-top: 50px;
       margin-left: -28px;
+    }
+
+    .buttons {
+      float: right;
+      margin: 20px;
+    }
+
+    .buttons paper-fab{
+      margin: 10px;
+    }
+
+    #abort{
+      --paper-fab-background: var(--default-primary-color);
     }
 
   </style>
@@ -145,22 +158,28 @@
           <iron-icon icon="clear"></iron-icon>
         </paper-button>
         <h1 id="title_default" class="default">{{recipe.desc}}</h1>
-        <paper-input id="title_input" class="input" label="Hi, my name is ... ?"></paper-input>
+        <paper-input id="title_input" class="input" label="Please name your recipe ... "></paper-input>
         <div class="content">
           <div class="leftColumn">
             <paper-material elevation="1" class="recipeImg">
             </paper-material>
-            <div class="ingredients">
+            <div class="ingredients" id="incr_default" class="default">
               <template is="dom-repeat" items="{{recipe.incredients}}">
                 <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
               </template>
             </div>
+            <div class="ingredients" id="incr_input" class="input">
+              <template is="dom-repeat" items="{{incredient_inputs}}">
+                <socobo-recipe-details-incredient state="add" id="{{item}}" on-rem_incr="removeIncr"></socobo-recipe-details-incredient>
+              </template>
+            </div>
+            <paper-fab icon="add" id="addIncr" on-click="addIncr"></paper-fab>
           </div>
           <div class="rightColumn">
             <div id="text_default" class="default" class="text">{{recipe.text}}</div>
             <paper-textarea class="input" id="text_input"
                             rows="6"
-                            label="Tell me a little bit more ..." ></paper-textarea>
+                            label="Here you might place a brief description or the like ..." ></paper-textarea>
             <div class="steps" id="steps_default" class="default">
               <template is="dom-repeat" items="{{recipe.steps}}">
                 <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
@@ -173,6 +192,10 @@
             </div>
             <paper-fab icon="add" id="addStep" on-click="addStep"></paper-fab>
           </div>
+        </div>
+        <div class="buttons">
+          <paper-fab icon="clear" id="abort"></paper-fab>
+          <paper-fab icon="done" id="ok"></paper-fab>
         </div>
       </paper-dialog>
   </template>
@@ -197,11 +220,21 @@
             "step0"
           ]
         },
+        incredient_inputs : {
+          type : Array,
+          value : [
+            "incr0"
+          ]
+        },
         state : {
           type: String,
           value: "show"
         },
         numberOfSteps : {
+          type : Number,
+          value : 1
+        },
+        numberOfIncr : {
           type : Number,
           value : 1
         }
@@ -217,15 +250,27 @@
         this.push("recipe_inputs", "step" + this.numberOfSteps);
         this.numberOfSteps++;
       },
+      addIncr : function () {
+        alert("Add incr");
+        this.push("incredient_inputs", "incr" + this.numberOfIncr);
+        this.numberOfIncr++;
+      },
       removeStep : function(e){
-        alert("remove");
+        alert("remove step");
         var model = e.model;
         var itemIndex = model.get('index');
         alert(itemIndex);
-        this.cutElementOffArray(itemIndex);
+        this.cutElementOffArray(itemIndex, "recipe_inputs");
       },
-      cutElementOffArray : function (index) {
-        this.splice("recipe_inputs", index ,1);
+      removeIncr : function(e){
+        alert("remove incr");
+        var model = e.model;
+        var itemIndex = model.get('index');
+        alert(itemIndex);
+        this.cutElementOffArray(itemIndex, 'incredient_inputs');
+      },
+      cutElementOffArray : function (index, arr) {
+        this.splice(arr, index ,1);
       },
       chooseState :function(){
         if(this.state === "add"){
@@ -235,6 +280,8 @@
           this.$.text_input.style.display = "block";
           this.$.steps_default.style.display = "none";
           this.$.steps_input.style.display = "block";
+          this.$.incr_default.style.display = "none";
+          this.$.incr_input.style.display = "block";
         }
       },
       ready : function(){
