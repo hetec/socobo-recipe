@@ -1,0 +1,217 @@
+<link href="elements.html" rel="import">
+<dom-module id="socobo-recipe-details-show">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .wrapper {
+      background-color: white;
+      width: 90%;
+      min-width:700px;
+      overflow: scroll;
+
+      color: var(--primary-text-color);
+      font-family: sans-serif;
+      border-radius: 5px;
+      line-height: 2;
+      padding: 0;
+    }
+
+    #dialog{
+      margin-top : 20px;
+      margin-bottom: 0;
+      top: 20px;
+      min-height: 85vh;
+    }
+    .content {
+    @apply(--layout-horizontal);
+    }
+
+    .leftColumn {
+      width: 300px;
+      padding: 30px;
+      padding-top: 0;
+    }
+
+    .rightColumn {
+      width: 100%;
+      margin-right: 0px;
+      padding: 30px;
+      padding-top: 0;
+      overflow: hidden;
+    }
+
+    .wrapper h1 {
+      z-index: 15;
+      padding-left: 30px;
+      margin: 0;
+      letter-spacing: -1px;
+      color: #8A7F80;
+      font-weight: 400;
+      font-size: 30px;
+    }
+
+    .recipeImg {
+      background-color: gainsboro;
+      width: 280px;
+      height: 280px;
+      margin-bottom: 20px;
+    }
+
+
+    .text {
+      vertical-align: text-top;
+      margin-bottom: 40px;
+      text-align: justify;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step {
+      width: 100%;
+    }
+
+    #exit iron-icon{
+      width: 30px;
+      height: 30px;
+      float: right;
+    }
+
+    #exit{
+      cursor: default;
+      width: 100%;
+      height: 100%;
+      line-height: 50px;
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      top:0px;
+      right: 0px;
+      color: #8A7F80;
+      font-weight: 100;
+    }
+
+    #exit::shadow paper-ripple {
+      color: var(--accent-color);
+    }
+
+    #exit iron-icon:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 0;
+      margin: 0;
+      padding-top: 0;
+    }
+
+    .default{
+      display: block;
+    }
+
+    #title_input{
+      padding: 0;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+
+    .step_input paper-input{
+    @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+
+    .step_input paper-icon-button{
+      width:40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+
+    .buttons paper-fab{
+      margin: 10px;
+    }
+
+  </style>
+  <template>
+    <paper-dialog elevation="0" class="wrapper" id="dialog" modal
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  with-backdrop>
+      <paper-button id="exit">
+        <iron-icon icon="clear" dialog-dismiss></iron-icon>
+      </paper-button>
+      <h1 id="title_default" class="default">{{recipe.desc}}</h1>
+      <div class="content">
+        <div class="leftColumn">
+          <paper-material elevation="1" class="recipeImg">
+          </paper-material>
+          <div class="ingredients" id="incr_default" class="default">
+            <template is="dom-repeat" items="{{recipe.incredients}}">
+              <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
+            </template>
+          </div>
+        </div>
+        <div class="rightColumn">
+          <div id="text_default" class="default" class="text">{{recipe.text}}</div>
+          <div class="steps" id="steps_default" class="default">
+            <template is="dom-repeat" items="{{recipe.steps}}">
+              <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
+            </template>
+          </div>
+        </div>
+      </div>
+    </paper-dialog>
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-recipe-details-show',
+      listeners : {
+
+      },
+      properties: {
+        recipe : {
+          type : Object,
+          value : {}
+        },
+        recipe_inputs : {
+          type : Array,
+          value : [
+            "step0"
+          ]
+        },
+        incredient_inputs : {
+          type : Array,
+          value : [
+            "incr0"
+          ]
+        },
+        numberOfSteps : {
+          type : Number,
+          value : 1
+        },
+        numberOfIncr : {
+          type : Number,
+          value : 1
+        }
+      },
+      exit : function () {
+        this.fire("exit_request");
+      },
+      toggleDialog : function(){
+        this.$.dialog.toggle();
+      },
+      cutElementOffArray : function (index, arr) {
+        this.splice(arr, index ,1);
+      }
+    });
+  })();
+</script>
+
+
