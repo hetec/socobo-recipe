@@ -63,7 +63,8 @@
       </paper-fab>
       <paper-fab id="clear" icon="clear" on-click="">
       </paper-fab>
-      <socobo-recipe-details-show id="dia"></socobo-recipe-details-show>
+      <socobo-recipe-details-show id="showDialog"></socobo-recipe-details-show>
+      <socobo-recipe-details-add id="addDialog"></socobo-recipe-details-add>
   </template>
 </dom-module>
 <script>
@@ -113,13 +114,13 @@
     },
     clicked : function (e){
       console.log(e.detail);
-      this.$.dia.recipe = e.detail;
-      this.$.dia.state = "show";
-      this.$.dia.toggleDialog();
+      this.$.showDialog.recipe = e.detail;
+      this.$.showDialog.state = "show";
+      this.$.showDialog.toggleDialog();
     },
     addRecipe : function(){
-      this.$.dia.state = "add";
-      this.$.dia.toggleDialog();
+      this.$.addDialog.state = "add";
+      this.$.addDialog.toggleDialog();
     },
     buttonAni : function (){
       this.playAnimation('entry');
