@@ -180,7 +180,7 @@
                           label="Here you might place a brief description or the like ..." ></paper-textarea>
           <div class="steps" id="steps_input" class="input">
             <template is="dom-repeat" items="{{recipe_inputs}}">
-              <socobo-recipe-details-step state="add" class="step" id="{{item}}" on-rem_step="removeStep"></socobo-recipe-details-step>
+              <socobo-recipe-details-step state="add" class="step" step="{{item}}" id="{{item}}" on-rem_step="removeStep"></socobo-recipe-details-step>
             </template>
           </div>
           <paper-fab icon="add" id="addStep" on-click="addStep"></paper-fab>
@@ -240,7 +240,12 @@
       },
       addStep : function () {
         //alert("Add step");
-        this.push("recipe_inputs", "step" + this.numberOfSteps);
+//        this.push("recipe_inputs", "step" + this.numberOfSteps);
+        var step = {
+          desc : "",
+          number : this.numberOfSteps
+        }
+        this.push("recipe_inputs", step);
         this.numberOfSteps++;
       },
       addIncr : function () {
