@@ -8,6 +8,11 @@ var RecipeDao = (function(){
       return url = that.url + "/" + id + "/Recipes";
     };
 
+    this.addRecipe = function(obj){
+      var dataRef = new Firebase(userUrl);
+      dataRef.push(obj);
+    }
+
     this.getAndUpdateRecipes = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function(snapshot) {

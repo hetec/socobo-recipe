@@ -299,6 +299,9 @@
           console.log(this.recipe.steps[k]);
           counter++;
         }
+
+        this.fire("add_request", this.recipe);
+
       }
     });
   })();
