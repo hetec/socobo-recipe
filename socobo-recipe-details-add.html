@@ -231,7 +231,7 @@
         state : {
           type: String,
           value: "show"
-        },
+        }/*,
         numberOfSteps : {
           type : Number,
           value : 1
@@ -239,7 +239,7 @@
         numberOfIncr : {
           type : Number,
           value : 1
-        }
+        }*/
       },
       exit : function () {
         this.fire("exit_request");
@@ -252,10 +252,10 @@
 //        this.push("recipe_inputs", "step" + this.numberOfSteps);
         var step = {
           desc : "",
-          number : this.numberOfSteps
+          number : 0
         }
         this.push("recipe_inputs", step);
-        this.numberOfSteps++;
+//        this.numberOfSteps++;
       },
       addIncr : function () {
         //alert("Add incr");
@@ -286,22 +286,18 @@
         this.splice(arr, index ,1);
       },
       createNewRecipe : function (){
-        console.log(this.recipe.desc);
-        console.log(this.recipe.text);
         this.recipe.incredients = this.incredient_inputs;
-        this.recipe.steps = this.recipe_inputs;
-        for(var k in this.recipe.incredients){
-          console.log(this.recipe.incredients[k]);
+        var arr = [];
+        for(var i = 0; i < this.recipe_inputs.length; i++){
+          arr[i]=this.recipe_inputs[i];
         }
+        this.recipe.steps = arr;
         var counter = 1;
         for(var k in this.recipe.steps){
           this.recipe.steps[k].number = counter;
-          console.log(this.recipe.steps[k]);
           counter++;
         }
-
         this.fire("add_request", this.recipe);
-
       }
     });
   })();

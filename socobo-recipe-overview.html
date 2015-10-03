@@ -55,7 +55,8 @@
             on-check="handleCheck"
             on-uncheck="handleUncheck"
             on-show_request="clicked"
-            on-delete_request="removeRecipe">
+            on-delete_request="removeRecipe"
+            >
           </socobo-element-list-item>
         </template>
       </div>
@@ -64,7 +65,10 @@
       <paper-fab id="clear" icon="clear" on-click="">
       </paper-fab>
       <socobo-recipe-details-show id="showDialog"></socobo-recipe-details-show>
-      <socobo-recipe-details-add id="addDialog"></socobo-recipe-details-add>
+      <socobo-recipe-details-add
+        id="addDialog"
+        on-add_request="addNewRecipe"
+        ></socobo-recipe-details-add>
   </template>
 </dom-module>
 <script>
@@ -130,6 +134,9 @@
     },
     removeRecipe : function (e){
       RecipeDao.getInstance(this, this.user).removeAndUpdateRecipe(e.detail);
+    },
+    addNewRecipe : function(e){
+      RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
     },
     switchButton : function (enableButton, disableButton){
       disableButton.style.display = "none";
