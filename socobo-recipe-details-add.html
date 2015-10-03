@@ -9,7 +9,7 @@
       background-color: white;
       width: 90%;
       min-width:700px;
-
+      overflow: scroll;
       color: var(--primary-text-color);
       font-family: sans-serif;
       border-radius: 5px;
@@ -106,12 +106,8 @@
       padding-top: 0;
     }
 
-    .default{
-      display: block;
-    }
-
     .input{
-      display: none;
+      display: block;
     }
 
     #title_input{
@@ -166,17 +162,11 @@
       <paper-button id="exit">
         <iron-icon icon="clear" dialog-dismiss></iron-icon>
       </paper-button>
-      <h1 id="title_default" class="default">{{recipe.desc}}</h1>
       <paper-input id="title_input" class="input" label="Please name your recipe ... "></paper-input>
       <div class="content">
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
-          <div class="ingredients" id="incr_default" class="default">
-            <template is="dom-repeat" items="{{recipe.incredients}}">
-              <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
-            </template>
-          </div>
           <div class="ingredients" id="incr_input" class="input">
             <template is="dom-repeat" items="{{incredient_inputs}}">
               <socobo-recipe-details-incredient state="add" id="{{item}}" on-rem_incr="removeIncr"></socobo-recipe-details-incredient>
@@ -185,15 +175,9 @@
           <paper-fab icon="add" id="addIncr" on-click="addIncr"></paper-fab>
         </div>
         <div class="rightColumn">
-          <div id="text_default" class="default" class="text">{{recipe.text}}</div>
           <paper-textarea class="input" id="text_input"
                           rows="6"
                           label="Here you might place a brief description or the like ..." ></paper-textarea>
-          <div class="steps" id="steps_default" class="default">
-            <template is="dom-repeat" items="{{recipe.steps}}">
-              <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
-            </template>
-          </div>
           <div class="steps" id="steps_input" class="input">
             <template is="dom-repeat" items="{{recipe_inputs}}">
               <socobo-recipe-details-step state="add" class="step" id="{{item}}" on-rem_step="removeStep"></socobo-recipe-details-step>
@@ -252,7 +236,6 @@
         this.fire("exit_request");
       },
       toggleDialog : function(){
-        this.chooseState();
         this.$.dialog.toggle();
       },
       addStep : function () {
@@ -281,37 +264,6 @@
       },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
-      },
-      chooseState :function(){
-        //alert(this.state);
-        if(this.state === "add"){
-          this.$.addIncr.style.display = "block";
-          this.$.addStep.style.display = "block";
-          this.$.ok.style.display = "block";
-          this.$.abort.style.display = "block";
-          this.$.title_default.style.display = "none";
-          this.$.title_input.style.display = "block";
-          this.$.text_default.style.display = "none";
-          this.$.text_input.style.display = "block";
-          this.$.steps_default.style.display = "none";
-          this.$.steps_input.style.display = "block";
-          this.$.incr_default.style.display = "none";
-          this.$.incr_input.style.display = "block";
-        }
-        if(this.state === "show"){
-          this.$.addIncr.style.display = "none";
-          this.$.addStep.style.display = "none";
-          this.$.ok.style.display = "none";
-          this.$.abort.style.display = "none";
-          this.$.title_default.style.display = "block";
-          this.$.title_input.style.display = "none";
-          this.$.text_default.style.display = "block";
-          this.$.text_input.style.display = "none";
-          this.$.steps_default.style.display = "block";
-          this.$.steps_input.style.display = "none";
-          this.$.incr_default.style.display = "block";
-          this.$.incr_input.style.display = "none";
-        }
       }
     });
   })();
