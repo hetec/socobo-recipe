@@ -189,7 +189,7 @@
         </div>
       </div>
       <div class="buttons">
-        <paper-fab icon="clear" id="abort" dialog-dismiss></paper-fab>
+        <paper-fab icon="clear" id="abort" dialog-dismiss on-click="clearInputFields"></paper-fab>
         <paper-fab icon="done" id="ok" on-click="createNewRecipe" dialog-dismiss></paper-fab>
       </div>
     </paper-dialog>
@@ -285,6 +285,23 @@
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
       },
+      clearInputFields : function(){
+        var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.input');
+        for(var field in inputFields){
+          inputFields[field].value = "";
+        }
+        this.incredient_inputs = [{
+          desc : "",
+          amount : 0,
+          unit : ""
+        }]
+        this.recipe_inputs = [
+          {
+            number : 0,
+            desc : ""
+          }
+        ]
+      },
       createNewRecipe : function (){
         this.recipe.incredients = this.incredient_inputs;
         var arr = [];
@@ -298,6 +315,7 @@
           counter++;
         }
         this.fire("add_request", this.recipe);
+        this.clearInputFields();
       }
     });
   })();
