@@ -54,6 +54,7 @@
       background-color: gainsboro;
       width: 280px;
       height: 280px;
+      margin-bottom: 50px;
     }
 
     .step {
@@ -165,9 +166,11 @@
                    label="Please name your recipe ... "
                    value="{{recipe.desc}}"
                    required
-                   pattern="\D+"
+                   pattern=".+"
                    auto-validate
-                   error-message="Missing name or invalid characters!";
+                   error-message="Missing name or invalid characters!"
+                   autofocus="true"
+                   focused="true";
         ></paper-input>
       <div class="content">
         <div class="leftColumn">
@@ -313,7 +316,7 @@
         }
         this.incredient_inputs = [{
           desc : "",
-          amount : 0,
+          amount : "",
           unit : ""
         }]
         this.recipe_inputs = [
