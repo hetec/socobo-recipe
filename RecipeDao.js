@@ -10,7 +10,13 @@ var RecipeDao = (function(){
 
     this.addRecipe = function(obj){
       var dataRef = new Firebase(userUrl);
-      dataRef.push(obj);
+      new Promise(function(resolve, reject){
+        resolve(dataRef.push(obj));
+      }).then(function(val){
+          alert("Successfully persisted");
+        }).catch(function(){
+          alert("Persist recipe failed");
+        })
     }
 
     this.getAndUpdateRecipes = function(){
