@@ -59,16 +59,39 @@
 
   </style>
   <template>
-    <div class="wrapper" id="incr_default">
+    <div class="wrapper"
+         id="incr_default">
       <span class="desc">{{incredient.desc}}</span>
-      <span class="amount">{{incredient.amount}}</span>
       <span class="unit">{{incredient.unit}}</span>
-      <hr class="seperator" id="sep">
+      <span class="amount">{{incredient.amount}}</span>
+      <hr class="seperator"
+          id="sep">
     </div>
-    <paper-material elevation="0" class="wrapper" id="incr_input">
-      <paper-input label="Name" class="desc_input"  value="{{incredient.desc}}"></paper-input>
-      <paper-input label="Measurement" class="amount_input" value="{{incredient.amount}}"></paper-input>
-      <paper-input label="Unit" class="unit_input"  value="{{incredient.unit}}"></paper-input>
+    <paper-material elevation="0"
+                    class="wrapper"
+                    id="incr_input">
+      <paper-input label="Name"
+                   class="desc_input"
+                   value="{{incredient.desc}}"
+                   required
+                   auto-validate
+                   pattern=".+"
+                   error-message="Title is required">
+      </paper-input>
+      <paper-input label="Measurement"
+                   class="amount_input"
+                   value="{{incredient.amount}}"
+                   pattern="[\d,.]+"
+                   auto-validate
+                   error-message="Invalid characters">
+        <input type="number">
+      </paper-input>
+      <paper-input label="Unit"
+                   class="unit_input"
+                   value="{{incredient.unit}}"
+                   pattern="[a-zA-z]{1,5}"
+                   auto-validate
+                   error-message="Invalid characters"></paper-input>
       <paper-icon-button icon="delete" on-click="removeIncr"></paper-icon-button>
     </paper-material>
 
