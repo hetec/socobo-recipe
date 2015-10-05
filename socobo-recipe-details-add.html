@@ -54,7 +54,7 @@
       background-color: gainsboro;
       width: 280px;
       height: 280px;
-      margin-bottom: 50px;
+      margin-bottom: 20px;
     }
 
     .step {
@@ -152,6 +152,11 @@
       --paper-fab-background: var(--default-primary-color);
     }
 
+    .subHeadings {
+      background-color: #F4F0EC;
+      text-align: center;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -176,9 +181,8 @@
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
-          <div class="ingredients"
-               id="incr_input"
-               class="input">
+
+            <div class="subHeadings">Incredients:</div>
             <template is="dom-repeat"
                       items="{{incredient_inputs}}">
               <socobo-recipe-details-incredient state="add"
@@ -187,7 +191,7 @@
                                                 on-rem_incr="removeIncr">
               </socobo-recipe-details-incredient>
             </template>
-          </div>
+
           <paper-button icon="add"
                      id="addIncr"
                      on-click="addIncr">
@@ -195,11 +199,15 @@
           </paper-button>
         </div>
         <div class="rightColumn">
+          <div class="subHeadings">Description</div>
           <paper-textarea class="input" id="text_input"
                           rows="6"
                           label="Here you might place a brief description or the like ..."
                           value="{{recipe.text}}"
             ></paper-textarea>
+          <template is="dom-if" if="{{recipe_inputs.length}}">
+            <div class="subHeadings">Steps</div>
+          </template>
           <div class="steps"
                id="steps_input"
                class="input">
@@ -293,6 +301,9 @@
         }
         this.push("incredient_inputs", incr);
         this.numberOfIncr++;
+      },
+      isGreaterZero : function(){
+        return this.recipe_inputs.length > 0;
       },
       removeStep : function(e){
         //alert("remove step");

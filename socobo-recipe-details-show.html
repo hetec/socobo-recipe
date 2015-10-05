@@ -134,6 +134,11 @@
       margin: 10px;
     }
 
+    .subHeadings {
+      background-color: #F4F0EC;
+      text-align: center;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -148,6 +153,9 @@
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
+          <template is="dom-if" if="{{recipe.incredients}}">
+            <div class="subHeadings">Incredients</div>
+          </template>
           <div class="ingredients" id="incr_default" class="default">
             <template is="dom-repeat" items="{{recipe.incredients}}">
               <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
@@ -155,7 +163,13 @@
           </div>
         </div>
         <div class="rightColumn">
+          <template is="dom-if" if="{{recipe.text}}">
+            <div class="subHeadings">Description</div>
+          </template>
           <div id="text_default" class="default" class="text">{{recipe.text}}</div>
+          <template is="dom-if" if="{{recipe.steps.length}}">
+            <div class="subHeadings">Steps</div>
+          </template>
           <div class="steps" id="steps_default" class="default">
             <template is="dom-repeat" items="{{recipe.steps}}">
               <socobo-recipe-details-step class="step" step="{{item}}"></socobo-recipe-details-step>
