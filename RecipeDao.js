@@ -5,10 +5,14 @@ var RecipeDao = (function(){
     var userUrl = getUserUrl();
 
     function getUserUrl(){
-      return url = that.url + "/" + id + "/Recipes";
+      //var url = that.url + "/" + id + "/Recipes";
+      var url = that.url + "Recipes/" + id;
+      alert(url);
+      return url;
     };
 
     this.addRecipe = function(obj){
+      alert("user Url: " + userUrl);
       var dataRef = new Firebase(userUrl);
       new Promise(function(resolve, reject){
         resolve(dataRef.push(obj));
