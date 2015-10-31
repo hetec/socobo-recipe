@@ -14,13 +14,21 @@ var RecipeDao = (function(){
     this.addRecipe = function(obj){
       alert("user Url: " + userUrl);
       var dataRef = new Firebase(userUrl);
-      new Promise(function(resolve, reject){
-        resolve(dataRef.push(obj));
-      }).then(function(val){
-          alert("Successfully persisted");
-        }).catch(function(){
-          alert("Persist recipe failed");
-        })
+      dataRef.push(obj, function(error){
+        if (error) {
+          alert("Error while saving your data " + error);
+        } else {
+          alert("OK!");
+        }
+      });
+
+      //new Promise(function(resolve, reject){
+      //  resolve(dataRef.push(obj));
+      //}).then(function(val){
+      //    alert("Successfully persisted");
+      //  }, function(err){
+      //    alert("ERROR: " + err);
+      //  })
     }
 
     this.getAndUpdateRecipes = function(){
