@@ -1,4 +1,4 @@
-<dom-module id="socobo-recipe-details-incredient">
+<dom-module id="socobo-recipe-details-ingredient">
   <style>
     :host {
       display: block;
@@ -30,7 +30,7 @@
       width: 30%;
     }
 
-    #incr_input{
+    #ingr_input{
     }
 
     .desc_input{
@@ -48,7 +48,7 @@
       margin-left: 3%;
     }
 
-    #incr_input paper-icon-button{
+    #ingr_input paper-icon-button{
       float: right;
       width: 40px;
       height: 40px;
@@ -59,19 +59,19 @@
   </style>
   <template>
     <div class="wrapper"
-         id="incr_default">
-      <span class="desc">{{incredient.desc}}</span>
-      <span class="unit">{{incredient.unit}}</span>
-      <span class="amount">{{incredient.amount}}</span>
+         id="ingr_default">
+      <span class="desc">{{ingredient.desc}}</span>
+      <span class="unit">{{ingredient.unit}}</span>
+      <span class="amount">{{ingredient.amount}}</span>
       <hr class="seperator"
           id="sep">
     </div>
     <paper-material elevation="0"
                     class="wrapper"
-                    id="incr_input">
-      <paper-input label="New incredient ..."
+                    id="ingr_input">
+      <paper-input label="New ingredient ..."
                    class="desc_input"
-                   value="{{incredient.desc}}"
+                   value="{{ingredient.desc}}"
                    required
                    auto-validate
                    pattern=".+"
@@ -79,7 +79,7 @@
       </paper-input>
       <paper-input label="Measurement"
                    class="amount_input"
-                   value="{{incredient.amount}}"
+                   value="{{ingredient.amount}}"
                    pattern="[\d,.]+"
                    auto-validate
                    error-message="Invalid characters">
@@ -87,11 +87,11 @@
       </paper-input>
       <paper-input label="Unit"
                    class="unit_input"
-                   value="{{incredient.unit}}"
+                   value="{{ingredient.unit}}"
                    pattern="[a-zA-z]{1,5}"
                    auto-validate
                    error-message="Invalid characters"></paper-input>
-      <paper-icon-button icon="delete" on-click="removeIncr"></paper-icon-button>
+      <paper-icon-button icon="delete" on-click="removeIngr"></paper-icon-button>
     </paper-material>
 
   </template>
@@ -101,9 +101,9 @@
 <script>
   (function() {
     Polymer({
-      is: 'socobo-recipe-details-incredient',
+      is: 'socobo-recipe-details-ingredient',
       properties: {
-        incredient: {
+        ingredient: {
           type: Object,
           value: {
           }
@@ -115,18 +115,18 @@
       },
       chooseState :function(){
         if(this.state === "add"){
-          this.$.incr_default.style.display = "none";
+          this.$.ingr_default.style.display = "none";
           this.$.sep.style.display = "none";
-          this.$.incr_input.style.display = "block";
+          this.$.ingr_input.style.display = "block";
         }
         if(this.state === "show"){
-          this.$.incr_default.style.display = "block";
+          this.$.ingr_default.style.display = "block";
           this.$.sep.style.display = "block";
-          this.$.incr_input.style.display = "none";
+          this.$.ingr_input.style.display = "none";
         }
       },
-      removeIncr : function(){
-        this.fire("rem_incr", this.incredient);
+      removeIngr : function(){
+        this.fire("rem_ingr", this.ingredient);
       },
       ready : function () {
         this.chooseState();

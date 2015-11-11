@@ -114,10 +114,6 @@
       text-align: center;
     }
 
-    .ingredients{
-      margin-top: -50px;
-    }
-
     #addStep{
       margin : 0;
       margin-top: 20px;
@@ -125,7 +121,7 @@
       font-size: 10px;
     }
 
-    #addIncr{
+    #addIngr{
       margin : 0;
       margin-top: 20px;
       background-color: #F4F0EC;
@@ -175,20 +171,20 @@
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
 
-            <div class="subHeadings">Incredients:</div>
+            <div class="subHeadings">Ingredients:</div>
             <template is="dom-repeat"
-                      items="{{incredient_inputs}}">
-              <socobo-recipe-details-incredient state="add"
-                                                incredient="{{item}}"
+                      items="{{ingredient_inputs}}">
+              <socobo-recipe-details-ingredient state="add"
+                                                ingredient="{{item}}"
                                                 id="{{item}}"
-                                                on-rem_incr="removeIncr">
-              </socobo-recipe-details-incredient>
+                                                on-rem_ingr="removeIngr">
+              </socobo-recipe-details-ingredient>
             </template>
 
           <paper-button icon="add"
-                     id="addIncr"
-                     on-click="addIncr">
-            add incredient
+                     id="addIngr"
+                     on-click="addIngr">
+            add ingredient
           </paper-button>
         </div>
         <div class="rightColumn">
@@ -241,9 +237,6 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-add',
-      listeners : {
-
-      },
       properties: {
         recipe : {
           type : Object,
@@ -258,7 +251,7 @@
             }
           ]
         },
-        incredient_inputs : {
+        ingredient_inputs : {
           type : Array,
           value : [
             {
@@ -286,29 +279,27 @@
         }
         this.push("recipe_inputs", step);
       },
-      addIncr : function () {
-        var incr = {
+      addIngr : function () {
+        var ingr = {
           desc : "",
           amount : "",
           unit : ""
         }
-        this.push("incredient_inputs", incr);
-        this.numberOfIncr++;
+        this.push("ingredient_inputs", ingr);
+        this.numberOfIngr++;
       },
       isGreaterZero : function(){
         return this.recipe_inputs.length > 0;
       },
       removeStep : function(e){
-        //alert("remove step");
         var model = e.model;
         var itemIndex = model.get('index');
-        //alert(itemIndex);
         this.cutElementOffArray(itemIndex, "recipe_inputs");
       },
-      removeIncr : function(e){
+      removeIngr : function(e){
         var model = e.model;
         var itemIndex = model.get('index');
-        this.cutElementOffArray(itemIndex, 'incredient_inputs');
+        this.cutElementOffArray(itemIndex, 'ingredient_inputs');
       },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
@@ -318,7 +309,7 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
-        this.incredient_inputs = [{
+        this.ingredient_inputs = [{
           desc : "",
           amount : "",
           unit : ""
@@ -341,7 +332,7 @@
         var titleExists = check(this, 'desc');
         var textExists = check(this, "text");
         var stepsExist = this.recipe.steps.length > 0;
-        var incredientsExist = this.recipe.incredients.length > 0;
+        var ingredientsExist = this.recipe.ingredients.length > 0;
         var message = "";
         if(!titleExists){
           message += "Title\n";
@@ -360,17 +351,17 @@
             message += "Steps need a description\n";
           }
         }
-        var incredientsComplete = true;
-        if(!incredientsExist){
-          message += "Incredients\n"
+        var ingredientsComplete = true;
+        if(!ingredientsExist){
+          message += "Ingredients\n"
         }else{
-          for(var incr in this.recipe.incredients){
-            if(this.recipe.incredients[incr].desc == ""){
-              incredientsComplete = false;
+          for(var ingr in this.recipe.ingredients){
+            if(this.recipe.ingredients[ingr].desc == ""){
+              ingredientsComplete = false;
             }
           }
-          if(!incredientsComplete){
-            message += "Incredients need a description\n";
+          if(!ingredientsComplete){
+            message += "Ingredients need a description\n";
           }
         }
         if(message != ""){
@@ -379,7 +370,7 @@
         return message;
       },
       createNewRecipe : function (){
-        this.recipe.incredients = this.incredient_inputs;
+        this.recipe.ingredients = this.ingredient_inputs;
         var arr = [];
         for(var i = 0; i < this.recipe_inputs.length; i++){
           arr[i]=this.recipe_inputs[i];

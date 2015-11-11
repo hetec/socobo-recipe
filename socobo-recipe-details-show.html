@@ -105,12 +105,6 @@
       display: block;
     }
 
-    #title_input{
-      padding: 0;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
-
     .step_input paper-input{
     @apply(--layout-flex);
       padding-right: 30px;
@@ -146,12 +140,12 @@
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
-          <template is="dom-if" if="{{recipe.incredients}}">
-            <div class="subHeadings">Incredients</div>
+          <template is="dom-if" if="{{recipe.ingredients}}">
+            <div class="subHeadings">Ingredients</div>
           </template>
-          <div class="ingredients" id="incr_default" class="default">
-            <template is="dom-repeat" items="{{recipe.incredients}}">
-              <socobo-recipe-details-incredient incredient="{{item}}"></socobo-recipe-details-incredient>
+          <div class="ingredients" id="ingr_default" class="default">
+            <template is="dom-repeat" items="{{recipe.ingredients}}">
+              <socobo-recipe-details-ingredient ingredient="{{item}}"></socobo-recipe-details-ingredient>
             </template>
           </div>
         </div>
@@ -193,17 +187,17 @@
             "step0"
           ]
         },
-        incredient_inputs : {
+        ingredient_inputs : {
           type : Array,
           value : [
-            "incr0"
+            "ingr0"
           ]
         },
         numberOfSteps : {
           type : Number,
           value : 1
         },
-        numberOfIncr : {
+        numberOfIngr : {
           type : Number,
           value : 1
         }

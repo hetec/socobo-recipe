@@ -14,17 +14,9 @@ var RecipeDao = (function(){
         if (error) {
           alert("Error while saving your data " + error);
         } else {
-          alert("OK!");
+          console.log("Element created at: " + userUrl);
         }
       });
-
-      //new Promise(function(resolve, reject){
-      //  resolve(dataRef.push(obj));
-      //}).then(function(val){
-      //    alert("Successfully persisted");
-      //  }, function(err){
-      //    alert("ERROR: " + err);
-      //  })
     };
 
     this.getAndUpdateRecipes = function(){
@@ -37,11 +29,11 @@ var RecipeDao = (function(){
             recipe.ref = snapshot.ref();
             recipe.desc = val.desc;
             recipe.info = val.info;
-            recipe.incredients = [];
+            recipe.ingredients = [];
             recipe.steps = [];
             recipe.text = val.text;
-            for(var k in val.incredients){
-              recipe.incredients.push(val.incredients[k])
+            for(var k in val.ingredients){
+              recipe.ingredients.push(val.ingredients[k])
             }
             for(var j in val.steps){
               recipe.steps.push(val.steps[j])
