@@ -248,13 +248,7 @@
         },
         ingredient_inputs : {
           type : Array,
-          value : [
-            {
-              desc : "",
-              amount : "",
-              unit : ""
-            }
-          ]
+          value : []
         },
         state : {
           type: String,
@@ -314,17 +308,6 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
-        this.ingredient_inputs = [{
-          desc : "",
-          amount : "",
-          unit : ""
-        }]
-        this.recipe_inputs = [
-          {
-            number : 0,
-            desc : ""
-          }
-        ]
       },
       validateRecipe : function(){
         var check = function(obj, value){
@@ -375,6 +358,7 @@
         return message;
       },
       createNewRecipe : function (){
+        console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
         var arr = [];
         for(var i = 0; i < this.recipe_inputs.length; i++){
@@ -388,7 +372,7 @@
         }
         var v = this.validateRecipe();
         if(v.length <= 0){
-          this.fire("add_request", this.recipe);
+          this.fire("edit_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();
         }else{

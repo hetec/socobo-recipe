@@ -370,6 +370,7 @@
         return message;
       },
       createNewRecipe : function (){
+        console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
         var arr = [];
         for(var i = 0; i < this.recipe_inputs.length; i++){

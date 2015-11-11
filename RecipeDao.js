@@ -19,6 +19,25 @@ var RecipeDao = (function(){
       });
     };
 
+    this.updateRecipe = function(obj){
+      var reference = "" + obj.ref + "";
+      var newObj = {};
+      for(var e in obj){
+        if(e != "ref" && e != "info"){
+          newObj[e] = obj[e]
+          console.log(newObj[e]);
+        }
+      }
+      var dataRef = new Firebase(reference);
+      dataRef.set(newObj, function(error){
+        if (error) {
+          alert("Error while saving your data " + error);
+        } else {
+          console.log("Element created at: " + userUrl);
+        }
+      });
+    };
+
     this.getAndUpdateRecipes = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function(snapshot) {

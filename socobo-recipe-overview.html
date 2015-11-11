@@ -73,7 +73,8 @@
         on-add_request="addNewRecipe"
         ></socobo-recipe-details-add>
       <socobo-recipe-details-edit
-        id="editDialog">
+        id="editDialog"
+        on-edit_request="editRecipe">
       </socobo-recipe-details-edit>
   </template>
 </dom-module>
@@ -150,6 +151,11 @@
     },
     addNewRecipe : function(e){
       RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
+    },
+    editRecipe : function(e){
+      console.log("Object ot update:");
+      console.log(e.detail)
+      RecipeDao.getInstance(this, this.user).updateRecipe(e.detail);
     },
     switchButton : function (enableButton, disableButton){
       disableButton.style.display = "none";
