@@ -132,6 +132,7 @@
       console.log(e.detail);
       this.$.editDialog.recipe = e.detail;
       this.$.editDialog.initSteps();
+      this.$.editDialog.initIngredients();
       this.$.editDialog.toggleDialog();
     },
     addRecipe : function(){

@@ -153,7 +153,7 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      <paper-icon-button id="exit" icon="clear" on-click="clearInputFields" dialog-dismiss>
       </paper-icon-button>
       <paper-input id="title_input"
                    class="input"
@@ -299,6 +299,11 @@
       initSteps : function(){
         for(var step in this.recipe.steps){
           this.push("recipe_inputs", this.recipe.steps[step]);
+        }
+      },
+      initIngredients : function(){
+        for(var ingr in this.recipe.ingredients){
+          this.push("ingredient_inputs", this.recipe.ingredients[ingr]);
         }
       },
       cutElementOffArray : function (index, arr) {
