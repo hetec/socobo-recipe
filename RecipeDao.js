@@ -6,10 +6,10 @@ var RecipeDao = (function(){
 
     function getUserUrl(){
       //var url = that.url + "/" + id + "/Recipes";
-      var url = that.url + "Recipes/" + id;
+      var url = that.url + "recipes/" + id;
       alert(url);
       return url;
-    };
+    }
 
     this.addRecipe = function(obj){
       alert("user Url: " + userUrl);
@@ -29,7 +29,7 @@ var RecipeDao = (function(){
       //  }, function(err){
       //    alert("ERROR: " + err);
       //  })
-    }
+    };
 
     this.getAndUpdateRecipes = function(){
       var dataRef = new Firebase(userUrl);
@@ -58,7 +58,7 @@ var RecipeDao = (function(){
       }, function(err){
         console.log(err);
       });
-    }
+    };
 
     this.removeAndUpdateRecipe = function(obj, succ, err) {
       if (typeof succ === 'undefined') { succ = function(){
@@ -84,7 +84,7 @@ var RecipeDao = (function(){
 
         }
       });
-    }
+    };
 
     function updateAfterDeletion(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
