@@ -69,9 +69,6 @@
 
     #exit{
       cursor: default;
-      width: 30%;
-      height: 50%;
-      line-height: 50px;
       position: absolute;
       padding: 0;
       margin: 0;
@@ -81,11 +78,8 @@
       font-weight: 100;
     }
 
-    #exit::shadow paper-ripple {
-      color: var(--accent-color);
-    }
 
-    #exit iron-icon:hover {
+    #exit:hover {
       color: var(--accent-color);
       cursor: pointer;
     }
@@ -163,9 +157,8 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-button id="exit">
-        <iron-icon icon="clear" dialog-dismiss></iron-icon>
-      </paper-button>
+      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      </paper-icon-button>
       <paper-input id="title_input"
                    class="input"
                    label="Please name your recipe ... "
