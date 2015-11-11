@@ -156,6 +156,7 @@
       console.log("Object ot update:");
       console.log(e.detail)
       RecipeDao.getInstance(this, this.user).updateRecipe(e.detail);
+      this.push('recipes', e.detail);
     },
     switchButton : function (enableButton, disableButton){
       disableButton.style.display = "none";

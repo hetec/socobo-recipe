@@ -34,6 +34,7 @@ var RecipeDao = (function(){
           alert("Error while saving your data " + error);
         } else {
           console.log("Element created at: " + userUrl);
+          updateAfterDeletion(obj, that.recipes, 'recipes');
         }
       });
     };
