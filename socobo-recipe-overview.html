@@ -56,7 +56,7 @@
             on-uncheck="handleUncheck"
             on-show_request="clicked"
             on-delete_request="removeRecipe"
-            on-edit-request="edit"
+            on-edit_request="edit"
             >
           </socobo-element-list-item>
         </template>
@@ -131,6 +131,7 @@
     edit : function (e){
       console.log(e.detail);
       this.$.editDialog.recipe = e.detail;
+      this.$.editDialog.initSteps();
       this.$.editDialog.toggleDialog();
     },
     addRecipe : function(){

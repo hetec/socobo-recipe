@@ -164,7 +164,7 @@
                    auto-validate
                    error-message="Missing name or invalid characters!"
                    autofocus="true"
-                   focused="true";
+                   focused="true"
       ></paper-input>
       <div class="content">
         <div class="leftColumn">
@@ -244,12 +244,7 @@
         },
         recipe_inputs : {
           type : Array,
-          value : [
-            {
-              desc: "",
-              number: 9
-            }
-          ]
+          value : []
         },
         ingredient_inputs : {
           type : Array,
@@ -300,6 +295,11 @@
         var model = e.model;
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, 'ingredient_inputs');
+      },
+      initSteps : function(){
+        for(var step in this.recipe.steps){
+          this.push("recipe_inputs", this.recipe.steps[step]);
+        }
       },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
