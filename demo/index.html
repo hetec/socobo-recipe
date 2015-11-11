@@ -5,24 +5,31 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>Recipe</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
     <link rel="import" href="../socobo-recipe.html">
     <link rel="import" href="../socobo-recipe-details.html">
   </head>
   <body>
     <template is="dom-bind" id="demo">
-      <socobo-recipe user-login="{{userLogin}}"></socobo-recipe>
+      <socobo-recipe
+        id="elDemoRecipe"
+        user-login="{{userLogin}}">
+      </socobo-recipe>
     </template>
 
     <script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
     <!-- Demo Data -->
     <script type="text/javascript">
-      var demo = document.querySelector('#demo');
-      demo.userLogin = {
-        "firebaseUrl": "https://socobo-dev-component.firebaseio.com/",
-        "userId": "29cfd62b-6a65-4431-96ad-bdba7bb1473a",
-        "expires": "-1"
-      };
+      window.addEventListener("WebComponentsReady", function() {
+        var demo = document.querySelector('#demo');
+        demo.userLogin = {
+          "firebaseUrl": "https://socobo-dev-component.firebaseio.com/",
+          "userId": "29cfd62b-6a65-4431-96ad-bdba7bb1473a",
+          "expires": "-1"
+        };
+
+        var elDemoRecipe = document.querySelector('#elDemoRecipe');
+        elDemoRecipe.loadData();
+      });
     </script>
   </body>
 </html>
