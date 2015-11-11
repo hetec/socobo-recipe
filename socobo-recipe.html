@@ -7,8 +7,11 @@
   </style>
 
   <template>
-
-    <socobo-recipe-overview url='[[userLogin.firebaseUrl]]' user="[[userLogin.userId]]" expire="[[expireDate]]" ></socobo-recipe-overview>
+    <socobo-recipe-overview
+      id="elRecipeOverview"
+      url='[[userLogin.firebaseUrl]]'
+      user="[[userLogin.userId]]"
+      expire="[[expireDate]]"></socobo-recipe-overview>
   </template>
 
 </dom-module>
@@ -25,27 +28,13 @@
          - expires
          */
         userLogin : {
-          type : Object,
-          value : {
-            userId : "524a36cc-2705-456e-ac36-55fcb449054e",
-            firebaseUrl : "https://socobo.firebaseio.com/"
-          }
-        },
-        baseUrl: {
-          type : String,
-          value : "https://luminous-inferno-5751.firebaseio.com"
-        },
-        userId: {
-          type : String,
-          value: "Franky"
-        },
-        expireDate : {
-          type : Number,
-          value: 0
+          type: Object,
+          value: {}
         }
       },
-      ready : function(){
+      loadData : function(){
         console.log(this.userLogin);
+        this.$.elRecipeOverview.getRecipes();
       }
     });
   })();

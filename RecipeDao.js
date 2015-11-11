@@ -5,14 +5,10 @@ var RecipeDao = (function(){
     var userUrl = getUserUrl();
 
     function getUserUrl(){
-      //var url = that.url + "/" + id + "/Recipes";
-      var url = that.url + "recipes/" + id;
-      alert(url);
-      return url;
+      return that.url + "recipes/" + id;
     }
 
     this.addRecipe = function(obj){
-      alert("user Url: " + userUrl);
       var dataRef = new Firebase(userUrl);
       dataRef.push(obj, function(error){
         if (error) {
@@ -44,11 +40,11 @@ var RecipeDao = (function(){
             recipe.incredients = [];
             recipe.steps = [];
             recipe.text = val.text;
-            for(k in val.incredients){
+            for(var k in val.incredients){
               recipe.incredients.push(val.incredients[k])
             }
-            for(k in val.steps){
-              recipe.steps.push(val.steps[k])
+            for(var j in val.steps){
+              recipe.steps.push(val.steps[j])
             }
             console.log("Desc: " + recipe.desc + ", info: " + recipe.info + ", ref: " + recipe.ref);
             that.push('recipes', recipe);
