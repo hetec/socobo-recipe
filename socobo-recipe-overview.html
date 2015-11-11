@@ -56,6 +56,7 @@
             on-uncheck="handleUncheck"
             on-show_request="clicked"
             on-delete_request="removeRecipe"
+            on-edit-request="edit"
             >
           </socobo-element-list-item>
         </template>
@@ -64,11 +65,16 @@
       </paper-fab>
       <paper-fab id="clear" icon="clear" on-click="">
       </paper-fab>
-      <socobo-recipe-details-show id="showDialog"></socobo-recipe-details-show>
+      <socobo-recipe-details-show
+        id="showDialog">
+      </socobo-recipe-details-show>
       <socobo-recipe-details-add
         id="addDialog"
         on-add_request="addNewRecipe"
         ></socobo-recipe-details-add>
+      <socobo-recipe-details-edit
+        id="editDialog">
+      </socobo-recipe-details-edit>
   </template>
 </dom-module>
 <script>
@@ -121,6 +127,11 @@
       this.$.showDialog.recipe = e.detail;
       this.$.showDialog.state = "show";
       this.$.showDialog.toggleDialog();
+    },
+    edit : function (e){
+      console.log(e.detail);
+      this.$.editDialog.recipe = e.detail;
+      this.$.editDialog.toggleDialog();
     },
     addRecipe : function(){
       this.$.addDialog.state = "add";
