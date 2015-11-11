@@ -156,7 +156,6 @@
       <paper-icon-button id="exit" icon="clear" on-click="clearInputFields" dialog-dismiss>
       </paper-icon-button>
       <paper-input id="title_input"
-                   class="input"
                    label="Please name your recipe ... "
                    value="{{recipe.desc}}"
                    required
@@ -177,7 +176,8 @@
             <socobo-recipe-details-ingredient state="add"
                                               ingredient="{{item}}"
                                               id="{{item}}"
-                                              on-rem_ingr="removeIngr">
+                                              on-rem_ingr="removeIngr"
+                                              >
             </socobo-recipe-details-ingredient>
           </template>
 
@@ -189,7 +189,7 @@
         </div>
         <div class="rightColumn">
           <div class="subHeadings">Description</div>
-          <paper-textarea class="input" id="text_input"
+          <paper-textarea id="text_input"
                           rows="6"
                           label="Here you might place a brief description or the like ..."
                           value="{{recipe.text}}"
@@ -300,6 +300,10 @@
           this.push("ingredient_inputs", this.recipe.ingredients[ingr]);
         }
       },
+      revokeEdit:function(){
+        this.recipe_inputs = [];
+        this.ingredient_inputs = [];
+      },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
       },
@@ -308,6 +312,7 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
+        this.revokeEdit();
       },
       validateRecipe : function(){
         var check = function(obj, value){
