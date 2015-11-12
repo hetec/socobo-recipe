@@ -63,7 +63,7 @@
       </div>
       <paper-fab id="add" icon="add" on-click="addRecipe">
       </paper-fab>
-      <paper-fab id="clear" icon="clear" on-click="">
+      <paper-fab id="clear" icon="clear" on-click="notDef">
       </paper-fab>
       <socobo-recipe-details-show
         id="showDialog">
@@ -144,19 +144,36 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
+//      RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
+      (new RecipeDao(this, this.user)).getAndUpdateRecipes();
     },
     removeRecipe : function (e){
-      RecipeDao.getInstance(this, this.user).removeAndUpdateRecipe(e.detail);
+//      RecipeDao.getInstance(this, this.user).removeAndUpdateRecipe(e.detail);
+      new RecipeDao(this, this.user).removeAndUpdateRecipe(e.detail);
+      this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
-      RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
+//      RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
+      new RecipeDao(this, this.user).addRecipe(e.detail);
     },
     editRecipe : function(e){
       console.log("Object ot update:");
       console.log(e.detail)
-      RecipeDao.getInstance(this, this.user).updateRecipe(e.detail);
-      this.push('recipes', e.detail);
+//      RecipeDao.getInstance(this, this.user).updateRecipe(e.detail);
+      new RecipeDao(this, this.user).updateRecipe(e.detail);
+      //this.recipes = [];
+      //Ugly way to update the view through fetching all entities again!
+      //But all trys to update the view through data binding or the like failed!
+      //RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
+    },
+    updateAfterDeletion : function(el, arr, pathToProperty){
+      for(var i = 0; i < arr.length; i++){
+        if(arr[i].ref == el.ref){
+          alert(el.ref);
+          alert(i);
+          this.splice(pathToProperty, i, 1);
+        }
+      }
     },
     switchButton : function (enableButton, disableButton){
       disableButton.style.display = "none";
