@@ -8,7 +8,10 @@
 
   <template>
     <socobo-recipe-overview
-      url='[[baseUrl]]' user="[[userId]]" expire="[[expireDate]]"></socobo-recipe-overview>
+      id="elRecipeOverview"
+      url='[[userLogin.firebaseUrl]]'
+      user="[[userLogin.userId]]"
+      expire="[[expireDate]]"></socobo-recipe-overview>
   </template>
 
 </dom-module>
@@ -18,18 +21,20 @@
     Polymer({
       is: 'socobo-recipe',
       properties : {
-        baseUrl: {
-          type : String,
-          value : "https://luminous-inferno-5751.firebaseio.com"
-        },
-        userId: {
-          type : String,
-          value: "Franky"
-        },
-        expireDate : {
-          type : Number,
-          value: 0
+        /*Object containing the user information. Must have following
+         properties:
+         - userId,
+         - firebaseUrl,
+         - expires
+         */
+        userLogin : {
+          type : Object,
+          value : {}
         }
+      },
+      loadData : function(){
+        console.log(this.userLogin);
+        this.$.elRecipeOverview.getRecipes();
       }
     });
   })();

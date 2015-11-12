@@ -1,0 +1,397 @@
+<link href="elements.html" rel="import">
+<dom-module id="socobo-recipe-details-add">
+  <style>
+    :host {
+      display: block;
+    }
+    .wrapper {
+      background-color: white;
+      width: 90%;
+      min-width:700px;
+      overflow: auto;
+      color: #8A7F80;
+      font-family: sans-serif;
+      border-radius: 5px;
+      line-height: 2;
+      padding: 0;
+    }
+
+    #dialog{
+      margin-top : 20px;
+      margin-bottom: 0;
+      top: 20px;
+      min-height: 85vh;
+    }
+    .content {
+    @apply(--layout-horizontal);
+    }
+
+    .leftColumn {
+      width: 300px;
+      padding: 30px;
+      padding-top: 0;
+    }
+
+    .rightColumn {
+      width: 100%;
+      margin-right: 0px;
+      padding: 30px;
+      padding-top: 0;
+      overflow: hidden;
+    }
+
+    .wrapper h1 {
+      z-index: 15;
+      padding-left: 30px;
+      margin: 0;
+      letter-spacing: -1px;
+      color: #8A7F80;
+      font-weight: 400;
+      font-size: 30px;
+    }
+
+    .recipeImg {
+      background-color: gainsboro;
+      width: 280px;
+      height: 280px;
+      margin-bottom: 20px;
+    }
+
+    .step {
+      width: 100%;
+    }
+
+    #exit iron-icon{
+      width: 30px;
+      height: 30px;
+      float: right;
+    }
+
+    #exit{
+      cursor: default;
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      top:0px;
+      right: 0px;
+      color: #8A7F80;
+      font-weight: 100;
+    }
+
+
+    #exit:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 0;
+      margin: 0;
+      padding-top: 0;
+    }
+
+    .input{
+      display: block;
+    }
+
+    #title_input{
+      padding: 0;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-bottom: 20px;
+    }
+
+    .step_input paper-input{
+    @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+
+    .step_input paper-icon-button{
+      width:40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+
+    #addStep{
+      margin : 0;
+      margin-top: 20px;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    #addIngr{
+      margin : 0;
+      margin-top: 20px;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    .buttons {
+      position: fixed;
+      right: 80px;
+      bottom: 60px;
+    }
+
+    .buttons paper-fab{
+      margin: 10px;
+    }
+
+    #abort{
+      --paper-fab-background: var(--default-primary-color);
+    }
+
+    .subHeadings {
+      background-color: #F4F0EC;
+      text-align: center;
+    }
+
+  </style>
+  <template>
+    <paper-dialog elevation="0" class="wrapper" id="dialog" modal
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  with-backdrop>
+      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      </paper-icon-button>
+      <paper-input id="title_input"
+                   class="input"
+                   label="Please name your recipe ... "
+                   value="{{recipe.desc}}"
+                   required
+                   pattern=".+"
+                   auto-validate
+                   error-message="Missing name or invalid characters!"
+                   autofocus="true"
+                   focused="true";
+        ></paper-input>
+      <div class="content">
+        <div class="leftColumn">
+          <paper-material elevation="1" class="recipeImg">
+          </paper-material>
+
+            <div class="subHeadings">Ingredients:</div>
+            <template is="dom-repeat"
+                      items="{{ingredient_inputs}}">
+              <socobo-recipe-details-ingredient state="add"
+                                                ingredient="{{item}}"
+                                                id="{{item}}"
+                                                on-rem_ingr="removeIngr">
+              </socobo-recipe-details-ingredient>
+            </template>
+
+          <paper-button icon="add"
+                     id="addIngr"
+                     on-click="addIngr">
+            add ingredient
+          </paper-button>
+        </div>
+        <div class="rightColumn">
+          <div class="subHeadings">Description</div>
+          <paper-textarea class="input" id="text_input"
+                          rows="6"
+                          label="Here you might place a brief description or the like ..."
+                          value="{{recipe.text}}"
+            ></paper-textarea>
+          <template is="dom-if" if="{{recipe_inputs.length}}">
+            <div class="subHeadings">Steps</div>
+          </template>
+          <div class="steps"
+               id="steps_input"
+               class="input">
+            <template is="dom-repeat"
+                      items="{{recipe_inputs}}">
+              <socobo-recipe-details-step state="add"
+                                          class="step"
+                                          step="{{item}}"
+                                          id="{{item}}"
+                                          on-rem_step="removeStep">
+              </socobo-recipe-details-step>
+            </template>
+          </div>
+          <paper-button icon="add"
+                     id="addStep"
+                     on-click="addStep">
+            add step
+          </paper-button>
+        </div>
+      </div>
+      <div class="buttons">
+        <paper-fab icon="clear"
+                   id="abort"
+                   dialog-dismiss
+                   on-click="clearInputFields">
+        </paper-fab>
+        <paper-fab icon="done"
+                   id="ok"
+                   on-click="createNewRecipe">
+        </paper-fab>
+      </div>
+    </paper-dialog>
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-recipe-details-add',
+      properties: {
+        recipe : {
+          type : Object,
+          value : {}
+        },
+        recipe_inputs : {
+          type : Array,
+          value : [
+            {
+              desc: "",
+              number: 9
+            }
+          ]
+        },
+        ingredient_inputs : {
+          type : Array,
+          value : [
+            {
+              desc : "",
+              amount : "",
+              unit : ""
+            }
+          ]
+        },
+        state : {
+          type: String,
+          value: "show"
+        },
+      },
+      exit : function () {
+        this.fire("exit_request");
+      },
+      toggleDialog : function(){
+        this.$.dialog.toggle();
+      },
+      addStep : function () {
+        var step = {
+          desc : "",
+          number : 0
+        }
+        this.push("recipe_inputs", step);
+      },
+      addIngr : function () {
+        var ingr = {
+          desc : "",
+          amount : "",
+          unit : ""
+        }
+        this.push("ingredient_inputs", ingr);
+        this.numberOfIngr++;
+      },
+      isGreaterZero : function(){
+        return this.recipe_inputs.length > 0;
+      },
+      removeStep : function(e){
+        var model = e.model;
+        var itemIndex = model.get('index');
+        this.cutElementOffArray(itemIndex, "recipe_inputs");
+      },
+      removeIngr : function(e){
+        var model = e.model;
+        var itemIndex = model.get('index');
+        this.cutElementOffArray(itemIndex, 'ingredient_inputs');
+      },
+      cutElementOffArray : function (index, arr) {
+        this.splice(arr, index ,1);
+      },
+      clearInputFields : function(){
+        var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.input');
+        for(var field in inputFields){
+          inputFields[field].value = "";
+        }
+        this.ingredient_inputs = [{
+          desc : "",
+          amount : "",
+          unit : ""
+        }]
+        this.recipe_inputs = [
+          {
+            number : 0,
+            desc : ""
+          }
+        ]
+      },
+      validateRecipe : function(){
+        var check = function(obj, value){
+          return obj.recipe[value] != "" && obj.recipe[value] != undefined
+        }
+        var checkContainer = function(obj, container){
+          console.log(typeof obj.recipe[container]);
+          return obj.recipe[container].lenght > 0;
+        }
+        var titleExists = check(this, 'desc');
+        var textExists = check(this, "text");
+        var stepsExist = this.recipe.steps.length > 0;
+        var ingredientsExist = this.recipe.ingredients.length > 0;
+        var message = "";
+        if(!titleExists){
+          message += "Title\n";
+        }
+        if(!stepsExist && !textExists){
+          message += "Description or Steps\n";
+        }
+        var stepsComplete = true;
+        if(stepsExist){
+          for(var step in this.recipe.steps){
+            if(this.recipe.steps[step].desc == ""){
+              stepsComplete = false;
+            }
+          }
+          if(!stepsComplete){
+            message += "Steps need a description\n";
+          }
+        }
+        var ingredientsComplete = true;
+        if(!ingredientsExist){
+          message += "Ingredients\n"
+        }else{
+          for(var ingr in this.recipe.ingredients){
+            if(this.recipe.ingredients[ingr].desc == ""){
+              ingredientsComplete = false;
+            }
+          }
+          if(!ingredientsComplete){
+            message += "Ingredients need a description\n";
+          }
+        }
+        if(message != ""){
+          message = "Missing:\n" + message;
+        }
+        return message;
+      },
+      createNewRecipe : function (){
+        this.recipe.ingredients = this.ingredient_inputs;
+        var arr = [];
+        for(var i = 0; i < this.recipe_inputs.length; i++){
+          arr[i]=this.recipe_inputs[i];
+        }
+        this.recipe.steps = arr;
+        var counter = 1;
+        for(var k in this.recipe.steps){
+          this.recipe.steps[k].number = counter;
+          counter++;
+        }
+        var v = this.validateRecipe();
+        if(v.length <= 0){
+          this.fire("add_request", this.recipe);
+          this.clearInputFields();
+          this.$.dialog.close();
+        }else{
+          alert(v);
+        }
+      }
+    });
+  })();
+</script>
+
+

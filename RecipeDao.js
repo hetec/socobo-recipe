@@ -5,7 +5,18 @@ var RecipeDao = (function(){
     var userUrl = getUserUrl();
 
     function getUserUrl(){
-      return url = that.url + "/" + id + "/Recipes";
+      return that.url + "recipes/" + id;
+    }
+
+    this.addRecipe = function(obj){
+      var dataRef = new Firebase(userUrl);
+      dataRef.push(obj, function(error){
+        if (error) {
+          alert("Error while saving your data " + error);
+        } else {
+          console.log("Element created at: " + userUrl);
+        }
+      });
     };
 
     this.getAndUpdateRecipes = function(){
@@ -18,14 +29,14 @@ var RecipeDao = (function(){
             recipe.ref = snapshot.ref();
             recipe.desc = val.desc;
             recipe.info = val.info;
-            recipe.incredients = [];
+            recipe.ingredients = [];
             recipe.steps = [];
             recipe.text = val.text;
-            for(k in val.incredients){
-              recipe.incredients.push(val.incredients[k])
+            for(var k in val.ingredients){
+              recipe.ingredients.push(val.ingredients[k])
             }
-            for(k in val.steps){
-              recipe.steps.push(val.steps[k])
+            for(var j in val.steps){
+              recipe.steps.push(val.steps[j])
             }
             console.log("Desc: " + recipe.desc + ", info: " + recipe.info + ", ref: " + recipe.ref);
             that.push('recipes', recipe);
@@ -35,7 +46,7 @@ var RecipeDao = (function(){
       }, function(err){
         console.log(err);
       });
-    }
+    };
 
     this.removeAndUpdateRecipe = function(obj, succ, err) {
       if (typeof succ === 'undefined') { succ = function(){
@@ -61,7 +72,7 @@ var RecipeDao = (function(){
 
         }
       });
-    }
+    };
 
     function updateAfterDeletion(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
