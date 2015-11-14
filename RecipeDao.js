@@ -137,6 +137,8 @@ function RecipeDao(component, userId) {
       if (typeof err !== 'function') {
         throw "The callback for errors in removeRecipe() is not a function";
       }
+      //alert("" + obj.ref);
+      //console.log(obj);
       var dataRef = new Firebase("" + obj.ref);
       dataRef.remove(function (error) {
         if (error) {
