@@ -12,6 +12,8 @@ function RecipeDao(component, userId) {
       dataRef.push(obj, function (error) {
         if (error) {
           alert("Error while saving your data " + error);
+          console.error("ERROR in ADD RECIPE");
+          console.error(error);
         } else {
           console.log("Element created at: " + userUrl);
         }
@@ -23,53 +25,75 @@ function RecipeDao(component, userId) {
       var newObj = {};
       for (var e in obj) {
         if (e != "ref" && e != "info") {
-          newObj[e] = obj[e]
-          console.log(newObj[e]);
+          if(checkProperty(obj, e)){
+            newObj[e] = obj[e];
+          }
         }
       }
-      alert(reference);
       var dataRef = new Firebase(reference);
       dataRef.set(newObj, function (error) {
         if (error) {
           alert("Error while saving your data " + error);
+          console.error("ERROR in EDIT RECIPE");
+          console.error(error);
         } else {
-          console.log("Element created at: " + userUrl);
+          console.log("Element updated to: ");
+          console.log(newObj);
         }
       });
       that.recipes = [];
     };
 
-    this.getAllRecipes = function(obj){
+    this.getAllRecipes = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.once("value", function (snapshot) {
         var val = snapshot.val();
         for(e in val){
-
           var recipe = {};
-          alert("SNAP REF: " + e);
-          recipe.ref = snapshot.ref() + "/" + e;
-          recipe.desc = val[e].desc;
-          recipe.info = val[e].info;
-          recipe.ingredients = [];
-          recipe.steps = [];
-          recipe.text = val[e].text;
-          for (var k in val[e].ingredients) {
-            recipe.ingredients.push(val[e].ingredients[k])
-          }
-          for (var j in val[e].steps) {
-            recipe.steps.push(val[e].steps[j])
+          var source;
+          if(checkProperty(val, e)){
+            source =  val[e];
+            recipe.ref = snapshot.ref() + "/" + e;
+            recipe.desc = source.desc;
+            recipe.info = source.info;
+            recipe.ingredients = [];
+            recipe.steps = [];
+            recipe.text = source.text;
+            fillArrayProperty(source, recipe, "ingredients");
+            //if(checkArrayProperty(recipe, "ingredients")){
+            //  for (var k in val[e].ingredients) {
+            //    recipe.ingredients.push(val[e].ingredients[k])
+            //  }
+            //}
+            fillArrayProperty(source, recipe, "steps");
+            //if(checkArrayProperty(recipe, "steps")){
+            //  for (var j in val[e].steps) {
+            //    recipe.steps.push(val[e].steps[j])
+            //  }
+            //}
+          }else {
+            recipe.ref = snapshot.ref() + "/" + e;
+            recipe.desc = "no titel";
+            recipe.info = "-";
+            recipe.ingredients = [];
+            recipe.steps = [];
+            recipe.text = "no description";
           }
           that.push("recipes", recipe);
         }
-      })
-    }
+        console.log("Fetching all recipes from db completed!");
+      }, function(err){
+        alert("ERROR while fetching all recipes!");
+        console.error("ERROR in GET ALL RECIPES");
+        console.error(err);
+      });
+    };
 
     this.getAndUpdateRecipes = function () {
-      console.log("getAndUpdateRecipes called");
+      console.log("Initialize alle recipes and keep updating on change");
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function (snapshot) {
-        console.log("CHILD ADDED --> UPDATE VIEW");
-        var p = new Promise(function (resolve, reject) {
+        new Promise(function (resolve, reject) {
           resolve(snapshot.val());
         }).then(function (val) {
           var recipe = {};
@@ -79,14 +103,14 @@ function RecipeDao(component, userId) {
           recipe.ingredients = [];
           recipe.steps = [];
           recipe.text = val.text;
-          for (var k in val.ingredients) {
-            recipe.ingredients.push(val.ingredients[k])
-          }
-          for (var j in val.steps) {
-            recipe.steps.push(val.steps[j])
-          }
-          console.log("IN ADD AND UPDATE");
-          console.log(recipe);
+          fillArrayProperty(val, recipe, "ingredients");
+          //for (var k in val.ingredients) {
+          //  recipe.ingredients.push(val.ingredients[k])
+          //}
+          fillArrayProperty(val, recipe, "steps");
+          //for (var j in val.steps) {
+          //  recipe.steps.push(val.steps[j])
+          //}
           that.push('recipes', recipe);
         }).catch(function (err) {
           console.log(err);
@@ -96,15 +120,15 @@ function RecipeDao(component, userId) {
       });
     };
 
-    this.removeAndUpdateRecipe = function (obj, succ, err) {
+    this.remove = function (obj, succ, err) {
       if (typeof succ === 'undefined') {
         succ = function () {
-          console.log('Synchronization succeeded');
+          console.log('Deletion succeeded');
         }
       }
       if (typeof err === 'undefined') {
         err = function () {
-          console.log('Synchronization failed');
+          console.log('Deletion failed');
         }
       }
       if (typeof succ !== 'function') {
@@ -113,7 +137,6 @@ function RecipeDao(component, userId) {
       if (typeof err !== 'function') {
         throw "The callback for errors in removeRecipe() is not a function";
       }
-      alert("IN REM: " + obj.ref);
       var dataRef = new Firebase("" + obj.ref);
       dataRef.remove(function (error) {
         if (error) {
@@ -124,10 +147,16 @@ function RecipeDao(component, userId) {
       });
     };
 
-    function updateAfterDeletion(el, arr, pathToProperty) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].ref == el.ref) {
-          that.splice(pathToProperty, i, 1);
+    function checkProperty(obj, propName){
+      return obj.hasOwnProperty(propName);
+    }
+
+    function fillArrayProperty(source, dest, arrProp){
+      if(checkProperty(dest, arrProp)){
+        for (var j in source[arrProp]) {
+          if(checkProperty(source[arrProp], j)){
+            (dest[arrProp]).push(source[arrProp][j]);
+          }
         }
       }
     }

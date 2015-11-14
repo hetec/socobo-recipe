@@ -148,8 +148,8 @@
       (new RecipeDao(this, this.user)).getAndUpdateRecipes();
     },
     removeRecipe : function (e){
-//      RecipeDao.getInstance(this, this.user).removeAndUpdateRecipe(e.detail);
-      new RecipeDao(this, this.user).removeAndUpdateRecipe(e.detail);
+//      RecipeDao.getInstance(this, this.user).remove(e.detail);
+      new RecipeDao(this, this.user).remove(e.detail);
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
