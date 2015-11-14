@@ -178,9 +178,13 @@
       }
     },
     removeAllChecked : function (e) {
-      console.log("REMOVE ALL");
+      console.log("REMOVE ALL CHECKED");
       for(i in this.checkedBoxes.refs){
         new RecipeDao(this, this.user).remove((this.checkedBoxes.refs)[i]);
+        this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
+        this.checkedBoxes.number--;
+        this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
+        this.trackCheckedBoxes();
       }
     },
     switchButton : function (enableButton, disableButton){
