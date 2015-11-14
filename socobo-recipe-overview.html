@@ -124,13 +124,11 @@
       }
     },
     clicked : function (e){
-      console.log(e.detail);
       this.$.showDialog.recipe = e.detail;
       this.$.showDialog.state = "show";
       this.$.showDialog.toggleDialog();
     },
     edit : function (e){
-      console.log(e.detail);
       this.$.editDialog.recipe = e.detail;
       this.$.editDialog.initSteps();
       this.$.editDialog.initIngredients();
@@ -144,31 +142,23 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-//      RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
-      (new RecipeDao(this, this.user)).getAndUpdateRecipes();
+      new RecipeDao(this, this.user).getAndUpdateRecipes();
     },
     removeRecipe : function (e){
-//      RecipeDao.getInstance(this, this.user).remove(e.detail);
       new RecipeDao(this, this.user).remove(e.detail);
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
-//      RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
       new RecipeDao(this, this.user).addRecipe(e.detail);
       var counter = 0;
     },
     editRecipe : function(e){
-      console.log("editRecipe called");
-      console.log("Object ot update:");
-      console.log(e.detail)
       new RecipeDao(this, this.user).updateRecipe(e.detail);
       new RecipeDao(this, this.user).getAllRecipes();
     },
     updateAfterDeletion : function(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
         if(arr[i].ref == el.ref){
-          alert(el.ref);
-          alert(i);
           this.splice(pathToProperty, i, 1);
         }
       }
