@@ -155,16 +155,14 @@
     addNewRecipe : function(e){
 //      RecipeDao.getInstance(this, this.user).addRecipe(e.detail);
       new RecipeDao(this, this.user).addRecipe(e.detail);
+      var counter = 0;
     },
     editRecipe : function(e){
+      console.log("editRecipe called");
       console.log("Object ot update:");
       console.log(e.detail)
-//      RecipeDao.getInstance(this, this.user).updateRecipe(e.detail);
       new RecipeDao(this, this.user).updateRecipe(e.detail);
-      //this.recipes = [];
-      //Ugly way to update the view through fetching all entities again!
-      //But all trys to update the view through data binding or the like failed!
-      //RecipeDao.getInstance(this, this.user).getAndUpdateRecipes();
+      new RecipeDao(this, this.user).getAllRecipes();
     },
     updateAfterDeletion : function(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){

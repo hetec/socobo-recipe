@@ -113,7 +113,9 @@ function RecipeDao(component, userId) {
       if (typeof err !== 'function') {
         throw "The callback for errors in removeRecipe() is not a function";
       }
-      obj.ref.remove(function (error) {
+      alert("IN REM: " + obj.ref);
+      var dataRef = new Firebase("" + obj.ref);
+      dataRef.remove(function (error) {
         if (error) {
           err();
         } else {
