@@ -7,7 +7,7 @@ function RecipeDao(component, userId) {
       return that.url + "recipes/" + id;
     }
 
-    this.addRecipe = function (obj) {
+    this.add = function (obj) {
       var dataRef = new Firebase(userUrl);
       dataRef.push(obj, function (error) {
         if (error) {
@@ -20,7 +20,7 @@ function RecipeDao(component, userId) {
       });
     };
 
-    this.updateRecipe = function (obj) {
+    this.update = function (obj) {
       var reference = "" + obj.ref + "";
       var newObj = {};
       for (var e in obj) {
@@ -44,7 +44,7 @@ function RecipeDao(component, userId) {
       that.recipes = [];
     };
 
-    this.getAllRecipes = function(){
+    this.getAll = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.once("value", function (snapshot) {
         var val = snapshot.val();
@@ -60,17 +60,7 @@ function RecipeDao(component, userId) {
             recipe.steps = [];
             recipe.text = source.text;
             fillArrayProperty(source, recipe, "ingredients");
-            //if(checkArrayProperty(recipe, "ingredients")){
-            //  for (var k in val[e].ingredients) {
-            //    recipe.ingredients.push(val[e].ingredients[k])
-            //  }
-            //}
             fillArrayProperty(source, recipe, "steps");
-            //if(checkArrayProperty(recipe, "steps")){
-            //  for (var j in val[e].steps) {
-            //    recipe.steps.push(val[e].steps[j])
-            //  }
-            //}
           }else {
             recipe.ref = snapshot.ref() + "/" + e;
             recipe.desc = "no titel";
@@ -89,7 +79,7 @@ function RecipeDao(component, userId) {
       });
     };
 
-    this.getAndUpdateRecipes = function () {
+    this.getAndUpdate = function () {
       console.log("Initialize alle recipes and keep updating on change");
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function (snapshot) {
@@ -104,13 +94,7 @@ function RecipeDao(component, userId) {
           recipe.steps = [];
           recipe.text = val.text;
           fillArrayProperty(val, recipe, "ingredients");
-          //for (var k in val.ingredients) {
-          //  recipe.ingredients.push(val.ingredients[k])
-          //}
           fillArrayProperty(val, recipe, "steps");
-          //for (var j in val.steps) {
-          //  recipe.steps.push(val.steps[j])
-          //}
           that.push('recipes', recipe);
         }).catch(function (err) {
           console.log(err);
@@ -137,8 +121,6 @@ function RecipeDao(component, userId) {
       if (typeof err !== 'function') {
         throw "The callback for errors in removeRecipe() is not a function";
       }
-      //alert("" + obj.ref);
-      //console.log(obj);
       var dataRef = new Firebase("" + obj.ref);
       dataRef.remove(function (error) {
         if (error) {

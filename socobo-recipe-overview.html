@@ -115,7 +115,6 @@
     handleCheck : function(e){
       this.checkedBoxes.number++;
       this.checkedBoxes.refs.push(e.detail);
-      console.log("ADD:");
       for(e in this.checkedBoxes.refs){
         console.log(this.checkedBoxes.refs[e]);
       }
@@ -124,7 +123,6 @@
     handleUncheck : function(e){
       this.checkedBoxes.number--;
       this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
-      console.log("REMOVE:");
       for(e in this.checkedBoxes.refs){
         console.log(this.checkedBoxes.refs[e]);
       }
@@ -156,19 +154,19 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      new RecipeDao(this, this.user).getAndUpdateRecipes();
+      new RecipeDao(this, this.user).getAndUpdate();
     },
     removeRecipe : function (e){
       new RecipeDao(this, this.user).remove(e.detail);
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
-      new RecipeDao(this, this.user).addRecipe(e.detail);
+      new RecipeDao(this, this.user).add(e.detail);
       var counter = 0;
     },
     editRecipe : function(e){
-      new RecipeDao(this, this.user).updateRecipe(e.detail);
-      new RecipeDao(this, this.user).getAllRecipes();
+      new RecipeDao(this, this.user).update(e.detail);
+      new RecipeDao(this, this.user).getAll();
     },
     updateAfterDeletion : function(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
@@ -178,7 +176,6 @@
       }
     },
     removeAllChecked : function (e) {
-      console.log("REMOVE ALL CHECKED");
       for(i in this.checkedBoxes.refs){
         new RecipeDao(this, this.user).remove((this.checkedBoxes.refs)[i]);
         this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
