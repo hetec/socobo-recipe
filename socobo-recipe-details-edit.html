@@ -1,5 +1,5 @@
 <link href="elements.html" rel="import">
-<dom-module id="socobo-recipe-details-add">
+<dom-module id="socobo-recipe-details-edit">
   <style>
     :host {
       display: block;
@@ -23,7 +23,7 @@
       min-height: 85vh;
     }
     .content {
-    @apply(--layout-horizontal);
+      @apply(--layout-horizontal);
     }
 
     .leftColumn {
@@ -102,7 +102,7 @@
     }
 
     .step_input paper-input{
-    @apply(--layout-flex);
+      @apply(--layout-flex);
       padding-right: 30px;
       width: 800px;
     }
@@ -153,10 +153,9 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      <paper-icon-button id="exit" icon="clear" on-click="clearInputFields" dialog-dismiss>
       </paper-icon-button>
       <paper-input id="title_input"
-                   class="input"
                    label="Please name your recipe ... "
                    value="{{recipe.desc}}"
                    required
@@ -164,36 +163,37 @@
                    auto-validate
                    error-message="Missing name or invalid characters!"
                    autofocus="true"
-                   focused="true";
-        ></paper-input>
+                   focused="true"
+      ></paper-input>
       <div class="content">
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
           </paper-material>
 
-            <div class="subHeadings">Ingredients:</div>
-            <template is="dom-repeat"
-                      items="{{ingredient_inputs}}">
-              <socobo-recipe-details-ingredient state="add"
-                                                ingredient="{{item}}"
-                                                id="{{item}}"
-                                                on-rem_ingr="removeIngr">
-              </socobo-recipe-details-ingredient>
-            </template>
+          <div class="subHeadings">Ingredients:</div>
+          <template is="dom-repeat"
+                    items="{{ingredient_inputs}}">
+            <socobo-recipe-details-ingredient state="add"
+                                              ingredient="{{item}}"
+                                              id="{{item}}"
+                                              on-rem_ingr="removeIngr"
+                                              >
+            </socobo-recipe-details-ingredient>
+          </template>
 
           <paper-button icon="add"
-                     id="addIngr"
-                     on-click="addIngr">
+                        id="addIngr"
+                        on-click="addIngr">
             add ingredient
           </paper-button>
         </div>
         <div class="rightColumn">
           <div class="subHeadings">Description</div>
-          <paper-textarea class="input" id="text_input"
+          <paper-textarea id="text_input"
                           rows="6"
                           label="Here you might place a brief description or the like ..."
                           value="{{recipe.text}}"
-            ></paper-textarea>
+          ></paper-textarea>
           <template is="dom-if" if="{{recipe_inputs.length}}">
             <div class="subHeadings">Steps</div>
           </template>
@@ -211,8 +211,8 @@
             </template>
           </div>
           <paper-button icon="add"
-                     id="addStep"
-                     on-click="addStep">
+                        id="addStep"
+                        on-click="addStep">
             add step
           </paper-button>
         </div>
@@ -236,7 +236,7 @@
 <script>
   (function() {
     Polymer({
-      is: 'socobo-recipe-details-add',
+      is: 'socobo-recipe-details-edit',
       properties: {
         recipe : {
           type : Object,
@@ -244,22 +244,11 @@
         },
         recipe_inputs : {
           type : Array,
-          value : [
-            {
-              desc: "",
-              number: 9
-            }
-          ]
+          value : []
         },
         ingredient_inputs : {
           type : Array,
-          value : [
-            {
-              desc : "",
-              amount : "",
-              unit : ""
-            }
-          ]
+          value : []
         },
         state : {
           type: String,
@@ -298,6 +287,20 @@
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, 'ingredient_inputs');
       },
+      initSteps : function(){
+        for(var step in this.recipe.steps){
+          this.push("recipe_inputs", this.recipe.steps[step]);
+        }
+      },
+      initIngredients : function(){
+        for(var ingr in this.recipe.ingredients){
+          this.push("ingredient_inputs", this.recipe.ingredients[ingr]);
+        }
+      },
+      revokeEdit:function(){
+        this.recipe_inputs = [];
+        this.ingredient_inputs = [];
+      },
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
       },
@@ -306,17 +309,7 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
-        this.ingredient_inputs = [{
-          desc : "",
-          amount : "",
-          unit : ""
-        }]
-        this.recipe_inputs = [
-          {
-            number : 0,
-            desc : ""
-          }
-        ]
+        this.revokeEdit();
       },
       validateRecipe : function(){
         var check = function(obj, value){
@@ -381,7 +374,7 @@
         }
         var v = this.validateRecipe();
         if(v.length <= 0){
-          this.fire("add_request", this.recipe);
+          this.fire("edit_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();
         }else{
@@ -391,5 +384,6 @@
     });
   })();
 </script>
+
 
 

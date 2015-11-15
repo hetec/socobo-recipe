@@ -59,15 +59,6 @@
       margin-bottom: 20px;
     }
 
-
-    .text {
-      vertical-align: text-top;
-      margin-bottom: 40px;
-      text-align: justify;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
     .step {
       width: 100%;
     }
@@ -88,7 +79,6 @@
       color: #8A7F80;
       font-weight: 100;
     }
-
 
     #exit:hover {
       color: var(--accent-color);
@@ -207,9 +197,6 @@
       },
       toggleDialog : function(){
         this.$.dialog.toggle();
-      },
-      cutElementOffArray : function (index, arr) {
-        this.splice(arr, index ,1);
       }
     });
   })();
