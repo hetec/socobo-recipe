@@ -7,20 +7,18 @@ function RecipeDao(component, userId) {
       return that.url + "recipes/" + id;
     }
 
-    this.addRecipe = function (obj) {
+    this.add = function (obj) {
       var dataRef = new Firebase(userUrl);
       dataRef.push(obj, function (error) {
         if (error) {
-          alert("Error while saving your data " + error);
-          console.error("ERROR in ADD RECIPE");
-          console.error(error);
+          notify("Sorry a technical error occured while saving your recipe :(");
         } else {
-          console.log("Element created at: " + userUrl);
+          notify("Element successfully created!");
         }
       });
     };
 
-    this.updateRecipe = function (obj) {
+    this.update = function (obj) {
       var reference = "" + obj.ref + "";
       var newObj = {};
       for (var e in obj) {
@@ -33,18 +31,15 @@ function RecipeDao(component, userId) {
       var dataRef = new Firebase(reference);
       dataRef.set(newObj, function (error) {
         if (error) {
-          alert("Error while saving your data " + error);
-          console.error("ERROR in EDIT RECIPE");
-          console.error(error);
+          notify("Sorry a technical error occured while updating your recipe :(");
         } else {
-          console.log("Element updated to: ");
-          console.log(newObj);
+          notify("Element successfully updated!");
         }
       });
       that.recipes = [];
     };
 
-    this.getAllRecipes = function(){
+    this.getAll = function(){
       var dataRef = new Firebase(userUrl);
       dataRef.once("value", function (snapshot) {
         var val = snapshot.val();
@@ -60,17 +55,7 @@ function RecipeDao(component, userId) {
             recipe.steps = [];
             recipe.text = source.text;
             fillArrayProperty(source, recipe, "ingredients");
-            //if(checkArrayProperty(recipe, "ingredients")){
-            //  for (var k in val[e].ingredients) {
-            //    recipe.ingredients.push(val[e].ingredients[k])
-            //  }
-            //}
             fillArrayProperty(source, recipe, "steps");
-            //if(checkArrayProperty(recipe, "steps")){
-            //  for (var j in val[e].steps) {
-            //    recipe.steps.push(val[e].steps[j])
-            //  }
-            //}
           }else {
             recipe.ref = snapshot.ref() + "/" + e;
             recipe.desc = "no titel";
@@ -81,16 +66,12 @@ function RecipeDao(component, userId) {
           }
           that.push("recipes", recipe);
         }
-        console.log("Fetching all recipes from db completed!");
       }, function(err){
-        alert("ERROR while fetching all recipes!");
-        console.error("ERROR in GET ALL RECIPES");
-        console.error(err);
+        notify("Sorry a technical error occured while fetching your recipes :(");
       });
     };
 
-    this.getAndUpdateRecipes = function () {
-      console.log("Initialize alle recipes and keep updating on change");
+    this.getAndUpdate = function () {
       var dataRef = new Firebase(userUrl);
       dataRef.on("child_added", function (snapshot) {
         new Promise(function (resolve, reject) {
@@ -104,31 +85,25 @@ function RecipeDao(component, userId) {
           recipe.steps = [];
           recipe.text = val.text;
           fillArrayProperty(val, recipe, "ingredients");
-          //for (var k in val.ingredients) {
-          //  recipe.ingredients.push(val.ingredients[k])
-          //}
           fillArrayProperty(val, recipe, "steps");
-          //for (var j in val.steps) {
-          //  recipe.steps.push(val.steps[j])
-          //}
           that.push('recipes', recipe);
         }).catch(function (err) {
-          console.log(err);
+          notify(err);
         });
       }, function (err) {
-        console.log(err);
+        notify(err);
       });
     };
 
     this.remove = function (obj, succ, err) {
       if (typeof succ === 'undefined') {
         succ = function () {
-          console.log('Deletion succeeded');
+          notify("Element successfully removed!");
         }
       }
       if (typeof err === 'undefined') {
         err = function () {
-          console.log('Deletion failed');
+          notify("Sorry a technical error occured while deleting your recipe :(");
         }
       }
       if (typeof succ !== 'function') {
@@ -159,6 +134,11 @@ function RecipeDao(component, userId) {
           }
         }
       }
+    }
+
+    function notify(msg){
+      that.$.errorNotification.text=msg;
+      that.$.errorNotification.show();
     }
 }
 

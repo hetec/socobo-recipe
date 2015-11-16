@@ -48,8 +48,9 @@
         <template is="dom-if" if="{{!recipes.length}}">
           <p id="no_recipes">no recipes<br>available</p>
         </template>
-        <template is="dom-repeat" items="{{recipes}}">
+        <template id="listItems" is="dom-repeat" items="{{recipes}}">
           <socobo-element-list-item
+            class="singleItem"
             obj="{{item}}"
             isChecked="{{valueOfCheckBox}}"
             on-check="handleCheck"
@@ -63,7 +64,7 @@
       </div>
       <paper-fab id="add" icon="add" on-click="addRecipe">
       </paper-fab>
-      <paper-fab id="clear" icon="clear" on-click="notDef">
+      <paper-fab id="clear" icon="clear" on-click="removeAllChecked">
       </paper-fab>
       <socobo-recipe-details-show
         id="showDialog">
@@ -76,6 +77,7 @@
         id="editDialog"
         on-edit_request="editRecipe">
       </socobo-recipe-details-edit>
+      <paper-toast id="errorNotification" ></paper-toast>
   </template>
 </dom-module>
 <script>
@@ -100,24 +102,29 @@
         value : 0
       },
       checkedBoxes : {
-        type : Number,
-        value :  0
+        type : Object,
+        value :  {
+          number: 0,
+          refs: []
+        }
       },
       valueOfCheckBox : {
         type : Boolean,
         value : false
       }
     },
-    handleCheck : function(){
-      this.checkedBoxes++;
+    handleCheck : function(e){
+      this.checkedBoxes.number++;
+      this.checkedBoxes.refs.push(e.detail);
       this.trackCheckedBoxes();
     },
-    handleUncheck : function(){
-      this.checkedBoxes--;
+    handleUncheck : function(e){
+      this.checkedBoxes.number--;
+      this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
       this.trackCheckedBoxes();
     },
     trackCheckedBoxes : function () {
-      if(this.checkedBoxes > 0){
+      if(this.checkedBoxes.number > 0){
         this.switchButton(this.$.clear,this.$.add);
       }else{
         this.switchButton(this.$.add, this.$.clear);
@@ -142,25 +149,34 @@
       this.playAnimation('entry');
     },
     getRecipes: function(){
-      new RecipeDao(this, this.user).getAndUpdateRecipes();
+      new RecipeDao(this, this.user).getAndUpdate();
     },
     removeRecipe : function (e){
       new RecipeDao(this, this.user).remove(e.detail);
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
-      new RecipeDao(this, this.user).addRecipe(e.detail);
+      new RecipeDao(this, this.user).add(e.detail);
       var counter = 0;
     },
     editRecipe : function(e){
-      new RecipeDao(this, this.user).updateRecipe(e.detail);
-      new RecipeDao(this, this.user).getAllRecipes();
+      new RecipeDao(this, this.user).update(e.detail);
+      new RecipeDao(this, this.user).getAll();
     },
     updateAfterDeletion : function(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
         if(arr[i].ref == el.ref){
           this.splice(pathToProperty, i, 1);
         }
+      }
+    },
+    removeAllChecked : function (e) {
+      for(var i in this.checkedBoxes.refs){
+        new RecipeDao(this, this.user).remove((this.checkedBoxes.refs)[i]);
+        this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
+        this.checkedBoxes.number--;
+        this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
+        this.trackCheckedBoxes();
       }
     },
     switchButton : function (enableButton, disableButton){
