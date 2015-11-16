@@ -1,6 +1,5 @@
-(function ImageService(){
-  var testButton = document.querySelector('#testButton');
-  var imageChooser = document.querySelector('#imageForm');
+(function ImageService(imageCooserId){
+  var imageChooser = document.querySelector('#' + imageCooserId);
 
   var data;
 
@@ -20,9 +19,5 @@
   imageChooser.addEventListener("change", function () {
     encode();
   });
-
-  testButton.onclick = function () {
-    getImageAsString();
-  }
 })();
 
