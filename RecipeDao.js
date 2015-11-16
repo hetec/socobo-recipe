@@ -18,6 +18,18 @@ function RecipeDao(component, userId) {
       });
     };
 
+    this.addImage = function (obj) {
+      var dbUrl = userUrl + "/" + "images";
+      var dataRef = new Firebase(dbUrl);
+      dataRef.push(obj, function (error) {
+        if (error) {
+          notify("Sorry a technical error occured while saving your recipe :(");
+        } else {
+          notify("Element successfully created!");
+        }
+      });
+    };
+
     this.update = function (obj) {
       var reference = "" + obj.ref + "";
       var newObj = {};
