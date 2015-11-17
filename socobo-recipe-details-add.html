@@ -169,8 +169,8 @@
         ></paper-input>
       <div class="content">
         <div class="leftColumn">
-          <paper-material elevation="1" class="recipeImg">
-            <input type="file" id="fileChooser"/>
+          <input type="file" id="fileChooser"/>
+          <paper-material elevation="1" class="recipeImg" id="imageHolder">
           </paper-material>
 
             <div class="subHeadings">Ingredients:</div>
@@ -376,7 +376,7 @@
       },
       encode : function(){
         this.image = new ImageService("#fileChooser");
-        this.image.encode();
+        this.image.encode(this.$.imageHolder);
       },
       createNewRecipe : function (){
         console.log(this.recipe);
