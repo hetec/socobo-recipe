@@ -1,4 +1,5 @@
 <link href="elements.html" rel="import">
+<script src="ImageService.js"></script>
 <dom-module id="socobo-recipe-details-add">
   <style>
     :host {
@@ -169,7 +170,7 @@
       <div class="content">
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
-            <input type="file" id="fileCooser"/>
+            <input type="file" id="fileChooser"/>
           </paper-material>
 
             <div class="subHeadings">Ingredients:</div>
@@ -238,10 +239,16 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-add',
+      listeners: {
+        'fileChooser.change': 'encode'
+      },
       properties: {
         recipe : {
           type : Object,
           value : {}
+        },
+        image : {
+          type : Object
         },
         recipe_inputs : {
           type : Array,
@@ -367,6 +374,10 @@
         }
         return message;
       },
+      encode : function(){
+        this.image = new ImageService("#fileChooser");
+        this.image.encode();
+      },
       createNewRecipe : function (){
         console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
@@ -381,6 +392,7 @@
           counter++;
         }
         var v = this.validateRecipe();
+        alert("RESULT: " + this.image.getImageAsString());
         var recipeContainer = {};
         if(v.length <= 0){
           recipeContainer.recipe = this.recipe;
