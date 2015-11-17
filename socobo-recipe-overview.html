@@ -156,7 +156,8 @@
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
-      new RecipeDao(this, this.user).add(e.detail.recipe);
+      console.log(e.detail);
+      new RecipeDao(this, this.user).add(e.detail);
       var counter = 0;
     },
     editRecipe : function(e){

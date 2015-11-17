@@ -392,11 +392,10 @@
           counter++;
         }
         var v = this.validateRecipe();
-        alert("RESULT: " + this.image.getImageAsString());
         var recipeContainer = {};
         if(v.length <= 0){
-          recipeContainer.recipe = this.recipe;
-          this.fire("add_request", recipeContainer);
+          this.recipe.image = this.image.getImageAsString();
+          this.fire("add_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();
         }else{

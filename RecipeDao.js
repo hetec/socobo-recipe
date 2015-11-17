@@ -18,8 +18,9 @@ function RecipeDao(component, userId) {
       });
     };
 
-    this.addImage = function (obj) {
-      var dbUrl = userUrl + "/" + "images";
+    this.addImage = function (obj, recipe) {
+      var dbUrl = that.url + "recipeImages/" + (recipe.ref);
+      alert(dbUrl);
       var dataRef = new Firebase(dbUrl);
       dataRef.push(obj, function (error) {
         if (error) {
