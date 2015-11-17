@@ -381,8 +381,10 @@
           counter++;
         }
         var v = this.validateRecipe();
+        var recipeContainer = {};
         if(v.length <= 0){
-          this.fire("add_request", this.recipe);
+          recipeContainer.recipe = this.recipe;
+          this.fire("add_request", recipeContainer);
           this.clearInputFields();
           this.$.dialog.close();
         }else{
