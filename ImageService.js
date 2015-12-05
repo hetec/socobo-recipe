@@ -4,7 +4,6 @@ function ImageService(imageCooserId){
   var data = "";
 
   this.encode = function (imageId) {
-    alert(imageId);
     var file = imageChooser.files[0];
     if(file === undefined || file === null){
       data = "";
@@ -13,7 +12,6 @@ function ImageService(imageCooserId){
       var reader = new FileReader();
       reader.onload = function(e){
         data = e.target.result;
-        alert("finished");
         build(imageId, data);
       }
       reader.readAsDataURL(file);
@@ -26,7 +24,9 @@ function ImageService(imageCooserId){
   };
 
   var build = function (id, data) {
-    id.src = data;
+    if(data !== null || data !== "" || data !== undefined){
+      id.src = data;
+    }
   }
 }
 

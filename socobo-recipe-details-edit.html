@@ -216,7 +216,7 @@
             </div>
             <template is="dom-if" if="{{recipe.image}}">
               <iron-image
-                id="recipe_image"
+                id="edit_image"
                 class="recipeImg_image"
                 src="{{recipe.image}}"
                 sizing="cover"
@@ -227,7 +227,7 @@
             </template>
             <template is="dom-if" if="{{!recipe.image}}">
               <iron-image
-                id="recipe_image"
+                id="edit_placeholder"
                 class="recipeImg"
                 src="placeholder.png"
                 sizing="cover"
@@ -384,6 +384,12 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
+        var image = document.querySelector("#edit_image");
+        image.src = this.recipe.image;
+        var placeholder = document.querySelector("#edit_placeholder");
+        placeholder.src = this.recipe.image;
+        var chooser = document.querySelector("#editfileChooser");
+        chooser.value = null;
         this.revokeEdit();
       },
       _openFileChooser : function () {
@@ -439,7 +445,8 @@
       },
       encode : function(){
         this.image = new ImageService("#editfileChooser");
-        this.image.encode(document.querySelector("#recipe_image"));
+        this.image.encode(document.querySelector("#edit_image"));
+        this.image.encode(document.querySelector("#edit_placeholder"));
       },
       createNewRecipe : function (){
         console.log(this.recipe);
@@ -456,10 +463,8 @@
         }
         var v = this.validateRecipe();
         if(v.length <= 0){
-          alert(this.image);
           if(this.image === undefined || this.image === null || this.image === ""){
             this.recipe.image = "";
-            alert(this.recipe.image);
           }else{
             this.recipe.image = this.image.getImageAsString();
           }

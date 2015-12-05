@@ -376,6 +376,8 @@
         ]
         var image = document.querySelector("#add_image");
         image.src = "";
+        var chooser = document.querySelector("#fileChooser");
+        chooser.value = null;
       },
       validateRecipe : function(){
         var check = function(obj, value){
