@@ -117,6 +117,11 @@
       text-align: center;
     }
 
+    .recipeImg img {
+      height:280px;
+      width: 280px;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -129,6 +134,12 @@
       <div class="content">
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
+            <template is="dom-if" if="{{recipe.image}}">
+              <img src="{{recipe.image}}"/>
+            </template>
+            <template is="dom-if" if="{{!recipe.image}}">
+              <img src="placeholder.jpg"/>
+            </template>
           </paper-material>
           <template is="dom-if" if="{{recipe.ingredients}}">
             <div class="subHeadings">Ingredients</div>

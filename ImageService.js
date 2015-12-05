@@ -1,6 +1,8 @@
 function ImageService(imageCooserId){
+
   var imageChooser = document.querySelector(imageCooserId);
   var data;
+
   this.encode = function (imageId) {
     var file = imageChooser.files[0];
     var reader = new FileReader();
@@ -23,6 +25,5 @@ function ImageService(imageCooserId){
     img.src = data;
     id.innerHTML = img.outerHTML;
   }
-
 }
 

@@ -131,8 +131,14 @@
       }
     },
     clicked : function (e){
-      this.$.showDialog.recipe = e.detail;
+      var image = new RecipeDao(this, this.user).findImage(e.detail);
+      var recipe = e.detail;
+      if(image !== undefined && image !== null && image !== ""){
+        recipe.image = image;
+      }
+      this.$.showDialog.recipe = recipe;
       this.$.showDialog.state = "show";
+
       this.$.showDialog.toggleDialog();
     },
     edit : function (e){
