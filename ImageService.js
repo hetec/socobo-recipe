@@ -1,17 +1,23 @@
 function ImageService(imageCooserId){
 
   var imageChooser = document.querySelector(imageCooserId);
-  var data;
+  var data = "";
 
   this.encode = function (imageId) {
     var file = imageChooser.files[0];
-    var reader = new FileReader();
-    reader.onload = function(e){
-      data = e.target.result;
-      alert("finished");
-      build(imageId, data);
+    if(file === undefined || file === null){
+      data = "";
+      build(imageId,"http://localhost:8080/components/socobo-recipe/placeholder.jpg");
+    }else{
+      var reader = new FileReader();
+      reader.onload = function(e){
+        data = e.target.result;
+        alert("finished");
+        build(imageId, data);
+      }
+      reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file);
+
   };
 
   this.getImageAsString = function(){
