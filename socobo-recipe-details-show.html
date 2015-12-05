@@ -117,9 +117,11 @@
       text-align: center;
     }
 
-    .recipeImg img {
-      height:280px;
+    .recipeImg_image {
+      position: absolute;
       width: 280px;
+      height: 280px;
+      z-index: 4;
     }
 
   </style>
@@ -135,11 +137,27 @@
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
             <template is="dom-if" if="{{recipe.image}}">
-              <img src="{{recipe.image}}"/>
+              <iron-image
+                      id="recipe_image"
+                      class="recipeImg_image"
+                      src="{{recipe.image}}"
+                      sizing="cover"
+                      preload="true"
+                      fade
+                      placeholder="http://localhost:8080/components/socobo-recipe/placeholder.png">
+              </iron-image>
             </template>
             <template is="dom-if" if="{{!recipe.image}}">
-              <img src="placeholder.jpg"/>
-            </template>
+              <iron-image
+                      id="recipe_image"
+                      class="recipeImg"
+                      src="placeholder.png"
+                      sizing="cover"
+                      preload="true"
+                      fade
+                      placeholder="http://localhost:8080/components/socobo-recipe/placeholder.png">
+              </iron-image>
+              </template>
           </paper-material>
           <template is="dom-if" if="{{recipe.ingredients}}">
             <div class="subHeadings">Ingredients</div>
