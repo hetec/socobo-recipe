@@ -4,10 +4,11 @@ function ImageService(imageCooserId){
   var data = "";
 
   this.encode = function (imageId) {
+    alert(imageId);
     var file = imageChooser.files[0];
     if(file === undefined || file === null){
       data = "";
-      build(imageId,"http://localhost:8080/components/socobo-recipe/placeholder.jpg");
+      build(imageId,"http://localhost:8080/components/socobo-recipe/placeholder.png");
     }else{
       var reader = new FileReader();
       reader.onload = function(e){
@@ -25,11 +26,7 @@ function ImageService(imageCooserId){
   };
 
   var build = function (id, data) {
-    var img = document.createElement('img');
-    img.style.height = '280px';
-    img.style.width = '280px';
-    img.src = data;
-    id.innerHTML = img.outerHTML;
+    id.src = data;
   }
 }
 
