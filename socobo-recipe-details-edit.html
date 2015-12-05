@@ -51,7 +51,10 @@
     }
 
     .recipeImg {
-      background-color: gainsboro;
+      position: relative;
+      top: 0px;
+      left: 0px;
+      background-color: transparent;
       width: 280px;
       height: 280px;
       margin-bottom: 20px;
@@ -147,10 +150,44 @@
       text-align: center;
     }
 
-    .recipeImg img {
-      height:280px;
+    .overlay{
       width: 280px;
+      height: 280px;
+      background-color: var(--default-primary-color);
+      opacity: 0.0;
+      position: absolute;
+      z-index: 6;
     }
+
+    .overlay iron-icon{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -50px;
+      margin-top: -50px;
+      --iron-icon-height: 100px;
+      --iron-icon-width: 100px;
+      color: white;
+      opacity: 1.0;
+    }
+
+    .recipeImg_image {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      z-index: 4;
+    }
+
+    .overlay:hover{
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    #editfileChooser{
+      display: none;
+    }
+
+
 
   </style>
   <template>
@@ -173,14 +210,34 @@
       <div class="content">
         <div class="leftColumn">
           <input type="file" id="editfileChooser"/>
-          <paper-material elevation="1" class="recipeImg" id="editImageHolder">
+          <div elevation="1" class="recipeImg" id="editImageHolder">
+            <div class="overlay" on-tap="_openFileChooser">
+              <iron-icon icon="create"></iron-icon>
+            </div>
             <template is="dom-if" if="{{recipe.image}}">
-              <img src="{{recipe.image}}"/>
+              <iron-image
+                id="recipe_image"
+                class="recipeImg_image"
+                src="{{recipe.image}}"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="http://localhost:8080/components/socobo-recipe/placeholder.png">
+              </iron-image>
             </template>
             <template is="dom-if" if="{{!recipe.image}}">
-              <img src="placeholder.jpg"/>
+              <iron-image
+                id="recipe_image"
+                class="recipeImg"
+                src="placeholder.png"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="http://localhost:8080/components/socobo-recipe/placeholder.png">
+              </iron-image>
             </template>
-          </paper-material>
+
+          </div>
 
           <div class="subHeadings">Ingredients:</div>
           <template is="dom-repeat"
@@ -329,6 +386,9 @@
         }
         this.revokeEdit();
       },
+      _openFileChooser : function () {
+        this.$.editfileChooser.click();
+      },
       validateRecipe : function(){
         var check = function(obj, value){
           return obj.recipe[value] != "" && obj.recipe[value] != undefined
@@ -379,8 +439,7 @@
       },
       encode : function(){
         this.image = new ImageService("#editfileChooser");
-        alert("EDIT image: " + this.image)
-        this.image.encode(this.$.editImageHolder);
+        this.image.encode(document.querySelector("#recipe_image"));
       },
       createNewRecipe : function (){
         console.log(this.recipe);
