@@ -142,7 +142,12 @@
       this.$.showDialog.toggleDialog();
     },
     edit : function (e){
-      this.$.editDialog.recipe = e.detail;
+      var image = new RecipeDao(this, this.user).findImage(e.detail);
+      var recipe = e.detail;
+      if(image !== undefined && image !== null && image !== ""){
+        recipe.image = image;
+      }
+      this.$.editDialog.recipe = recipe;
       this.$.editDialog.initSteps();
       this.$.editDialog.initIngredients();
       this.$.editDialog.toggleDialog();

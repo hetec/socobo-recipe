@@ -147,6 +147,11 @@
       text-align: center;
     }
 
+    .recipeImg img {
+      height:280px;
+      width: 280px;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -167,7 +172,14 @@
       ></paper-input>
       <div class="content">
         <div class="leftColumn">
-          <paper-material elevation="1" class="recipeImg">
+          <input type="file" id="editfileChooser"/>
+          <paper-material elevation="1" class="recipeImg" id="editImageHolder">
+            <template is="dom-if" if="{{recipe.image}}">
+              <img src="{{recipe.image}}"/>
+            </template>
+            <template is="dom-if" if="{{!recipe.image}}">
+              <img src="placeholder.jpg"/>
+            </template>
           </paper-material>
 
           <div class="subHeadings">Ingredients:</div>
@@ -237,10 +249,16 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-edit',
+      listeners: {
+        'editfileChooser.change': 'encode'
+      },
       properties: {
         recipe : {
           type : Object,
           value : {}
+        },
+        image : {
+          type : Object
         },
         recipe_inputs : {
           type : Array,
@@ -359,6 +377,11 @@
         }
         return message;
       },
+      encode : function(){
+        this.image = new ImageService("#editfileChooser");
+        alert("EDIT image: " + this.image)
+        this.image.encode(this.$.editImageHolder);
+      },
       createNewRecipe : function (){
         console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
@@ -374,6 +397,13 @@
         }
         var v = this.validateRecipe();
         if(v.length <= 0){
+          alert(this.image);
+          if(this.image === undefined || this.image === null || this.image === ""){
+            this.recipe.image = "";
+            alert(this.recipe.image);
+          }else{
+            this.recipe.image = this.image.getImageAsString();
+          }
           this.fire("edit_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();
