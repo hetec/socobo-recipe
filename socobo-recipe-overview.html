@@ -135,10 +135,11 @@
       var recipe = e.detail;
       if(image !== undefined && image !== null && image !== ""){
         recipe.image = image;
+      }else{
+        recipe.image = "http://localhost:8080/components/socobo-recipe/placeholder.png";
       }
       this.$.showDialog.recipe = recipe;
       this.$.showDialog.state = "show";
-
       this.$.showDialog.toggleDialog();
     },
     edit : function (e){
