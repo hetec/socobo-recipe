@@ -51,7 +51,10 @@
     }
 
     .recipeImg {
-      background-color: gainsboro;
+      position: relative;
+      top: 0px;
+      left: 0px;
+      background-color: transparent;
       width: 280px;
       height: 280px;
       margin-bottom: 20px;
@@ -147,6 +150,45 @@
       text-align: center;
     }
 
+    .overlay{
+      width: 280px;
+      height: 280px;
+      background-color: var(--default-primary-color);
+      opacity: 0.0;
+      position: absolute;
+      z-index: 6;
+    }
+
+    .overlay iron-icon{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -50px;
+      margin-top: -50px;
+      --iron-icon-height: 100px;
+      --iron-icon-width: 100px;
+      color: white;
+      opacity: 1.0;
+    }
+
+    .recipeImg_image {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      z-index: 4;
+    }
+
+    .overlay:hover{
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    #editfileChooser{
+      display: none;
+    }
+
+
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -167,8 +209,35 @@
       ></paper-input>
       <div class="content">
         <div class="leftColumn">
-          <paper-material elevation="1" class="recipeImg">
-          </paper-material>
+          <input type="file" id="editfileChooser"/>
+          <div elevation="1" class="recipeImg" id="editImageHolder">
+            <div class="overlay" on-tap="_openFileChooser">
+              <iron-icon icon="create"></iron-icon>
+            </div>
+            <template is="dom-if" if="{{recipe.image}}">
+              <iron-image
+                id="edit_image"
+                class="recipeImg_image"
+                src="{{recipe.image}}"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="../placeholder.png">
+              </iron-image>
+            </template>
+            <template is="dom-if" if="{{!recipe.image}}">
+              <iron-image
+                id="edit_placeholder"
+                class="recipeImg"
+                src="placeholder.png"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="../placeholder.png">
+              </iron-image>
+            </template>
+
+          </div>
 
           <div class="subHeadings">Ingredients:</div>
           <template is="dom-repeat"
@@ -237,10 +306,16 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-edit',
+      listeners: {
+        'editfileChooser.change': 'encode'
+      },
       properties: {
         recipe : {
           type : Object,
           value : {}
+        },
+        image : {
+          type : Object
         },
         recipe_inputs : {
           type : Array,
@@ -309,7 +384,16 @@
         for(var field in inputFields){
           inputFields[field].value = "";
         }
+        var image = document.querySelector("#edit_image");
+        image.src = this.recipe.image;
+        var placeholder = document.querySelector("#edit_placeholder");
+        placeholder.src = this.recipe.image;
+        var chooser = document.querySelector("#editfileChooser");
+        chooser.value = null;
         this.revokeEdit();
+      },
+      _openFileChooser : function () {
+        this.$.editfileChooser.click();
       },
       validateRecipe : function(){
         var check = function(obj, value){
@@ -359,6 +443,11 @@
         }
         return message;
       },
+      encode : function(){
+        this.image = new ImageService("#editfileChooser");
+        this.image.encode(document.querySelector("#edit_image"));
+        this.image.encode(document.querySelector("#edit_placeholder"));
+      },
       createNewRecipe : function (){
         console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
@@ -374,6 +463,11 @@
         }
         var v = this.validateRecipe();
         if(v.length <= 0){
+          if(this.image === undefined || this.image === null || this.image === ""){
+            this.recipe.image = "";
+          }else{
+            this.recipe.image = this.image.getImageAsString();
+          }
           this.fire("edit_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();

@@ -117,6 +117,13 @@
       text-align: center;
     }
 
+    .recipeImg_image {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      z-index: 4;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
@@ -129,6 +136,28 @@
       <div class="content">
         <div class="leftColumn">
           <paper-material elevation="1" class="recipeImg">
+            <template is="dom-if" if="{{recipe.image}}">
+              <iron-image
+                      id="show_image"
+                      class="recipeImg_image"
+                      src="{{recipe.image}}"
+                      sizing="cover"
+                      preload="true"
+                      fade
+                      placeholder="../placeholder.png">
+              </iron-image>
+            </template>
+            <template is="dom-if" if="{{!recipe.image}}">
+              <iron-image
+                      id="recipe_image"
+                      class="recipeImg"
+                      src="placeholder.png"
+                      sizing="cover"
+                      preload="true"
+                      fade
+                      placeholder="../placeholder.png">
+              </iron-image>
+              </template>
           </paper-material>
           <template is="dom-if" if="{{recipe.ingredients}}">
             <div class="subHeadings">Ingredients</div>

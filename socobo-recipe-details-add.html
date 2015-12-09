@@ -1,4 +1,5 @@
 <link href="elements.html" rel="import">
+<script src="ImageService.js"></script>
 <dom-module id="socobo-recipe-details-add">
   <style>
     :host {
@@ -147,13 +148,50 @@
       text-align: center;
     }
 
+    .recipeImg_image {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      z-index: 4;
+    }
+
+    .overlay{
+      width: 280px;
+      height: 280px;
+      background-color: var(--default-primary-color);
+      opacity: 0.0;
+      position: absolute;
+      z-index: 6;
+    }
+
+    .overlay iron-icon{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -50px;
+      margin-top: -50px;
+      --iron-icon-height: 100px;
+      --iron-icon-width: 100px;
+      color: white;
+      opacity: 1.0;
+    }
+
+    .overlay:hover{
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    #fileChooser{
+      display: none;
+    }
+
   </style>
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      <paper-icon-button id="exit" icon="clear" dialog-dismiss on-click="clearInputFields">
       </paper-icon-button>
       <paper-input id="title_input"
                    class="input"
@@ -168,7 +206,20 @@
         ></paper-input>
       <div class="content">
         <div class="leftColumn">
-          <paper-material elevation="1" class="recipeImg">
+          <input type="file" id="fileChooser"/>
+          <paper-material elevation="1" class="recipeImg" id="imageHolder">
+            <div class="overlay" on-tap="_openFileChooser">
+              <iron-icon icon="create"></iron-icon>
+            </div>
+            <iron-image
+              id="add_image"
+              class="recipeImg_image"
+              src="{{recipe.image}}"
+              sizing="cover"
+              preload="true"
+              fade
+              placeholder="../placeholder.png">
+            </iron-image>
           </paper-material>
 
             <div class="subHeadings">Ingredients:</div>
@@ -237,10 +288,16 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-add',
+      listeners: {
+        'fileChooser.change': 'encode'
+      },
       properties: {
         recipe : {
           type : Object,
           value : {}
+        },
+        image : {
+          type : Object
         },
         recipe_inputs : {
           type : Array,
@@ -317,6 +374,10 @@
             desc : ""
           }
         ]
+        var image = document.querySelector("#add_image");
+        image.src = "";
+        var chooser = document.querySelector("#fileChooser");
+        chooser.value = null;
       },
       validateRecipe : function(){
         var check = function(obj, value){
@@ -366,6 +427,13 @@
         }
         return message;
       },
+      _openFileChooser : function () {
+        this.$.fileChooser.click();
+      },
+      encode : function(){
+        this.image = new ImageService("#fileChooser");
+        this.image.encode(document.querySelector("#add_image"));
+      },
       createNewRecipe : function (){
         console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
@@ -380,7 +448,15 @@
           counter++;
         }
         var v = this.validateRecipe();
+        var recipeContainer = {};
         if(v.length <= 0){
+          alert(this.image);
+          if(this.image === undefined || this.image === null || this.image === ""){
+            this.recipe.image = "";
+            alert(this.recipe.image);
+          }else{
+            this.recipe.image = this.image.getImageAsString();
+          }
           this.fire("add_request", this.recipe);
           this.clearInputFields();
           this.$.dialog.close();

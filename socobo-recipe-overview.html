@@ -1,6 +1,6 @@
 <link href="elements.html" rel="import">
 <script src="RecipeDao.js"></script>
-
+<script src="ImageService.js"></script>
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
@@ -131,12 +131,26 @@
       }
     },
     clicked : function (e){
-      this.$.showDialog.recipe = e.detail;
+      var image = new RecipeDao(this, this.user).findImage(e.detail);
+      var recipe = e.detail;
+      if(image !== undefined && image !== null && image !== ""){
+        recipe.image = image;
+      }else{
+        recipe.image = "../placeholder.png";
+      }
+      this.$.showDialog.recipe = recipe;
       this.$.showDialog.state = "show";
       this.$.showDialog.toggleDialog();
     },
     edit : function (e){
-      this.$.editDialog.recipe = e.detail;
+      var image = new RecipeDao(this, this.user).findImage(e.detail);
+      var recipe = e.detail;
+      if(image !== undefined && image !== null && image !== ""){
+        recipe.image = image;
+      }else{
+        recipe.image = "../placeholder.png";
+      }
+      this.$.editDialog.recipe = recipe;
       this.$.editDialog.initSteps();
       this.$.editDialog.initIngredients();
       this.$.editDialog.toggleDialog();
@@ -156,6 +170,7 @@
       this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
     },
     addNewRecipe : function(e){
+      console.log(e.detail);
       new RecipeDao(this, this.user).add(e.detail);
       var counter = 0;
     },

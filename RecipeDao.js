@@ -18,6 +18,18 @@ function RecipeDao(component, userId) {
       });
     };
 
+    this.findImage = function(recipe){
+      var dbUrl = (recipe.ref) + "/image";
+      var image = undefined;
+      var dataRef = new Firebase(dbUrl);
+      dataRef.once("value", function (snapshot) {
+        image = snapshot.val();
+      }, function(error){
+        notify("Getting image from the database failed");
+      });
+      return image;
+    }
+
     this.update = function (obj) {
       var reference = "" + obj.ref + "";
       var newObj = {};
