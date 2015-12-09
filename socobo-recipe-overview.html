@@ -136,7 +136,7 @@
       if(image !== undefined && image !== null && image !== ""){
         recipe.image = image;
       }else{
-        recipe.image = "http://localhost:8080/components/socobo-recipe/placeholder.png";
+        recipe.image = "../placeholder.png";
       }
       this.$.showDialog.recipe = recipe;
       this.$.showDialog.state = "show";
@@ -148,7 +148,7 @@
       if(image !== undefined && image !== null && image !== ""){
         recipe.image = image;
       }else{
-        recipe.image = "http://localhost:8080/components/socobo-recipe/placeholder.png";
+        recipe.image = "../placeholder.png";
       }
       this.$.editDialog.recipe = recipe;
       this.$.editDialog.initSteps();
