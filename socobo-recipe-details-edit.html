@@ -186,10 +186,8 @@
     #editfileChooser{
       display: none;
     }
-
-
-
   </style>
+
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
                   entry-animation="scale-up-animation"
@@ -328,7 +326,7 @@
         state : {
           type: String,
           value: "show"
-        },
+        }
       },
       exit : function () {
         this.fire("exit_request");
@@ -340,7 +338,7 @@
         var step = {
           desc : "",
           number : 0
-        }
+        };
         this.push("recipe_inputs", step);
       },
       addIngr : function () {
@@ -348,7 +346,7 @@
           desc : "",
           amount : "",
           unit : ""
-        }
+        };
         this.push("ingredient_inputs", ingr);
         this.numberOfIngr++;
       },
@@ -398,11 +396,11 @@
       validateRecipe : function(){
         var check = function(obj, value){
           return obj.recipe[value] != "" && obj.recipe[value] != undefined
-        }
+        };
         var checkContainer = function(obj, container){
           console.log(typeof obj.recipe[container]);
           return obj.recipe[container].lenght > 0;
-        }
+        };
         var titleExists = check(this, 'desc');
         var textExists = check(this, "text");
         var stepsExist = this.recipe.steps.length > 0;

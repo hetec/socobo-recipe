@@ -1,6 +1,5 @@
 <link href="elements.html" rel="import">
-<script src="RecipeDao.js"></script>
-<script src="ImageService.js"></script>
+
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
@@ -44,6 +43,7 @@
 
   </style>
   <template>
+      <!-- List -->
       <div id="recipe_list">
         <template is="dom-if" if="{{!recipes.length}}">
           <p id="no_recipes">no recipes<br>available</p>
@@ -57,49 +57,55 @@
             on-uncheck="handleUncheck"
             on-show_request="clicked"
             on-delete_request="removeRecipe"
-            on-edit_request="edit"
-            >
+            on-edit_request="edit">
           </socobo-element-list-item>
         </template>
       </div>
-      <paper-fab id="add" icon="add" on-click="addRecipe">
+      <!-- Add -->
+      <paper-fab
+        id="add"
+        icon="add"
+        on-tap="addRecipe">
       </paper-fab>
-      <paper-fab id="clear" icon="clear" on-click="removeAllChecked">
+      <!-- Clear -->
+      <paper-fab
+        id="clear"
+        icon="clear"
+        on-tap="removeAllChecked">
       </paper-fab>
+      <!-- Show Dialog -->
       <socobo-recipe-details-show
         id="showDialog">
       </socobo-recipe-details-show>
+      <!-- Add Dialog -->
       <socobo-recipe-details-add
         id="addDialog"
-        on-add_request="addNewRecipe"
-        ></socobo-recipe-details-add>
+        on-add_request="addNewRecipe">
+      </socobo-recipe-details-add>
+      <!-- Edit Dialog -->
       <socobo-recipe-details-edit
         id="editDialog"
         on-edit_request="editRecipe">
       </socobo-recipe-details-edit>
-      <paper-toast id="errorNotification" ></paper-toast>
+      <!-- Notification -->
+      <paper-toast id="errorNotification"></paper-toast>
   </template>
 </dom-module>
 <script>
 (function() {
   Polymer({
     is: 'socobo-recipe-overview',
+    /**
+     *
+     */
     properties: {
       recipes : {
         type : Array,
         value : []
       },
-      user : {
-        type : String,
-        value : ""
-      },
-      url : {
-        type : String,
-        value : ""
-      },
-      expire : {
-        type : Number,
-        value : 0
+      userLogin : {
+        type : Object,
+        value : {}
       },
       checkedBoxes : {
         type : Object,
@@ -113,16 +119,27 @@
         value : false
       }
     },
+    /**
+     *
+     * @param e
+     */
     handleCheck : function(e){
       this.checkedBoxes.number++;
       this.checkedBoxes.refs.push(e.detail);
       this.trackCheckedBoxes();
     },
+    /**
+     *
+     * @param e
+     */
     handleUncheck : function(e){
       this.checkedBoxes.number--;
       this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
       this.trackCheckedBoxes();
     },
+    /**
+     *
+     */
     trackCheckedBoxes : function () {
       if(this.checkedBoxes.number > 0){
         this.switchButton(this.$.clear,this.$.add);
@@ -130,54 +147,129 @@
         this.switchButton(this.$.add, this.$.clear);
       }
     },
+    /**
+     *
+     * @param e
+     */
     clicked : function (e){
-      var image = new RecipeDao(this, this.user).findImage(e.detail);
-      var recipe = e.detail;
-      if(image !== undefined && image !== null && image !== ""){
-        recipe.image = image;
-      }else{
-        recipe.image = "../placeholder.png";
-      }
-      this.$.showDialog.recipe = recipe;
-      this.$.showDialog.state = "show";
-      this.$.showDialog.toggleDialog();
+      RecipeDao.getInstance(this.userLogin)
+        .findImage(e.detail)
+        .then(function(image) {
+          this.$.showDialog.toggleDialog();
+          var recipe = e.detail;
+          recipe.image = this._getRecipeImage(image.value);
+          this.$.showDialog.recipe = recipe;
+          this.$.showDialog.state = "show";
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     * @param e
+     */
     edit : function (e){
-      var image = new RecipeDao(this, this.user).findImage(e.detail);
-      var recipe = e.detail;
-      if(image !== undefined && image !== null && image !== ""){
-        recipe.image = image;
-      }else{
-        recipe.image = "../placeholder.png";
-      }
-      this.$.editDialog.recipe = recipe;
-      this.$.editDialog.initSteps();
-      this.$.editDialog.initIngredients();
-      this.$.editDialog.toggleDialog();
+      RecipeDao.getInstance(this.userLogin)
+        .findImage(e.detail)
+        .then(function(image) {
+          this.$.editDialog.toggleDialog();
+          var recipe = e.detail;
+          recipe.image = this._getRecipeImage(image.value);
+          this.$.editDialog.recipe = recipe;
+          this.$.editDialog.initSteps();
+          this.$.editDialog.initIngredients();
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     */
     addRecipe : function(){
-      this.$.addDialog.state = "add";
       this.$.addDialog.toggleDialog();
+      this.$.addDialog.state = "add";
     },
+    /**
+     *
+     */
     buttonAni : function (){
       this.playAnimation('entry');
     },
+    /**
+     *
+     */
     getRecipes: function(){
-      new RecipeDao(this, this.user).getAndUpdate();
+      RecipeDao.getInstance(this.userLogin)
+        .getAll()
+        .then(function(recipes) {
+          this.set("recipes", recipes.value);
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     * @param e
+     */
     removeRecipe : function (e){
-      new RecipeDao(this, this.user).remove(e.detail);
-      this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
+      RecipeDao.getInstance(this.userLogin)
+        .remove(e.detail)
+        .then(function(success) {
+          this._notify(success.value);
+          this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     * @param e
+     */
     addNewRecipe : function(e){
-      console.log(e.detail);
-      new RecipeDao(this, this.user).add(e.detail);
-      var counter = 0;
+      RecipeDao.getInstance(this.userLogin)
+        .add(e.detail)
+        .then(function(success) {
+          this._notify(success.value);
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     * @param e
+     */
     editRecipe : function(e){
-      new RecipeDao(this, this.user).update(e.detail);
-      new RecipeDao(this, this.user).getAll();
+      RecipeDao.getInstance(this.userLogin)
+        .update(e.detail)
+        .then(function(success) {
+          this._notify(success.value);
+          this.set("recipes", []);
+
+          RecipeDao.getInstance(this.userLogin)
+            .getAll()
+            .then(function(recipes) {
+              this.set("recipes", recipes.value);
+            }.bind(this))
+            .catch(function(error) {
+              this._notify(error.value);
+            }.bind(this));
+
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.value);
+        }.bind(this));
     },
+    /**
+     *
+     * @param el
+     * @param arr
+     * @param pathToProperty
+     */
     updateAfterDeletion : function(el, arr, pathToProperty){
       for(var i = 0; i < arr.length; i++){
         if(arr[i].ref == el.ref){
@@ -185,18 +277,56 @@
         }
       }
     },
+    /**
+     *
+     * @param e
+     */
     removeAllChecked : function (e) {
       for(var i in this.checkedBoxes.refs){
-        new RecipeDao(this, this.user).remove((this.checkedBoxes.refs)[i]);
-        this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
-        this.checkedBoxes.number--;
-        this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
-        this.trackCheckedBoxes();
+        RecipeDao.getInstance(this.userLogin)
+          .remove((this.checkedBoxes.refs)[i])
+          .then(function(success) {
+            this._notify(success.value);
+            this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
+            this.checkedBoxes.number--;
+            this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
+            this.trackCheckedBoxes();
+          }.bind(this))
+          .catch(function(error) {
+            this._notify(error.value);
+          }.bind(this));
       }
     },
+    /**
+     *
+     * @param enableButton
+     * @param disableButton
+     */
     switchButton : function (enableButton, disableButton){
       disableButton.style.display = "none";
       enableButton.style.display = "block";
+    },
+    /**
+     *
+     * @param msg
+     * @private
+     */
+    _notify : function(msg) {
+      this.$.errorNotification.text = msg;
+      this.$.errorNotification.show();
+    },
+    /**
+     *
+     * @param image
+     * @returns {String}
+     * @private
+     */
+    _getRecipeImage : function(image) {
+      if ((image !== undefined) && (image !== null) && (image !== "")) {
+        return image;
+      } else {
+        return "../placeholder.png";
+      }
     }
   });
 })();
