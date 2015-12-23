@@ -9,9 +9,7 @@
   <template>
     <socobo-recipe-overview
       id="elRecipeOverview"
-      url='[[userLogin.firebaseUrl]]'
-      user="[[userLogin.userId]]"
-      expire="[[expireDate]]"></socobo-recipe-overview>
+      user-login='[[userLogin]]'></socobo-recipe-overview>
   </template>
 
 </dom-module>
@@ -33,7 +31,6 @@
         }
       },
       loadData : function(){
-        console.log(this.userLogin);
         this.$.elRecipeOverview.getRecipes();
       }
     });

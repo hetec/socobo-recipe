@@ -5,157 +5,71 @@
     :host {
       display: block;
     }
+
+    /* CONTENT */
     .wrapper {
-      background-color: white;
+      top: 20px;
+      max-height: 85%;
       width: 90%;
       min-width:700px;
+      padding: 0;
       overflow: auto;
+      background-color: white;
       color: #8A7F80;
       font-family: sans-serif;
       border-radius: 5px;
       line-height: 2;
-      padding: 0;
-    }
-
-    #dialog{
-      margin-top : 20px;
-      margin-bottom: 0;
-      top: 20px;
-      min-height: 85vh;
     }
     .content {
-    @apply(--layout-horizontal);
+      @apply(--layout-horizontal);
+      padding: 0;
+      margin: 0;
+      height: 100%;
     }
-
     .leftColumn {
       width: 300px;
-      padding: 30px;
-      padding-top: 0;
+      padding: 0 30px 30px 30px;
     }
-
     .rightColumn {
       width: 100%;
-      margin-right: 0px;
-      padding: 30px;
-      padding-top: 0;
+      margin-right: 0;
+      padding: 0 30px 30px 30px;
       overflow: hidden;
     }
 
-    .wrapper h1 {
-      z-index: 15;
-      padding-left: 30px;
+    /* EXIT DIALOG */
+    .style-exit-add-button {
+      cursor: default;
+      position: absolute;
+      padding: 0;
       margin: 0;
-      letter-spacing: -1px;
+      top: 0;
+      right: 20px;
       color: #8A7F80;
-      font-weight: 400;
-      font-size: 30px;
+      font-weight: 100;
     }
-
-    .recipeImg {
-      background-color: gainsboro;
-      width: 280px;
-      height: 280px;
-      margin-bottom: 20px;
+    .style-exit-add-button:hover {
+      color: var(--accent-color);
+      cursor: pointer;
     }
-
-    .step {
-      width: 100%;
-    }
-
-    #exit iron-icon{
+    .style-exit-add-button iron-icon {
       width: 30px;
       height: 30px;
       float: right;
     }
 
-    #exit{
-      cursor: default;
-      position: absolute;
-      padding: 0;
-      margin: 0;
-      top:0px;
-      right: 0px;
-      color: #8A7F80;
-      font-weight: 100;
-    }
-
-
-    #exit:hover {
-      color: var(--accent-color);
-      cursor: pointer;
-    }
-
-    .content {
-      padding: 0;
-      margin: 0;
-      padding-top: 0;
-    }
-
-    .input{
-      display: block;
-    }
-
-    #title_input{
-      padding: 0;
-      padding-left: 30px;
-      padding-right: 30px;
+    /* TITLE */
+    .style-recipe-name {
+      padding: 0 30px 0 30px;
       margin-bottom: 20px;
     }
-
-    .step_input paper-input{
-    @apply(--layout-flex);
-      padding-right: 30px;
-      width: 800px;
-    }
-
-    .step_input paper-icon-button{
-      width:40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    #addStep{
-      margin : 0;
-      margin-top: 20px;
-      background-color: #F4F0EC;
-      font-size: 10px;
-    }
-
-    #addIngr{
-      margin : 0;
-      margin-top: 20px;
-      background-color: #F4F0EC;
-      font-size: 10px;
-    }
-
-    .buttons {
-      position: fixed;
-      right: 80px;
-      bottom: 60px;
-    }
-
-    .buttons paper-fab{
-      margin: 10px;
-    }
-
-    #abort{
-      --paper-fab-background: var(--default-primary-color);
-    }
-
     .subHeadings {
       background-color: #F4F0EC;
       text-align: center;
     }
 
-    .recipeImg_image {
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      z-index: 4;
-    }
-
-    .overlay{
+    /* IMAGES */
+    .overlay {
       width: 280px;
       height: 280px;
       background-color: var(--default-primary-color);
@@ -163,8 +77,11 @@
       position: absolute;
       z-index: 6;
     }
-
-    .overlay iron-icon{
+    .overlay:hover {
+      opacity: 0.4;
+      cursor: pointer;
+    }
+    .overlay iron-icon {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -175,14 +92,59 @@
       color: white;
       opacity: 1.0;
     }
-
-    .overlay:hover{
-      opacity: 0.4;
-      cursor: pointer;
+    .recipeImg {
+      position: relative;
+      top: 0;
+      left: 0;
+      background-color: transparent;
+      width: 280px;
+      height: 280px;
+      margin-bottom: 20px;
+    }
+    .recipeImg_image {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      z-index: 4;
+    }
+    .style-file-chooser {
+      display: none;
     }
 
-    #fileChooser{
-      display: none;
+    /* STEPS */
+    .step {
+      width: 100%;
+    }
+    .step_input paper-input {
+      @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+    .step_input paper-icon-button {
+      width:40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+    .style-add-step-button {
+      margin: 20px 0 0 0;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    /* INGREDIENTS */
+    .style-add-ingr-button {
+      margin: 20px 0 0 0;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    /* BOTTOM BUTTONS */
+    paper-fab {
+      margin: 10px;
+    }
+    .style-abort-fab {
+      --paper-fab-background: var(--default-primary-color);
     }
 
   </style>
@@ -191,22 +153,31 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" dialog-dismiss on-click="clearInputFields">
+      <!-- DIALOG -->
+      <!-- EXIT DIALOG-->
+      <paper-icon-button id="exit" class="style-exit-add-button" icon="clear" dialog-dismiss on-tap="clearInputFields">
       </paper-icon-button>
-      <paper-input id="title_input"
-                   class="input"
-                   label="Please name your recipe ... "
-                   value="{{recipe.desc}}"
-                   required
-                   pattern=".+"
-                   auto-validate
-                   error-message="Missing name or invalid characters!"
-                   autofocus="true"
-                   focused="true";
-        ></paper-input>
+      <!-- RECIPE NAME -->
+      <paper-input
+        id="title_input"
+        class="style-recipe-name"
+        label="Please name your recipe ... "
+        value="{{recipe.desc}}"
+        required
+        pattern=".+"
+        auto-validate
+        error-message="Missing name or invalid characters!"
+        autofocus="true"
+        focused="true">
+      </paper-input>
+
+      <!-- CONTENT -->
       <div class="content">
+
+        <!-- LEFT COLUMN -->
         <div class="leftColumn">
-          <input type="file" id="fileChooser"/>
+          <!-- IMAGE SECTION -->
+          <input type="file" id="fileChooser" class="style-file-chooser"/>
           <paper-material elevation="1" class="recipeImg" id="imageHolder">
             <div class="overlay" on-tap="_openFileChooser">
               <iron-icon icon="create"></iron-icon>
@@ -222,75 +193,93 @@
             </iron-image>
           </paper-material>
 
-            <div class="subHeadings">Ingredients:</div>
-            <template is="dom-repeat"
-                      items="{{ingredient_inputs}}">
-              <socobo-recipe-details-ingredient state="add"
-                                                ingredient="{{item}}"
-                                                id="{{item}}"
-                                                on-rem_ingr="removeIngr">
-              </socobo-recipe-details-ingredient>
-            </template>
-
-          <paper-button icon="add"
-                     id="addIngr"
-                     on-click="addIngr">
-            add ingredient
+          <!-- DETAIL INGREDIENTS -->
+          <div class="subHeadings">Ingredients:</div>
+          <template is="dom-repeat"
+                    items="{{ingredient_inputs}}">
+            <socobo-recipe-details-ingredient
+              state="add"
+              ingredient="{{item}}"
+              id="{{item}}"
+              on-rem_ingr="removeIngr">
+            </socobo-recipe-details-ingredient>
+          </template>
+          <paper-button
+            icon="add"
+            id="addIngr"
+            class="style-add-ingr-button"
+            on-tap="addIngr">add ingredient
           </paper-button>
         </div>
+
+        <!-- RIGHT COLUMN -->
         <div class="rightColumn">
+          <!-- DESCRIPTION SECTION -->
           <div class="subHeadings">Description</div>
-          <paper-textarea class="input" id="text_input"
-                          rows="6"
-                          label="Here you might place a brief description or the like ..."
-                          value="{{recipe.text}}"
-            ></paper-textarea>
+          <paper-textarea
+            id="text_input"
+            rows="6"
+            label="Here you might place a brief description or the like ..."
+            value="{{recipe.text}}">
+          </paper-textarea>
+          <!-- DETAIL STEPS -->
           <template is="dom-if" if="{{recipe_inputs.length}}">
             <div class="subHeadings">Steps</div>
           </template>
-          <div class="steps"
-               id="steps_input"
-               class="input">
+          <div class="steps" id="steps_input">
             <template is="dom-repeat"
                       items="{{recipe_inputs}}">
-              <socobo-recipe-details-step state="add"
-                                          class="step"
-                                          step="{{item}}"
-                                          id="{{item}}"
-                                          on-rem_step="removeStep">
+              <socobo-recipe-details-step
+                state="add"
+                class="step"
+                step="{{item}}"
+                id="{{item.number}}"
+                on-rem_step="removeStep">
               </socobo-recipe-details-step>
             </template>
           </div>
-          <paper-button icon="add"
-                     id="addStep"
-                     on-click="addStep">
-            add step
+          <paper-button
+            icon="add"
+            id="addStep"
+            class="style-add-step-button"
+            on-tap="addStep">add step
           </paper-button>
         </div>
       </div>
+
+      <!-- DIALOG BUTTONS -->
       <div class="buttons">
-        <paper-fab icon="clear"
-                   id="abort"
-                   dialog-dismiss
-                   on-click="clearInputFields">
+        <paper-fab
+          icon="clear"
+          id="abort"
+          class="style-abort-fab"
+          dialog-dismiss
+          on-tap="clearInputFields">
         </paper-fab>
-        <paper-fab icon="done"
-                   id="ok"
-                   on-click="createNewRecipe">
+        <paper-fab
+          icon="done"
+          id="ok"
+          on-tap="createNewRecipe">
         </paper-fab>
       </div>
     </paper-dialog>
   </template>
-
 </dom-module>
 
 <script>
   (function() {
     Polymer({
       is: 'socobo-recipe-details-add',
+      /**
+       * LISTENERS
+       */
       listeners: {
         'fileChooser.change': 'encode'
       },
+
+      /**
+       * PROPERTIES
+       */
       properties: {
         recipe : {
           type : Object,
@@ -301,64 +290,85 @@
         },
         recipe_inputs : {
           type : Array,
-          value : [
-            {
-              desc: "",
-              number: 9
-            }
-          ]
+          value : []
         },
         ingredient_inputs : {
           type : Array,
-          value : [
-            {
-              desc : "",
-              amount : "",
-              unit : ""
-            }
-          ]
+          value : []
         },
         state : {
           type: String,
           value: "show"
-        },
+        }
       },
-      exit : function () {
-        this.fire("exit_request");
-      },
-      toggleDialog : function(){
+
+      /**
+       * SHOW / HIDE
+       */
+      toggleDialog : function() {
         this.$.dialog.toggle();
       },
+
+      /**
+       * EXIT
+       */
+      exit : function() {
+        this.fire("exit_request");
+      },
+
+      /**
+       * ADD
+       */
       addStep : function () {
         var step = {
           desc : "",
           number : 0
-        }
+        };
         this.push("recipe_inputs", step);
       },
+
+      /**
+       * ADD
+       */
       addIngr : function () {
         var ingr = {
           desc : "",
           amount : "",
           unit : ""
-        }
+        };
         this.push("ingredient_inputs", ingr);
         this.numberOfIngr++;
       },
+
+      /**
+       * REMOVE
+       */
       removeStep : function(e){
         var model = e.model;
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, "recipe_inputs");
       },
+
+      /**
+       * REMOVE
+       */
       removeIngr : function(e){
         var model = e.model;
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, 'ingredient_inputs');
       },
-      cutElementOffArray : function (index, arr) {
+
+      /**
+       * REMOVE
+       */
+      cutElementOffArray : function(index, arr) {
         this.splice(arr, index ,1);
       },
-      clearInputFields : function(){
+
+      /**
+       * CLEAR
+       */
+      clearInputFields : function() {
         var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.input');
         for(var field in inputFields){
           inputFields[field].value = "";
@@ -367,75 +377,38 @@
           desc : "",
           amount : "",
           unit : ""
-        }]
-        this.recipe_inputs = [
-          {
-            number : 0,
-            desc : ""
-          }
-        ]
+        }];
+        this.recipe_inputs = [{
+          number : 0,
+          desc : ""
+        }];
         var image = document.querySelector("#add_image");
         image.src = "";
         var chooser = document.querySelector("#fileChooser");
         chooser.value = null;
       },
-      validateRecipe : function(){
-        var check = function(obj, value){
-          return obj.recipe[value] != "" && obj.recipe[value] != undefined
-        }
-        var checkContainer = function(obj, container){
-          console.log(typeof obj.recipe[container]);
-          return obj.recipe[container].lenght > 0;
-        }
-        var titleExists = check(this, 'desc');
-        var textExists = check(this, "text");
-        var stepsExist = this.recipe.steps.length > 0;
-        var ingredientsExist = this.recipe.ingredients.length > 0;
-        var message = "";
-        if(!titleExists){
-          message += "Title\n";
-        }
-        if(!stepsExist && !textExists){
-          message += "Description or Steps\n";
-        }
-        var stepsComplete = true;
-        if(stepsExist){
-          for(var step in this.recipe.steps){
-            if(this.recipe.steps[step].desc == ""){
-              stepsComplete = false;
-            }
-          }
-          if(!stepsComplete){
-            message += "Steps need a description\n";
-          }
-        }
-        var ingredientsComplete = true;
-        if(!ingredientsExist){
-          message += "Ingredients\n"
-        }else{
-          for(var ingr in this.recipe.ingredients){
-            if(this.recipe.ingredients[ingr].desc == ""){
-              ingredientsComplete = false;
-            }
-          }
-          if(!ingredientsComplete){
-            message += "Ingredients need a description\n";
-          }
-        }
-        if(message != ""){
-          message = "Missing:\n" + message;
-        }
-        return message;
-      },
-      _openFileChooser : function () {
+
+      /**
+       * FILE CHOOSER
+       * @private
+       */
+      _openFileChooser : function() {
         this.$.fileChooser.click();
       },
-      encode : function(){
+
+      /**
+       * FILE CHOOSER
+       * @private
+       */
+      encode : function() {
         this.image = new ImageService("#fileChooser");
         this.image.encode(document.querySelector("#add_image"));
       },
-      createNewRecipe : function (){
-        console.log(this.recipe);
+
+      /**
+       * NEW
+       */
+      createNewRecipe : function() {
         this.recipe.ingredients = this.ingredient_inputs;
         var arr = [];
         for(var i = 0; i < this.recipe_inputs.length; i++){
@@ -450,11 +423,9 @@
         var v = this.validateRecipe();
         var recipeContainer = {};
         if(v.length <= 0){
-          alert(this.image);
-          if(this.image === undefined || this.image === null || this.image === ""){
+          if (this.image === undefined || this.image === null || this.image === "") {
             this.recipe.image = "";
-            alert(this.recipe.image);
-          }else{
+          } else {
             this.recipe.image = this.image.getImageAsString();
           }
           this.fire("add_request", this.recipe);
@@ -463,7 +434,59 @@
         }else{
           alert(v);
         }
+      },
+
+      /**
+       * VALIDATE
+       */
+      validateRecipe : function() {
+        var check = function(obj, value){
+          return obj.recipe[value] != "" && obj.recipe[value] != undefined
+        };
+        var checkContainer = function(obj, container){
+          return obj.recipe[container].lenght > 0;
+        };
+        var titleExists = check(this, 'desc');
+        var textExists = check(this, "text");
+        var stepsExist = this.recipe.steps.length > 0;
+        var ingredientsExist = this.recipe.ingredients.length > 0;
+        var message = "";
+        if (!titleExists) {
+          message += "Title\n";
+        }
+        if (!stepsExist && !textExists) {
+          message += "Description or Steps\n";
+        }
+        var stepsComplete = true;
+        if (stepsExist) {
+          for(var step in this.recipe.steps){
+            if(this.recipe.steps[step].desc == ""){
+              stepsComplete = false;
+            }
+          }
+          if(!stepsComplete){
+            message += "Steps need a description\n";
+          }
+        }
+        var ingredientsComplete = true;
+        if (!ingredientsExist) {
+          message += "Ingredients\n"
+        } else {
+          for(var ingr in this.recipe.ingredients){
+            if(this.recipe.ingredients[ingr].desc == ""){
+              ingredientsComplete = false;
+            }
+          }
+          if(!ingredientsComplete){
+            message += "Ingredients need a description\n";
+          }
+        }
+        if (message !== "") {
+          message = "Missing:\n" + message;
+        }
+        return message;
       }
+
     });
   })();
 </script>

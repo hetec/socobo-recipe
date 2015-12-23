@@ -16,11 +16,11 @@
       border-top-left-radius: 25px;
     }
 
-    .wrapper:hover{
+    .wrapper:hover {
       background-color: whitesmoke;
     }
 
-    .wrapper:hover .stepNumber{
+    .wrapper:hover .stepNumber {
       background-color: var(--default-primary-color);
       color: var(--light-primary-color)
     }
@@ -37,38 +37,33 @@
       float: left;
     }
 
-
     .stepDesc {
       @apply(--layout-flex);
       min-height: 30px;
-      margin:0;
-      padding-left: 30px;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      margin: 0 0 0 20px;
+      padding: 10px 10px 10px 30px;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-left: 20px;
       color: var(--primary-text-color);
-      padding-right: 10px;
       text-align: justify;
     }
 
-    .seperater {
+    .separator {
       width: 30%;
       border: 1px solid #F4F0EC;
     }
 
-    .steps_input{
+    .steps_input {
       width: 100%;
       @apply(--layout-horizontal);
     }
 
-    .steps_input paper-textarea{
+    .steps_input paper-textarea {
       float: left;
       width: 80%;
     }
 
-    .steps_input paper-icon-button{
+    .steps_input paper-icon-button {
       float: right;
       margin-top: 13px;
       width: 40px;
@@ -77,37 +72,39 @@
       text-align: center;
     }
 
-    #clearer{
+    .clearer {
       clear: both;
     }
 
-
   </style>
   <template>
-    <div class="wrapper"
-         id="steps_default">
+    <!---->
+    <div class="wrapper" id="steps_default">
       <paper-material elevation="1"
                       class="stepNumber"
                       id="stepNumber">{{step.number}}</paper-material>
       <p class="stepDesc" id="stepDesc">{{step.desc}}</p>
     </div>
-    <div id="steps_input"
-         class="steps_input">
+    <!---->
+    <div id="steps_input" class="steps_input">
+      <!---->
       <paper-textarea label="New step ..."
                       value="{{step.desc}}"
                       required
                       auto-validate
                       error-message="Description is required">
       </paper-textarea>
-      <paper-icon-button icon="delete"
-                         on-click="removeStep">
+      <!---->
+      <paper-icon-button
+        icon="delete"
+        on-click="removeStep">
       </paper-icon-button>
     </div>
-    <div id="clearer"></div>
-    <hr class="seperater"
-        id="sep">
+    <!---->
+    <div class="clearer"></div>
+    <!---->
+    <hr class="separator" id="sep">
   </template>
-
 </dom-module>
 
 <script>
@@ -145,6 +142,3 @@
     });
   })();
 </script>
-
-
-

@@ -7,8 +7,15 @@
     .wrapper {
       width: 260px;
       font-family: sans-serif;
-      margin: 0;
-      margin-bottom: 50px;
+      margin: 0 0 50px 0;
+    }
+
+    .wrapper paper-icon-button{
+      float: right;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
     }
 
     .desc {
@@ -23,18 +30,14 @@
       margin-left: 10px;
     }
 
-    .seperator {
+    .separator {
       clear: both;
       margin-top:40px;
       border: solid 1px #F4F0EC;
       width: 30%;
     }
-
-    #ingr_input{
-    }
-
     .desc_input{
-      widht: 100%;
+      width: 100%;
     }
 
     .amount_input{
@@ -48,27 +51,20 @@
       margin-left: 3%;
     }
 
-    #ingr_input paper-icon-button{
-      float: right;
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
   </style>
   <template>
-    <div class="wrapper"
-         id="ingr_default">
+    <!---->
+    <div class="wrapper" id="ingr_default">
       <span class="desc">{{ingredient.desc}}</span>
       <span class="unit">{{ingredient.unit}}</span>
       <span class="amount">{{ingredient.amount}}</span>
-      <hr class="seperator"
-          id="sep">
+      <hr class="separator" id="sep">
     </div>
+    <!---->
     <paper-material elevation="0"
                     class="wrapper"
                     id="ingr_input">
+      <!---->
       <paper-input label="New ingredient ..."
                    class="desc_input"
                    value="{{ingredient.desc}}"
@@ -77,14 +73,16 @@
                    pattern=".+"
                    error-message="Title is required">
       </paper-input>
+      <!---->
       <paper-input label="Measurement"
                    class="amount_input"
+                   type="number"
                    value="{{ingredient.amount}}"
                    pattern="[\d,.]+"
                    auto-validate
                    error-message="Invalid characters">
-        <input type="number">
       </paper-input>
+      <!---->
       <paper-input label="Unit"
                    class="unit_input"
                    value="{{ingredient.unit}}"
@@ -93,9 +91,7 @@
                    error-message="Invalid characters"></paper-input>
       <paper-icon-button icon="delete" on-click="removeIngr"></paper-icon-button>
     </paper-material>
-
   </template>
-
 </dom-module>
 
 <script>
@@ -134,5 +130,3 @@
     });
   })();
 </script>
-
-
