@@ -218,6 +218,17 @@
         .add(e.detail)
         .then(function(success) {
           this._notify(success.value);
+
+          RecipeDao.getInstance(this.userLogin)
+            .getAll()
+            .then(function(recipes) {
+              this.set("recipes", []);
+              this.set("recipes", recipes.value);
+            }.bind(this))
+            .catch(function(error) {
+              this._notify(error.value);
+            }.bind(this));
+
         }.bind(this))
         .catch(function(error) {
           this._notify(error.value);

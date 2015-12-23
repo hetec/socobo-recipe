@@ -7,8 +7,15 @@
     .wrapper {
       width: 260px;
       font-family: sans-serif;
-      margin: 0;
-      margin-bottom: 50px;
+      margin: 0 0 50px 0;
+    }
+
+    .wrapper paper-icon-button{
+      float: right;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
     }
 
     .desc {
@@ -23,18 +30,14 @@
       margin-left: 10px;
     }
 
-    .seperator {
+    .separator {
       clear: both;
       margin-top:40px;
       border: solid 1px #F4F0EC;
       width: 30%;
     }
-
-    #ingr_input{
-    }
-
     .desc_input{
-      widht: 100%;
+      width: 100%;
     }
 
     .amount_input{
@@ -48,14 +51,6 @@
       margin-left: 3%;
     }
 
-    #ingr_input paper-icon-button{
-      float: right;
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
   </style>
   <template>
     <!---->
@@ -63,7 +58,7 @@
       <span class="desc">{{ingredient.desc}}</span>
       <span class="unit">{{ingredient.unit}}</span>
       <span class="amount">{{ingredient.amount}}</span>
-      <hr class="seperator" id="sep">
+      <hr class="separator" id="sep">
     </div>
     <!---->
     <paper-material elevation="0"
@@ -135,5 +130,3 @@
     });
   })();
 </script>
-
-

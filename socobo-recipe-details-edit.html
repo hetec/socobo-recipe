@@ -147,7 +147,6 @@
     }
 
   </style>
-
   <template>
     <paper-dialog elevation="0" class="wrapper" id="dialog" modal
                   entry-animation="scale-up-animation"
@@ -249,7 +248,7 @@
             <div class="subHeadings">Steps</div>
           </template>
           <!-- DETAIL STEPS -->
-          <div class="steps inputs" id="steps_input">
+          <div class="steps" id="steps_input">
             <template is="dom-repeat" items="{{recipe_inputs}}">
               <!-- DETAIL STEP -->
               <socobo-recipe-details-step
@@ -291,7 +290,6 @@
       </div>
     </paper-dialog>
   </template>
-
 </dom-module>
 
 <script>
@@ -473,7 +471,6 @@
        * NEW
        */
       createNewRecipe : function (){
-        console.log(this.recipe);
         this.recipe.ingredients = this.ingredient_inputs;
         var arr = [];
         for (var i = 0; i < this.recipe_inputs.length; i++) {
@@ -509,7 +506,6 @@
           return obj.recipe[value] != "" && obj.recipe[value] != undefined
         };
         var checkContainer = function(obj, container){
-          console.log(typeof obj.recipe[container]);
           return obj.recipe[container].lenght > 0;
         };
         var titleExists = check(this, 'desc');
