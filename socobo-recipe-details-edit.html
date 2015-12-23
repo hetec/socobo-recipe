@@ -4,153 +4,71 @@
     :host {
       display: block;
     }
+
+    /* CONTENT */
     .wrapper {
-      background-color: white;
+      top: 20px;
+      max-height: 85%;
       width: 90%;
       min-width:700px;
+      padding: 0;
       overflow: auto;
+      background-color: white;
       color: #8A7F80;
       font-family: sans-serif;
       border-radius: 5px;
       line-height: 2;
-      padding: 0;
-    }
-
-    #dialog{
-      margin-top : 20px;
-      margin-bottom: 0;
-      top: 20px;
-      min-height: 85vh;
     }
     .content {
       @apply(--layout-horizontal);
+      padding: 0;
+      margin: 0;
+      height: 100%;
     }
-
     .leftColumn {
       width: 300px;
-      padding: 30px;
-      padding-top: 0;
+      padding: 0 30px 30px 30px;
     }
-
     .rightColumn {
       width: 100%;
-      margin-right: 0px;
-      padding: 30px;
-      padding-top: 0;
+      margin-right: 0;
+      padding: 0 30px 30px 30px;
       overflow: hidden;
     }
 
-    .wrapper h1 {
-      z-index: 15;
-      padding-left: 30px;
+    /* EXIT DIALOG */
+    .style-exit-button {
+      cursor: default;
+      position: absolute;
+      padding: 0;
       margin: 0;
-      letter-spacing: -1px;
+      top: 0;
+      right: 20px;
       color: #8A7F80;
-      font-weight: 400;
-      font-size: 30px;
+      font-weight: 100;
     }
-
-    .recipeImg {
-      position: relative;
-      top: 0px;
-      left: 0px;
-      background-color: transparent;
-      width: 280px;
-      height: 280px;
-      margin-bottom: 20px;
+    .style-exit-button:hover {
+      color: var(--accent-color);
+      cursor: pointer;
     }
-
-    .step {
-      width: 100%;
-    }
-
-    #exit iron-icon{
+    .style-exit-button iron-icon {
       width: 30px;
       height: 30px;
       float: right;
     }
 
-    #exit{
-      cursor: default;
-      position: absolute;
-      padding: 0;
-      margin: 0;
-      top:0px;
-      right: 0px;
-      color: #8A7F80;
-      font-weight: 100;
-    }
-
-
-    #exit:hover {
-      color: var(--accent-color);
-      cursor: pointer;
-    }
-
-    .content {
-      padding: 0;
-      margin: 0;
-      padding-top: 0;
-    }
-
-    .input{
-      display: block;
-    }
-
-    #title_input{
-      padding: 0;
-      padding-left: 30px;
-      padding-right: 30px;
+    /* TITLE */
+    .style-recipe-name {
+      padding: 0 30px 0 30px;
       margin-bottom: 20px;
     }
-
-    .step_input paper-input{
-      @apply(--layout-flex);
-      padding-right: 30px;
-      width: 800px;
-    }
-
-    .step_input paper-icon-button{
-      width:40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    #addStep{
-      margin : 0;
-      margin-top: 20px;
-      background-color: #F4F0EC;
-      font-size: 10px;
-    }
-
-    #addIngr{
-      margin : 0;
-      margin-top: 20px;
-      background-color: #F4F0EC;
-      font-size: 10px;
-    }
-
-    .buttons {
-      position: fixed;
-      right: 80px;
-      bottom: 60px;
-    }
-
-    .buttons paper-fab{
-      margin: 10px;
-    }
-
-    #abort{
-      --paper-fab-background: var(--default-primary-color);
-    }
-
     .subHeadings {
       background-color: #F4F0EC;
       text-align: center;
     }
 
-    .overlay{
+    /* IMAGES */
+    .overlay {
       width: 280px;
       height: 280px;
       background-color: var(--default-primary-color);
@@ -158,8 +76,11 @@
       position: absolute;
       z-index: 6;
     }
-
-    .overlay iron-icon{
+    .overlay:hover {
+      opacity: 0.4;
+      cursor: pointer;
+    }
+    .overlay iron-icon {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -170,22 +91,61 @@
       color: white;
       opacity: 1.0;
     }
-
+    .recipeImg {
+      position: relative;
+      top: 0;
+      left: 0;
+      background-color: transparent;
+      width: 280px;
+      height: 280px;
+      margin-bottom: 20px;
+    }
     .recipeImg_image {
       position: absolute;
       width: 280px;
       height: 280px;
       z-index: 4;
     }
-
-    .overlay:hover{
-      opacity: 0.4;
-      cursor: pointer;
-    }
-
-    #editfileChooser{
+    .style-file-chooser {
       display: none;
     }
+
+    /* STEPS */
+    .step {
+      width: 100%;
+    }
+    .step_input paper-input {
+      @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+    .step_input paper-icon-button {
+      width:40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+    .style-add-step-button {
+      margin: 20px 0 0 0;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    /* INGREDIENTS */
+    .style-add-ingr-button {
+      margin: 20px 0 0 0;
+      background-color: #F4F0EC;
+      font-size: 10px;
+    }
+
+    /* BOTTOM BUTTONS */
+    paper-fab {
+      margin: 10px;
+    }
+    .style-abort-fab {
+      --paper-fab-background: var(--default-primary-color);
+    }
+
   </style>
 
   <template>
@@ -193,25 +153,39 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" on-click="clearInputFields" dialog-dismiss>
+      <!-- DIALOG -->
+      <!-- EXIT DIALOG-->
+      <paper-icon-button id="exit" class="style-exit-button" icon="clear" on-tap="clearInputFields" dialog-dismiss>
       </paper-icon-button>
-      <paper-input id="title_input"
-                   label="Please name your recipe ... "
-                   value="{{recipe.desc}}"
-                   required
-                   pattern=".+"
-                   auto-validate
-                   error-message="Missing name or invalid characters!"
-                   autofocus="true"
-                   focused="true"
-      ></paper-input>
+
+      <!-- RECIPE NAME -->
+      <paper-input
+        id="title_input"
+        class="style-recipe-name"
+        label="Please name your recipe ... "
+        value="{{recipe.desc}}"
+        required
+        pattern=".+"
+        auto-validate
+        error-message="Missing name or invalid characters!"
+        autofocus="true"
+        focused="true">
+      </paper-input>
+
+      <!-- START CONTENT -->
       <div class="content">
+
+        <!-- START LEFT COLUMN -->
         <div class="leftColumn">
-          <input type="file" id="editfileChooser"/>
+
+          <!-- START IMAGE SECTION -->
+          <input type="file" id="editfileChooser" class="style-file-chooser"/>
           <div elevation="1" class="recipeImg" id="editImageHolder">
+            <!-- OVERLAY EDIT IMAGE -->
             <div class="overlay" on-tap="_openFileChooser">
               <iron-icon icon="create"></iron-icon>
             </div>
+            <!-- RECIPE IMAGE -->
             <template is="dom-if" if="{{recipe.image}}">
               <iron-image
                 id="edit_image"
@@ -223,6 +197,7 @@
                 placeholder="../placeholder.png">
               </iron-image>
             </template>
+            <!-- RECIPE IMAGE PLACEHOLDER -->
             <template is="dom-if" if="{{!recipe.image}}">
               <iron-image
                 id="edit_placeholder"
@@ -234,65 +209,84 @@
                 placeholder="../placeholder.png">
               </iron-image>
             </template>
-
+            <!-- END IMAGE SECTION -->
           </div>
 
+          <!-- DETAIL INGREDIENTS HEADLINE -->
           <div class="subHeadings">Ingredients:</div>
-          <template is="dom-repeat"
-                    items="{{ingredient_inputs}}">
-            <socobo-recipe-details-ingredient state="add"
-                                              ingredient="{{item}}"
-                                              id="{{item}}"
-                                              on-rem_ingr="removeIngr"
-                                              >
+          <!-- DETAIL INGREDIENTS -->
+          <template is="dom-repeat" items="{{ingredient_inputs}}">
+            <!-- DETAIL INGREDIENT -->
+            <socobo-recipe-details-ingredient
+              state="add"
+              ingredient="{{item}}"
+              id="{{item}}"
+              on-rem_ingr="removeIngr">
             </socobo-recipe-details-ingredient>
           </template>
-
-          <paper-button icon="add"
-                        id="addIngr"
-                        on-click="addIngr">
-            add ingredient
+          <!-- ADD DETAIL INGREDIENT-->
+          <paper-button
+            id="addIngr"
+            class="style-add-ingr-button"
+            icon="add"
+            on-tap="addIngr">add ingredient
           </paper-button>
+          <!-- END LEFT COLUMN -->
         </div>
+
+        <!-- START RIGHT COLUMN -->
         <div class="rightColumn">
+          <!-- DESCRIPTION SECTION -->
           <div class="subHeadings">Description</div>
-          <paper-textarea id="text_input"
-                          rows="6"
-                          label="Here you might place a brief description or the like ..."
-                          value="{{recipe.text}}"
-          ></paper-textarea>
+          <paper-textarea
+            id="text_input"
+            rows="6"
+            label="Here you might place a brief description or the like ..."
+            value="{{recipe.text}}">
+          </paper-textarea>
+          <!-- SHOW DETAIL STEPS HEADLINE -->
           <template is="dom-if" if="{{recipe_inputs.length}}">
             <div class="subHeadings">Steps</div>
           </template>
-          <div class="steps"
-               id="steps_input"
-               class="input">
-            <template is="dom-repeat"
-                      items="{{recipe_inputs}}">
-              <socobo-recipe-details-step state="add"
-                                          class="step"
-                                          step="{{item}}"
-                                          id="{{item}}"
-                                          on-rem_step="removeStep">
+          <!-- DETAIL STEPS -->
+          <div class="steps inputs" id="steps_input">
+            <template is="dom-repeat" items="{{recipe_inputs}}">
+              <!-- DETAIL STEP -->
+              <socobo-recipe-details-step
+                state="add"
+                class="step"
+                step="{{item}}"
+                id="{{item.number}}"
+                on-rem_step="removeStep">
               </socobo-recipe-details-step>
             </template>
           </div>
-          <paper-button icon="add"
-                        id="addStep"
-                        on-click="addStep">
-            add step
+          <!-- ADD DETAIL STEP -->
+          <paper-button
+            id="addStep"
+            class="style-add-step-button"
+            icon="add"
+            on-tap="addStep">add step
           </paper-button>
+          <!-- END RIGHT COLUMN -->
         </div>
+
+        <!-- END CONTENT -->
       </div>
+
+      <!-- DIALOG BUTTONS -->
       <div class="buttons">
-        <paper-fab icon="clear"
-                   id="abort"
-                   dialog-dismiss
-                   on-click="clearInputFields">
+        <paper-fab
+          id="abort"
+          class="style-abort-fab"
+          icon="clear"
+          dialog-dismiss
+          on-tap="clearInputFields">
         </paper-fab>
-        <paper-fab icon="done"
-                   id="ok"
-                   on-click="createNewRecipe">
+        <paper-fab
+          id="ok"
+          icon="done"
+          on-tap="createNewRecipe">
         </paper-fab>
       </div>
     </paper-dialog>
@@ -304,9 +298,17 @@
   (function() {
     Polymer({
       is: 'socobo-recipe-details-edit',
+
+      /**
+       * LISTENERS
+       */
       listeners: {
         'editfileChooser.change': 'encode'
       },
+
+      /**
+       * PROPERTIES
+       */
       properties: {
         recipe : {
           type : Object,
@@ -328,12 +330,49 @@
           value: "show"
         }
       },
+
+      /**
+       * SHOW / HIDE
+       */
+      toggleDialog : function() {
+        this.$.dialog.toggle();
+      },
+
+      /**
+       * EXIT
+       */
       exit : function () {
         this.fire("exit_request");
       },
-      toggleDialog : function(){
-        this.$.dialog.toggle();
+
+      /**
+       * INIT
+       */
+      initSteps : function() {
+        for(var step in this.recipe.steps){
+          this.push("recipe_inputs", this.recipe.steps[step]);
+        }
       },
+
+      /**
+       * INIT
+       */
+      initIngredients : function() {
+        for(var ingr in this.recipe.ingredients){
+          this.push("ingredient_inputs", this.recipe.ingredients[ingr]);
+        }
+      },
+
+      /**
+       * INIT
+       */
+      initImage : function() {
+        this.image = this.recipe.image;
+      },
+
+      /**
+       * ADD
+       */
       addStep : function () {
         var step = {
           desc : "",
@@ -341,6 +380,10 @@
         };
         this.push("recipe_inputs", step);
       },
+
+      /**
+       * ADD
+       */
       addIngr : function () {
         var ingr = {
           desc : "",
@@ -350,49 +393,117 @@
         this.push("ingredient_inputs", ingr);
         this.numberOfIngr++;
       },
-      removeStep : function(e){
+
+      /**
+       * REMOVE
+       */
+      removeStep : function(e) {
         var model = e.model;
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, "recipe_inputs");
       },
-      removeIngr : function(e){
+
+      /**
+       * REMOVE
+       */
+      removeIngr : function(e) {
         var model = e.model;
         var itemIndex = model.get('index');
         this.cutElementOffArray(itemIndex, 'ingredient_inputs');
       },
-      initSteps : function(){
-        for(var step in this.recipe.steps){
-          this.push("recipe_inputs", this.recipe.steps[step]);
-        }
-      },
-      initIngredients : function(){
-        for(var ingr in this.recipe.ingredients){
-          this.push("ingredient_inputs", this.recipe.ingredients[ingr]);
-        }
-      },
-      revokeEdit:function(){
-        this.recipe_inputs = [];
-        this.ingredient_inputs = [];
-      },
+
+      /**
+       * REMOVE
+       */
       cutElementOffArray : function (index, arr) {
         this.splice(arr, index ,1);
       },
-      clearInputFields : function(){
+
+      /**
+       * CLEAR
+       */
+      clearInputFields : function() {
         var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.input');
-        for(var field in inputFields){
+        var image = document.querySelector("#edit_image");
+        var placeholder = document.querySelector("#edit_placeholder");
+        var chooser = document.querySelector("#editfileChooser");
+
+        for (var field in inputFields){
           inputFields[field].value = "";
         }
-        var image = document.querySelector("#edit_image");
-        image.src = this.recipe.image;
-        var placeholder = document.querySelector("#edit_placeholder");
-        placeholder.src = this.recipe.image;
-        var chooser = document.querySelector("#editfileChooser");
-        chooser.value = null;
+        if (image !== null ) {
+          image.src = this.recipe.image;
+        }
+        if (placeholder !== null) {
+          placeholder.src = this.recipe.image;
+        }
+        if (chooser !== null) {
+          chooser.value = null;
+        }
+
         this.revokeEdit();
       },
+
+      /**
+       * CLEAR
+       */
+      revokeEdit:function() {
+        this.recipe_inputs = [];
+        this.ingredient_inputs = [];
+      },
+
+      /**
+       * FILE CHOOSER
+       * @private
+       */
       _openFileChooser : function () {
         this.$.editfileChooser.click();
       },
+
+      /**
+       * FILE CHOOSER
+       */
+      encode : function() {
+        this.image = new ImageService("#editfileChooser");
+        this.image.encode(document.querySelector("#edit_image"));
+        this.image.encode(document.querySelector("#edit_placeholder"));
+      },
+
+      /**
+       * NEW
+       */
+      createNewRecipe : function (){
+        console.log(this.recipe);
+        this.recipe.ingredients = this.ingredient_inputs;
+        var arr = [];
+        for (var i = 0; i < this.recipe_inputs.length; i++) {
+          arr[i]=this.recipe_inputs[i];
+        }
+        this.recipe.steps = arr;
+        var counter = 1;
+        for (var k in this.recipe.steps) {
+          this.recipe.steps[k].number = counter;
+          counter++;
+        }
+        var v = this.validateRecipe();
+        if (v.length <= 0){
+          if (this.image === undefined || this.image === null || this.image === "") {
+            this.recipe.image = "";
+          }
+          if (this.image.hasOwnProperty("getImageAsString")) {
+            this.recipe.image = this.image.getImageAsString();
+          }
+          this.fire("edit_request", this.recipe);
+          this.clearInputFields();
+          this.$.dialog.close();
+        } else {
+          alert(v);
+        }
+      },
+
+      /**
+       * VALIDATE
+       */
       validateRecipe : function(){
         var check = function(obj, value){
           return obj.recipe[value] != "" && obj.recipe[value] != undefined
@@ -440,38 +551,6 @@
           message = "Missing:\n" + message;
         }
         return message;
-      },
-      encode : function(){
-        this.image = new ImageService("#editfileChooser");
-        this.image.encode(document.querySelector("#edit_image"));
-        this.image.encode(document.querySelector("#edit_placeholder"));
-      },
-      createNewRecipe : function (){
-        console.log(this.recipe);
-        this.recipe.ingredients = this.ingredient_inputs;
-        var arr = [];
-        for(var i = 0; i < this.recipe_inputs.length; i++){
-          arr[i]=this.recipe_inputs[i];
-        }
-        this.recipe.steps = arr;
-        var counter = 1;
-        for(var k in this.recipe.steps){
-          this.recipe.steps[k].number = counter;
-          counter++;
-        }
-        var v = this.validateRecipe();
-        if(v.length <= 0){
-          if(this.image === undefined || this.image === null || this.image === ""){
-            this.recipe.image = "";
-          }else{
-            this.recipe.image = this.image.getImageAsString();
-          }
-          this.fire("edit_request", this.recipe);
-          this.clearInputFields();
-          this.$.dialog.close();
-        }else{
-          alert(v);
-        }
       }
     });
   })();

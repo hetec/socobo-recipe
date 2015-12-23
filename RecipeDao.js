@@ -10,15 +10,25 @@ var RecipeDao = (function(){
      */
     var _baseUrl = user.firebaseUrl;
     var _id = user.userId;
-    var _userUrl = _getUserUrl();
+    var _recipesUrl = _getGlobalRecipesUrl();
+    var _userUrl = _getUserRecipesUrl();
 
     /**
      *
      * @returns {string}
      * @private
      */
-    function _getUserUrl() {
-      return _baseUrl + "recipes/" + _id;
+    function _getGlobalRecipesUrl() {
+      return _baseUrl + "recipes/"
+    }
+
+    /**
+     *
+     * @returns {string}
+     * @private
+     */
+    function _getUserRecipesUrl() {
+      return _baseUrl + "users/" + _id + "/recipes";
     }
 
     /**
@@ -28,7 +38,7 @@ var RecipeDao = (function(){
      * @returns {boolean}
      * @private
      */
-    function _checkProperty(obj, propName){
+    function _checkProperty(obj, propName) {
       return obj.hasOwnProperty(propName);
     }
 
@@ -39,7 +49,7 @@ var RecipeDao = (function(){
      * @param arrProp
      * @private
      */
-    function _fillArrayProperty(source, dest, arrProp){
+    function _fillArrayProperty(source, dest, arrProp) {
       if(_checkProperty(dest, arrProp)){
         for (var j in source[arrProp]) {
           if(_checkProperty(source[arrProp], j)){
@@ -50,25 +60,38 @@ var RecipeDao = (function(){
     }
 
     /**
-     *
+     * changed
      * @param obj
      * @returns {Promise}
      */
     function add(obj) {
       return new Promise(function(resolve, reject) {
-        var dataRef = new Firebase(_userUrl);
-        dataRef.push(obj, function (error) {
+        // set author to recipe object
+        obj.userId = _id;
+        // #1 save recipe under /recipes
+        var dataGlobalRef = new Firebase(_recipesUrl);
+        var recipeRef = dataGlobalRef.push(obj, function (error) {
           if (error) {
-            reject({value: "Sorry a technical error occured while saving your recipe :("});
+            reject({value: "Sorry a technical error occured while creating your recipe :("});
           } else {
-            resolve({value: "Element successfully created!"});
+            // #2 Get Ref Id from current saved recipe
+            var recipeId = recipeRef.key();
+            // #3 Save recipe ref id to /users/recipes
+            var dataRef = new Firebase(_userUrl);
+            dataRef.push({id : recipeId}, function (error) {
+              if (error) {
+                reject({value: "Sorry a technical error occured while saving your recipe :("});
+              } else {
+                resolve({value: "Element successfully saved!"});
+              }
+            });
           }
         });
       });
     }
 
     /**
-     *
+     * changed
      * @param obj
      * @returns {Promise}
      */
@@ -98,89 +121,140 @@ var RecipeDao = (function(){
     }
 
     /**
-     *
+     * changed
      * @param obj
      * @returns {Promise}
      */
-    function remove(obj) {
+    function remove(obj)  {
       return new Promise(function(resolve, reject) {
         var dataRef = new Firebase(obj.ref.toString());
-        dataRef.remove(function (error) {
+        var userRef = new Firebase(obj.refUser);
+        var counter = 0;
+        var onComplete = function (error) {
           if (error) {
             reject({value: "Sorry a technical error occured while deleting your recipe :("});
           } else {
-            resolve({value: "Element successfully removed!"});
-          }
-        });
-      });
-    }
-
-    /**
-     *
-     * @returns {Promise}
-     */
-    function getAll(){
-      return new Promise(function(resolve, reject) {
-        var recipes = [];
-        var dataRef = new Firebase(_userUrl);
-        dataRef.once("value", function (snapshot) {
-          var val = snapshot.val();
-          for(var e in val){
-            var recipe = {};
-            var source;
-            if (_checkProperty(val, e)) {
-              source =  val[e];
-              recipe.ref = snapshot.ref() + "/" + e;
-              recipe.desc = source.desc;
-              recipe.info = source.info;
-              recipe.ingredients = [];
-              recipe.steps = [];
-              recipe.text = source.text;
-              _fillArrayProperty(source, recipe, "ingredients");
-              _fillArrayProperty(source, recipe, "steps");
+            if (counter !== 1) {
+              counter++;
             } else {
-              recipe.ref = snapshot.ref() + "/" + e;
-              recipe.desc = "no titel";
-              recipe.info = "-";
-              recipe.ingredients = [];
-              recipe.steps = [];
-              recipe.text = "no description";
+              resolve({value: "Element successfully removed!"});
             }
-            recipes.push(recipe);
           }
-          resolve({value: recipes});
-        }, function(err){
-          reject({value: "Sorry a technical error occured while fetching your recipes :("});
-        });
+        };
+        dataRef.remove(onComplete);
+        userRef.remove(onComplete);
       });
     }
 
     /**
-     *
-     * @param recipe
+     * changed
      * @returns {Promise}
      */
-    function findImage(recipe){
+    function getAll() {
       return new Promise(function(resolve, reject) {
-        var dbUrl = recipe.ref.toString() + "/image";
-        var dataRef = new Firebase(dbUrl);
-        dataRef.once("value", function (snapshot) {
-          resolve({value: snapshot.val()});
-        }, function(error){
-          reject({value: "Getting image from the database failed"});
+        _getRecipesIds()
+          .then(function(ids) {
+            _getRecipes(ids.keys, ids.value)
+              .then(function(recipes) {
+                resolve({value: recipes});
+              });
+          })
+          .catch(function(error) {
+            reject({value: "Sorry a technical error occured while fetching your recipes. " + error.value});
+          });
+      });
+    }
+
+    /**
+     * Get Recipe Ids from /user/recipes
+     * @returns {Promise}
+     * @private
+     */
+    function _getRecipesIds() {
+      return new Promise(function(resolve, reject) {
+        var idKeys = [];
+        var ids = [];
+        var dataRef = new Firebase(_userUrl);
+        dataRef.once("value", function(snapshot) {
+          snapshot.forEach(function(item) {
+            idKeys.push(item.key());
+            ids.push(item.val().id);
+          });
+          resolve({keys: idKeys, value: ids});
+        }, function(err){
+          reject({value: err.message});
         });
       });
     }
 
     /**
-     *
+     * Get all Recipes from /recipes with ids
+     * @param keys
+     * @param ids
+     * @returns {Promise}
+     * @private
+     */
+    function _getRecipes(keys, ids) {
+      return new Promise(function(resolve, reject) {
+        // Promise Holder
+        var recipePromise = [];
+        // iterate over all recipe ids and get the recipe
+        ids.forEach(function(id, index) {
+          recipePromise.push(_getRecipe(keys[index], id));
+        });
+        // bundle all promise values to one promise
+        Promise.all(recipePromise)
+          .then(function(recipes) {
+            resolve(recipes);
+          })
+          .catch(function(error) {
+            reject(error.message);
+          });
+      });
+    }
+
+    /**
+     * Get specific Recipe from /recipes with id
+     * @param key
+     * @param id
+     * @returns {Promise}
+     * @private
+     */
+    function _getRecipe(key, id) {
+      return new Promise(function(resolve, reject) {
+        var ref = new Firebase(_recipesUrl + "/" + id);
+        ref.once("value", function(snapshot) {
+          // recipe item from firebase
+          var item = snapshot.val();
+          // init recipe object
+          var recipe = {};
+          // fill recipe object with data
+          recipe.ref = snapshot.ref();
+          recipe.refUser = _userUrl + "/" + key;
+          recipe.desc = item.desc;
+          recipe.info = item.info;
+          recipe.image = item.image;
+          recipe.ingredients = [];
+          recipe.steps = [];
+          recipe.text = item.text;
+          _fillArrayProperty(item, recipe, "ingredients");
+          _fillArrayProperty(item, recipe, "steps");
+          // return recipe object
+          resolve(recipe);
+        }, function(err) {
+          reject(err.message);
+        });
+      });
+    }
+
+    /**
+     * Public Functions
      */
     return {
       add    : add,
       update : update,
       remove : remove,
-      getAll : getAll,
-      findImage : findImage
+      getAll : getAll
     };
   }
 

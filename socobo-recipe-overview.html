@@ -3,6 +3,7 @@
 <dom-module id="socobo-recipe-overview">
   <style>
     :host{
+      display: block;
     }
 
     #recipe_list{
@@ -43,6 +44,20 @@
 
   </style>
   <template>
+      <!-- Show Dialog -->
+      <socobo-recipe-details-show
+        id="showDialog">
+      </socobo-recipe-details-show>
+      <!-- Add Dialog -->
+      <socobo-recipe-details-add
+        id="addDialog"
+        on-add_request="addNewRecipe">
+      </socobo-recipe-details-add>
+      <!-- Edit Dialog -->
+      <socobo-recipe-details-edit
+        id="editDialog"
+        on-edit_request="editRecipe">
+      </socobo-recipe-details-edit>
       <!-- List -->
       <div id="recipe_list">
         <template is="dom-if" if="{{!recipes.length}}">
@@ -73,20 +88,6 @@
         icon="clear"
         on-tap="removeAllChecked">
       </paper-fab>
-      <!-- Show Dialog -->
-      <socobo-recipe-details-show
-        id="showDialog">
-      </socobo-recipe-details-show>
-      <!-- Add Dialog -->
-      <socobo-recipe-details-add
-        id="addDialog"
-        on-add_request="addNewRecipe">
-      </socobo-recipe-details-add>
-      <!-- Edit Dialog -->
-      <socobo-recipe-details-edit
-        id="editDialog"
-        on-edit_request="editRecipe">
-      </socobo-recipe-details-edit>
       <!-- Notification -->
       <paper-toast id="errorNotification"></paper-toast>
   </template>
@@ -123,7 +124,7 @@
      *
      * @param e
      */
-    handleCheck : function(e){
+    handleCheck : function(e) {
       this.checkedBoxes.number++;
       this.checkedBoxes.refs.push(e.detail);
       this.trackCheckedBoxes();
@@ -132,7 +133,7 @@
      *
      * @param e
      */
-    handleUncheck : function(e){
+    handleUncheck : function(e) {
       this.checkedBoxes.number--;
       this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
       this.trackCheckedBoxes();
@@ -140,7 +141,7 @@
     /**
      *
      */
-    trackCheckedBoxes : function () {
+    trackCheckedBoxes : function() {
       if(this.checkedBoxes.number > 0){
         this.switchButton(this.$.clear,this.$.add);
       }else{
@@ -151,56 +152,39 @@
      *
      * @param e
      */
-    clicked : function (e){
-      RecipeDao.getInstance(this.userLogin)
-        .findImage(e.detail)
-        .then(function(image) {
-          this.$.showDialog.toggleDialog();
-          var recipe = e.detail;
-          recipe.image = this._getRecipeImage(image.value);
-          this.$.showDialog.recipe = recipe;
-          this.$.showDialog.state = "show";
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
+    clicked : function(e) {
+      this.$.showDialog.state = "show";
+      this.$.showDialog.toggleDialog();
+      this.$.showDialog.recipe = e.detail;
     },
     /**
      *
      * @param e
      */
-    edit : function (e){
-      RecipeDao.getInstance(this.userLogin)
-        .findImage(e.detail)
-        .then(function(image) {
-          this.$.editDialog.toggleDialog();
-          var recipe = e.detail;
-          recipe.image = this._getRecipeImage(image.value);
-          this.$.editDialog.recipe = recipe;
-          this.$.editDialog.initSteps();
-          this.$.editDialog.initIngredients();
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
+    edit : function(e) {
+      this.$.editDialog.toggleDialog();
+      this.$.editDialog.recipe = e.detail;
+      this.$.editDialog.initSteps();
+      this.$.editDialog.initIngredients();
+      this.$.editDialog.initImage();
     },
     /**
      *
      */
-    addRecipe : function(){
-      this.$.addDialog.toggleDialog();
+    addRecipe : function() {
       this.$.addDialog.state = "add";
+      this.$.addDialog.toggleDialog();
     },
     /**
      *
      */
-    buttonAni : function (){
+    buttonAni : function() {
       this.playAnimation('entry');
     },
     /**
      *
      */
-    getRecipes: function(){
+    getRecipes: function() {
       RecipeDao.getInstance(this.userLogin)
         .getAll()
         .then(function(recipes) {
@@ -214,7 +198,7 @@
      *
      * @param e
      */
-    removeRecipe : function (e){
+    removeRecipe : function(e) {
       RecipeDao.getInstance(this.userLogin)
         .remove(e.detail)
         .then(function(success) {
@@ -229,7 +213,7 @@
      *
      * @param e
      */
-    addNewRecipe : function(e){
+    addNewRecipe : function(e) {
       RecipeDao.getInstance(this.userLogin)
         .add(e.detail)
         .then(function(success) {
@@ -243,16 +227,16 @@
      *
      * @param e
      */
-    editRecipe : function(e){
+    editRecipe : function(e) {
       RecipeDao.getInstance(this.userLogin)
         .update(e.detail)
         .then(function(success) {
           this._notify(success.value);
-          this.set("recipes", []);
 
           RecipeDao.getInstance(this.userLogin)
             .getAll()
             .then(function(recipes) {
+              this.set("recipes", []);
               this.set("recipes", recipes.value);
             }.bind(this))
             .catch(function(error) {
@@ -270,7 +254,7 @@
      * @param arr
      * @param pathToProperty
      */
-    updateAfterDeletion : function(el, arr, pathToProperty){
+    updateAfterDeletion : function(el, arr, pathToProperty) {
       for(var i = 0; i < arr.length; i++){
         if(arr[i].ref == el.ref){
           this.splice(pathToProperty, i, 1);
@@ -281,7 +265,7 @@
      *
      * @param e
      */
-    removeAllChecked : function (e) {
+    removeAllChecked : function(e) {
       for(var i in this.checkedBoxes.refs){
         RecipeDao.getInstance(this.userLogin)
           .remove((this.checkedBoxes.refs)[i])
@@ -302,7 +286,7 @@
      * @param enableButton
      * @param disableButton
      */
-    switchButton : function (enableButton, disableButton){
+    switchButton : function(enableButton, disableButton) {
       disableButton.style.display = "none";
       enableButton.style.display = "block";
     },

@@ -1,9 +1,10 @@
 {
   "name": "socobo-recipe",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Meta element for all components related to recipes",
   "author": [
-    "hetec"
+    "hetec",
+    "flashback2k14"
   ],
   "keywords": [
     "web-components",
@@ -22,25 +23,22 @@
   "homepage": "https://github.com/hetec/socobo-recipe.git",
   "ignore": [],
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#1.0.2",
-    "paper-elements": "PolymerElements/paper-elements#1.0.2",
-    "platinum-elements": "PolymerElements/platinum-elements#1.1.1",
+    "iron-elements": "PolymerElements/iron-elements#1.0.4",
+    "paper-elements": "PolymerElements/paper-elements#1.0.6",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0",
+    "polymer": "Polymer/polymer#1.2.0",
     "socobo-element-list-item": "hetec/socobo-element-list-item#master"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "iron-component-page": "polymerelements/iron-component-page#1.0.9",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "web-component-tester": "*"
   },
   "resolutions": {
-    "platinum-sw": "^1.2.0",
-    "iron-elements": "1.0.2",
-    "paper-elements": "1.0.2",
-    "platinum-elements": "1.1.1",
-    "socobo-element-list-item": "master"
+    "paper-elements": "1.0.6",
+    "iron-elements": "1.0.4",
+    "polymer": "^1.2.1"
   }
 }

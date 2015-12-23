@@ -58,17 +58,18 @@
 
   </style>
   <template>
-    <div class="wrapper"
-         id="ingr_default">
+    <!---->
+    <div class="wrapper" id="ingr_default">
       <span class="desc">{{ingredient.desc}}</span>
       <span class="unit">{{ingredient.unit}}</span>
       <span class="amount">{{ingredient.amount}}</span>
-      <hr class="seperator"
-          id="sep">
+      <hr class="seperator" id="sep">
     </div>
+    <!---->
     <paper-material elevation="0"
                     class="wrapper"
                     id="ingr_input">
+      <!---->
       <paper-input label="New ingredient ..."
                    class="desc_input"
                    value="{{ingredient.desc}}"
@@ -77,14 +78,16 @@
                    pattern=".+"
                    error-message="Title is required">
       </paper-input>
+      <!---->
       <paper-input label="Measurement"
                    class="amount_input"
+                   type="number"
                    value="{{ingredient.amount}}"
                    pattern="[\d,.]+"
                    auto-validate
                    error-message="Invalid characters">
-        <input type="number">
       </paper-input>
+      <!---->
       <paper-input label="Unit"
                    class="unit_input"
                    value="{{ingredient.unit}}"
@@ -93,9 +96,7 @@
                    error-message="Invalid characters"></paper-input>
       <paper-icon-button icon="delete" on-click="removeIngr"></paper-icon-button>
     </paper-material>
-
   </template>
-
 </dom-module>
 
 <script>
