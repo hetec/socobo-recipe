@@ -59,6 +59,9 @@
     }
 
     /* TITLE */
+    .inputs {
+      /*only needed for clearing*/
+    }
     .style-recipe-name {
       padding: 0 30px 0 30px;
       margin-bottom: 20px;
@@ -160,7 +163,7 @@
       <!-- RECIPE NAME -->
       <paper-input
         id="title_input"
-        class="style-recipe-name"
+        class="inputs style-recipe-name"
         label="Please name your recipe ... "
         value="{{recipe.desc}}"
         required
@@ -195,8 +198,7 @@
 
           <!-- DETAIL INGREDIENTS -->
           <div class="subHeadings">Ingredients:</div>
-          <template is="dom-repeat"
-                    items="{{ingredient_inputs}}">
+          <template is="dom-repeat" items="{{ingredient_inputs}}">
             <socobo-recipe-details-ingredient
               state="add"
               ingredient="{{item}}"
@@ -218,17 +220,15 @@
           <div class="subHeadings">Description</div>
           <paper-textarea
             id="text_input"
+            class="inputs"
             rows="6"
             label="Here you might place a brief description or the like ..."
             value="{{recipe.text}}">
           </paper-textarea>
           <!-- DETAIL STEPS -->
-          <template is="dom-if" if="{{recipe_inputs.length}}">
-            <div class="subHeadings">Steps</div>
-          </template>
+          <div class="subHeadings">Steps</div>
           <div class="steps" id="steps_input">
-            <template is="dom-repeat"
-                      items="{{recipe_inputs}}">
+            <template is="dom-repeat" items="{{recipe_inputs}}">
               <socobo-recipe-details-step
                 state="add"
                 class="step"
@@ -369,23 +369,17 @@
        * CLEAR
        */
       clearInputFields : function() {
-        var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.input');
-        for(var field in inputFields){
-          inputFields[field].value = "";
-        }
-        this.ingredient_inputs = [{
-          desc : "",
-          amount : "",
-          unit : ""
-        }];
-        this.recipe_inputs = [{
-          number : 0,
-          desc : ""
-        }];
-        var image = document.querySelector("#add_image");
-        image.src = "";
-        var chooser = document.querySelector("#fileChooser");
-        chooser.value = null;
+        // clear title and description
+        var inputFields = Polymer.dom(this.$.dialog).querySelectorAll('.inputs');
+        inputFields.forEach(function(field) {
+          field.value = "";
+        });
+        // clear ingredients and steps
+        this.ingredient_inputs = [];
+        this.recipe_inputs = [];
+        // clear images
+        Polymer.dom(this.$.dialog).querySelector("#add_image").src = "";
+        Polymer.dom(this.$.dialog).querySelector("#fileChooser").value = null;
       },
 
       /**

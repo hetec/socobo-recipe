@@ -174,6 +174,7 @@
     addRecipe : function() {
       this.$.addDialog.state = "add";
       this.$.addDialog.toggleDialog();
+      this.$.addDialog.clearInputFields();
     },
     /**
      *
@@ -274,23 +275,34 @@
     },
     /**
      *
-     * @param e
      */
-    removeAllChecked : function(e) {
-      for(var i in this.checkedBoxes.refs){
-        RecipeDao.getInstance(this.userLogin)
-          .remove((this.checkedBoxes.refs)[i])
-          .then(function(success) {
-            this._notify(success.value);
-            this.updateAfterDeletion(((this.checkedBoxes.refs)[i]), this.recipes, 'recipes');
+    removeAllChecked : function() {
+      // array to collect the remove promises
+      var removePromises = [];
+      // iterate over the checked recipes references
+      this.checkedBoxes.refs.forEach(function(item) {
+        // push remove promise to array
+        removePromises.push(RecipeDao.getInstance(this.userLogin).remove(item));
+      }.bind(this));
+
+      // collect all promises and perform data binding functions
+      Promise.all(removePromises)
+        .then(function(success) {
+          // iterate over successful removed recipes
+          success.forEach(function(recipe) {
+            // cut recipe from bounded arrays
+            this.updateAfterDeletion(recipe.item, this.recipes, 'recipes');
+            this.updateAfterDeletion(recipe.item, this.checkedBoxes.refs, "checkedBoxes.refs");
             this.checkedBoxes.number--;
-            this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
+            // check to change FAB
             this.trackCheckedBoxes();
-          }.bind(this))
-          .catch(function(error) {
-            this._notify(error.value);
           }.bind(this));
-      }
+          // notify user
+          this._notify("Elements successfully removed!");
+        }.bind(this))
+        .catch(function(error) {
+          this._notify(error.message);
+        }.bind(this));
     },
     /**
      *
@@ -309,19 +321,6 @@
     _notify : function(msg) {
       this.$.errorNotification.text = msg;
       this.$.errorNotification.show();
-    },
-    /**
-     *
-     * @param image
-     * @returns {String}
-     * @private
-     */
-    _getRecipeImage : function(image) {
-      if ((image !== undefined) && (image !== null) && (image !== "")) {
-        return image;
-      } else {
-        return "../placeholder.png";
-      }
     }
   });
 })();
