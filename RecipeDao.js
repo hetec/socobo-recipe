@@ -137,7 +137,7 @@ var RecipeDao = (function(){
             if (counter !== 1) {
               counter++;
             } else {
-              resolve({value: "Element successfully removed!"});
+              resolve({value: "Element successfully removed!", item: obj});
             }
           }
         };
