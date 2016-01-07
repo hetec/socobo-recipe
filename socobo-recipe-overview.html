@@ -56,7 +56,7 @@
       <!-- Edit Dialog -->
       <socobo-recipe-details-edit
         id="editDialog"
-        on-edit_request="editRecipe">
+        on-add_edited_recipe="editRecipe">
       </socobo-recipe-details-edit>
       <!-- List -->
       <div id="recipe_list">
@@ -162,8 +162,11 @@
      * @param e
      */
     edit : function(e) {
+      //this.$.editDialog.recipe_inputs = [];
+      //this.$.editDialog.ingredient_inputs = [];
+      var eClone = (JSON.parse(JSON.stringify(e.detail)))
       this.$.editDialog.toggleDialog();
-      this.$.editDialog.recipe = e.detail;
+      this.$.editDialog.recipe = {original: e.detail, clone: eClone};
       this.$.editDialog.initSteps();
       this.$.editDialog.initIngredients();
       this.$.editDialog.initImage();
