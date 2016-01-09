@@ -13,7 +13,7 @@ function ImageService(imageChooserId){
     var file = imageChooser.files[0];
     if(file === undefined || file === null){
       data = "";
-      build(imageId,"../placeholder.png");
+      build(imageId,"placeholder.png");
     }else{
       var reader = new FileReader();
       reader.onload = function(e){
