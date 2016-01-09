@@ -163,7 +163,10 @@
      */
     edit : function(e) {
       //Create clone of the e.detail object
-      var eClone = (JSON.parse(JSON.stringify(e.detail)))
+      var stringref = e.detail.ref.toString();
+      e.detail.ref = stringref;
+      var eClone = CloneModule.clone(e.detail);
+      //Alternative: var eClone = (JSON.parse(JSON.stringify(e.detail)));
       this.$.editDialog.toggleDialog();
       //Pass clone object and original object to the recipe dialog
       this.$.editDialog.recipe = {original: e.detail, clone: eClone};

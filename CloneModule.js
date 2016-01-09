@@ -12,7 +12,7 @@ var CloneModule = CloneModule || (function(){
      * @private
      */
     function _cloneArray(arr){
-      var tmp = []
+      var tmp = [];
       arr.forEach(function(element){
         if(_isArray(element)){
           var a = _cloneArray(element);
@@ -68,7 +68,7 @@ var CloneModule = CloneModule || (function(){
           return _cloneObject(genes);
         }
       }else{
-        throw Error("Data type '" + typeof genes + "' is not supported. The type must be equal to 'object'")
+        throw Error("Data type '" + typeof genes + "' is not supported. The type must be equal to 'object'");
       }
     }
 
