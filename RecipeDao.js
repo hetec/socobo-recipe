@@ -4,9 +4,33 @@ var RecipeDao = (function(){
    */
   var instance;
 
+  /**
+   * Public API
+   * @param user
+   * @returns {{add: add, update: update, remove: remove, getAll: getAll}}
+     */
   function init(user) {
+
     /**
-     *
+     * Get Global Recipes URL
+     * @returns {string}
+     * @private
+     */
+    var _getGlobalRecipesUrl = function() {
+      return _baseUrl + "recipes/"
+    };
+
+    /**
+     * Get User Recipes URL
+     * @returns {string}
+     * @private
+     */
+    var _getUserRecipesUrl = function() {
+      return _baseUrl + "users/" + _id + "/recipes";
+    };
+
+    /**
+     * Private Variables
      */
     var _baseUrl = user.firebaseUrl;
     var _id = user.userId;
@@ -14,42 +38,24 @@ var RecipeDao = (function(){
     var _userUrl = _getUserRecipesUrl();
 
     /**
-     *
-     * @returns {string}
-     * @private
-     */
-    function _getGlobalRecipesUrl() {
-      return _baseUrl + "recipes/"
-    }
-
-    /**
-     *
-     * @returns {string}
-     * @private
-     */
-    function _getUserRecipesUrl() {
-      return _baseUrl + "users/" + _id + "/recipes";
-    }
-
-    /**
-     *
+     * Check Object contains Property
      * @param obj
      * @param propName
      * @returns {boolean}
      * @private
      */
-    function _checkProperty(obj, propName) {
+    var _checkProperty = function(obj, propName) {
       return obj.hasOwnProperty(propName);
-    }
+    };
 
     /**
-     *
+     * Fill Array withh Properties
      * @param source
      * @param dest
      * @param arrProp
      * @private
      */
-    function _fillArrayProperty(source, dest, arrProp) {
+    var _fillArrayProperty = function(source, dest, arrProp) {
       if(_checkProperty(dest, arrProp)){
         for (var j in source[arrProp]) {
           if(_checkProperty(source[arrProp], j)){
@@ -57,14 +63,14 @@ var RecipeDao = (function(){
           }
         }
       }
-    }
+    };
 
     /**
-     * changed
+     * Add Recipe on DB
      * @param obj
      * @returns {Promise}
      */
-    function add(obj) {
+    var add = function(obj) {
       return new Promise(function(resolve, reject) {
         // set author to recipe object
         obj.userId = _id;
@@ -88,20 +94,20 @@ var RecipeDao = (function(){
           }
         });
       });
-    }
+    };
 
     /**
-     * changed
+     * Update Recipe on DB
      * @param obj
      * @returns {Promise}
      */
-    function update(obj) {
+    var update = function(obj) {
       //
       var reference = obj.ref.toString();
       //
       var newObj = {};
       for (var e in obj) {
-        if (e != "ref" && e != "info") {
+        if (e !== "ref" && e !== "info") {
           if(_checkProperty(obj, e)){
             newObj[e] = obj[e];
           }
@@ -118,14 +124,14 @@ var RecipeDao = (function(){
           }
         });
       });
-    }
+    };
 
     /**
-     * changed
+     * Remove Recipe on DB
      * @param obj
      * @returns {Promise}
      */
-    function remove(obj)  {
+    var remove = function(obj)  {
       return new Promise(function(resolve, reject) {
         var dataRef = new Firebase(obj.ref.toString());
         var userRef = new Firebase(obj.refUser);
@@ -144,33 +150,14 @@ var RecipeDao = (function(){
         dataRef.remove(onComplete);
         userRef.remove(onComplete);
       });
-    }
-
-    /**
-     * changed
-     * @returns {Promise}
-     */
-    function getAll() {
-      return new Promise(function(resolve, reject) {
-        _getRecipesIds()
-          .then(function(ids) {
-            _getRecipes(ids.keys, ids.value)
-              .then(function(recipes) {
-                resolve({value: recipes});
-              });
-          })
-          .catch(function(error) {
-            reject({value: "Sorry a technical error occured while fetching your recipes. " + error.value});
-          });
-      });
-    }
+    };
 
     /**
      * Get Recipe Ids from /user/recipes
      * @returns {Promise}
      * @private
      */
-    function _getRecipesIds() {
+    var _getRecipesIds = function() {
       return new Promise(function(resolve, reject) {
         var idKeys = [];
         var ids = [];
@@ -185,7 +172,7 @@ var RecipeDao = (function(){
           reject({value: err.message});
         });
       });
-    }
+    };
 
     /**
      * Get all Recipes from /recipes with ids
@@ -194,7 +181,7 @@ var RecipeDao = (function(){
      * @returns {Promise}
      * @private
      */
-    function _getRecipes(keys, ids) {
+    var _getRecipes = function(keys, ids) {
       return new Promise(function(resolve, reject) {
         // Promise Holder
         var recipePromise = [];
@@ -211,7 +198,7 @@ var RecipeDao = (function(){
             reject(error.message);
           });
       });
-    }
+    };
 
     /**
      * Get specific Recipe from /recipes with id
@@ -220,7 +207,7 @@ var RecipeDao = (function(){
      * @returns {Promise}
      * @private
      */
-    function _getRecipe(key, id) {
+    var _getRecipe = function(key, id) {
       return new Promise(function(resolve, reject) {
         var ref = new Firebase(_recipesUrl + "/" + id);
         ref.once("value", function(snapshot) {
@@ -245,7 +232,26 @@ var RecipeDao = (function(){
           reject(err.message);
         });
       });
-    }
+    };
+
+    /**
+     * Get All Recipes from DB
+     * @returns {Promise}
+     */
+    var getAll = function() {
+      return new Promise(function(resolve, reject) {
+        _getRecipesIds()
+          .then(function(ids) {
+            _getRecipes(ids.keys, ids.value)
+              .then(function(recipes) {
+                resolve({value: recipes});
+              });
+          })
+          .catch(function(error) {
+            reject({value: "Sorry a technical error occured while fetching your recipes. " + error.value});
+          });
+      });
+    };
 
     /**
      * Public Functions
