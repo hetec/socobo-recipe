@@ -162,10 +162,10 @@
      * @param e
      */
     edit : function(e) {
-      //this.$.editDialog.recipe_inputs = [];
-      //this.$.editDialog.ingredient_inputs = [];
+      //Create clone of the e.detail object
       var eClone = (JSON.parse(JSON.stringify(e.detail)))
       this.$.editDialog.toggleDialog();
+      //Pass clone object and original object to the recipe dialog
       this.$.editDialog.recipe = {original: e.detail, clone: eClone};
       this.$.editDialog.initSteps();
       this.$.editDialog.initIngredients();
