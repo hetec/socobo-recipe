@@ -163,8 +163,6 @@
      */
     edit : function(e) {
       //Create clone of the e.detail object
-      var stringref = e.detail.ref.toString();
-      e.detail.ref = stringref;
       var eClone = CloneModule.clone(e.detail);
       //Alternative: var eClone = (JSON.parse(JSON.stringify(e.detail)));
       this.$.editDialog.toggleDialog();

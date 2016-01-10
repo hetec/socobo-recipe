@@ -216,7 +216,7 @@ var RecipeDao = (function(){
           // init recipe object
           var recipe = {};
           // fill recipe object with data
-          recipe.ref = snapshot.ref();
+          recipe.ref = snapshot.ref().toString();
           recipe.refUser = _userUrl + "/" + key;
           recipe.desc = item.desc;
           recipe.info = item.info;
