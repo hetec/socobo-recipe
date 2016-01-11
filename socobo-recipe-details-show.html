@@ -5,43 +5,22 @@
       display: block;
     }
 
+    /* CONTENT */
     .wrapper {
-      background-color: white;
+      top: 20px;
+      min-height: 85%;
       width: 90%;
       min-width:700px;
+      padding: 0;
+      margin-top : 20px;
+      margin-bottom: 0;
       overflow: scroll;
-
+      background-color: white;
       color: var(--primary-text-color);
       font-family: sans-serif;
       border-radius: 5px;
       line-height: 2;
-      padding: 0;
     }
-
-    #dialog{
-      margin-top : 20px;
-      margin-bottom: 0;
-      top: 20px;
-      min-height: 85vh;
-    }
-    .content {
-    @apply(--layout-horizontal);
-    }
-
-    .leftColumn {
-      width: 300px;
-      padding: 30px;
-      padding-top: 0;
-    }
-
-    .rightColumn {
-      width: 100%;
-      margin-right: 0px;
-      padding: 30px;
-      padding-top: 0;
-      overflow: hidden;
-    }
-
     .wrapper h1 {
       z-index: 15;
       padding-left: 30px;
@@ -51,77 +30,81 @@
       font-weight: 400;
       font-size: 30px;
     }
+    .content {
+      @apply(--layout-horizontal);
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+    .leftColumn {
+      width: 300px;
+      padding: 0 30px 30px 30px;
+    }
+    .rightColumn {
+      width: 100%;
+      margin-right: 0;
+      padding: 0 30px 30px 30px;
+      overflow: hidden;
+    }
 
+    /* EXIT DIALOG */
+    .style-exit-show-button {
+      cursor: default;
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      top: 0;
+      right: 0;
+      color: #8A7F80;
+      font-weight: 100;
+    }
+    .style-exit-show-button:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+    .style-exit-show-button iron-icon {
+      width: 30px;
+      height: 30px;
+      float: right;
+    }
+
+    /* TITLE */
+    .default {
+      display: block;
+    }
+    .subHeadings {
+      background-color: #F4F0EC;
+      text-align: center;
+    }
+
+    /* IMAGES */
     .recipeImg {
       background-color: gainsboro;
       width: 280px;
       height: 280px;
       margin-bottom: 20px;
     }
-
-    .step {
-      width: 100%;
-    }
-
-    #exit iron-icon{
-      width: 30px;
-      height: 30px;
-      float: right;
-    }
-
-    #exit{
-      cursor: default;
-      position: absolute;
-      padding: 0;
-      margin: 0;
-      top:0px;
-      right: 0px;
-      color: #8A7F80;
-      font-weight: 100;
-    }
-
-    #exit:hover {
-      color: var(--accent-color);
-      cursor: pointer;
-    }
-
-    .content {
-      padding: 0;
-      margin: 0;
-      padding-top: 0;
-    }
-
-    .default{
-      display: block;
-    }
-
-    .step_input paper-input{
-    @apply(--layout-flex);
-      padding-right: 30px;
-      width: 800px;
-    }
-
-    .step_input paper-icon-button{
-      width:40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    .buttons paper-fab{
-      margin: 10px;
-    }
-
-    .subHeadings {
-      background-color: #F4F0EC;
-      text-align: center;
-    }
-
     .recipeImg_image {
       position: absolute;
       width: 280px;
       height: 280px;
       z-index: 4;
+    }
+
+    /* STEPS */
+    .step {
+      width: 100%;
+    }
+    .step_input paper-input {
+      @apply(--layout-flex);
+      padding-right: 30px;
+      width: 800px;
+    }
+    .step_input paper-icon-button {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
     }
 
   </style>
@@ -130,35 +113,42 @@
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
                   with-backdrop>
-      <paper-icon-button id="exit" icon="clear" dialog-dismiss>
+      <!-- DIALOG -->
+      <!-- EXIT DIALOG-->
+      <paper-icon-button id="exit" class="style-exit-show-button" icon="clear" dialog-dismiss>
       </paper-icon-button>
+      <!-- RECIPE NAME -->
       <h1 id="title_default" class="default">{{recipe.desc}}</h1>
+      <!-- CONTENT -->
       <div class="content">
+        <!-- LEFT COLUMN -->
         <div class="leftColumn">
+          <!-- IMAGE SECTION -->
           <paper-material elevation="1" class="recipeImg">
             <template is="dom-if" if="{{recipe.image}}">
               <iron-image
-                      id="show_image"
-                      class="recipeImg_image"
-                      src="{{recipe.image}}"
-                      sizing="cover"
-                      preload="true"
-                      fade
-                      placeholder="../placeholder.png">
+                id="show_image"
+                class="recipeImg_image"
+                src="{{recipe.image}}"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="bower_components/socobo-recipe/placeholder.png"><!-- Does not work with polyserve -->
               </iron-image>
             </template>
             <template is="dom-if" if="{{!recipe.image}}">
               <iron-image
-                      id="recipe_image"
-                      class="recipeImg"
-                      src="placeholder.png"
-                      sizing="cover"
-                      preload="true"
-                      fade
-                      placeholder="../placeholder.png">
+                id="recipe_image"
+                class="recipeImg"
+                src="placeholder.png"
+                sizing="cover"
+                preload="true"
+                fade
+                placeholder="bower_components/socobo-recipe/placeholder.png"><!-- Does not work with polyserve -->
               </iron-image>
               </template>
           </paper-material>
+          <!-- DETAIL INGREDIENTS -->
           <template is="dom-if" if="{{recipe.ingredients}}">
             <div class="subHeadings">Ingredients</div>
           </template>
@@ -168,11 +158,14 @@
             </template>
           </div>
         </div>
+        <!-- RIGHT COLUMN -->
         <div class="rightColumn">
+          <!-- DESCRIPTION SECTION -->
           <template is="dom-if" if="{{recipe.text}}">
             <div class="subHeadings">Description</div>
           </template>
           <div id="text_default" class="default" class="text">{{recipe.text}}</div>
+          <!-- DETAIL STEPS -->
           <template is="dom-if" if="{{recipe.steps.length}}">
             <div class="subHeadings">Steps</div>
           </template>
@@ -185,16 +178,12 @@
       </div>
     </paper-dialog>
   </template>
-
 </dom-module>
 
 <script>
   (function() {
     Polymer({
       is: 'socobo-recipe-details-show',
-      listeners : {
-
-      },
       properties: {
         recipe : {
           type : Object,
