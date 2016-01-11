@@ -245,9 +245,7 @@
             value="{{recipe.clone.text}}">
           </paper-textarea>
           <!-- SHOW DETAIL STEPS HEADLINE -->
-          <template is="dom-if" if="{{recipe_inputs.length}}">
-            <div class="subHeadings">Steps</div>
-          </template>
+          <div class="subHeadings">Steps</div>
           <!-- DETAIL STEPS -->
           <div class="steps" id="steps_input">
             <template is="dom-repeat" items="{{recipe_inputs}}">
