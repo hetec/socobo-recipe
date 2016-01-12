@@ -365,15 +365,16 @@
       _searchQueryCleared: function(e) {
         this._searchQueryChanged({detail: {searchQuery: null}})
       },
-      _setHidden: function (item, query) {
+      _setHidden: function (item, searchquery) {
         //check the title of the item
-        var checkDesc = !(query === null
-          || typeof query === 'undefined'
-          || item.desc.indexOf(query) != -1);
+        var lowerCaseQuery = searchquery.toLowerCase();
+        var checkDesc = !(lowerCaseQuery === null
+          || typeof lowerCaseQuery === 'undefined'
+          || (item.desc).toLowerCase().indexOf(lowerCaseQuery) != -1);
         var checkInfo = false;
         //if info is available it will be checked else not
         if(item.info !== undefined){
-          checkInfo = !(item.info.indexOf(query) != -1);
+          checkInfo = !((item.info).toLowerCase().indexOf(lowerCaseQuery) != -1);
         }
         return checkDesc || checkInfo;
       },
