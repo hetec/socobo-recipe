@@ -63,8 +63,7 @@
       id = "searchbar"
        on-check-all-items="_checkItems" 
       on-uncheck-all-items="_uncheckItems"
-      on-changed-search-query="_searchQueryChanged"
-      on-clear-search-query="_searchQueryCleared"> 
+      on-changed-search-query="_searchQueryChanged">
     </socobo-element-search>
     <!-- List -->
     <div id="recipe_list">
@@ -413,15 +412,6 @@
        */
       _searchQueryChanged: function(e) {
         this.query = e.detail.searchQuery;
-      },
-      /**
-       * Handler for the clear search query event of the search-element.
-       * Resets the query to null.
-       * @param e
-       * @private
-       */
-      _searchQueryCleared: function(e) {
-        this._searchQueryChanged({detail: {searchQuery: null}})
       },
       /**
        * Sets the related item invisible or visible related on
