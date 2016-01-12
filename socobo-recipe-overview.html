@@ -51,17 +51,17 @@
     <!-- Add Dialog -->
     <socobo-recipe-details-add
       id="addDialog"
-      on-add_request="addNewRecipe">
+      on-add_request="_addNewRecipe">
     </socobo-recipe-details-add>
     <!-- Edit Dialog -->
     <socobo-recipe-details-edit
       id="editDialog"
-      on-add_edited_recipe="editRecipe">
+      on-add_edited_recipe="_editRecipe">
     </socobo-recipe-details-edit>
     <!-- Search -->
     <socobo-element-search
-       on-check-all-items="checkItems" 
-      on-uncheck-all-items="uncheckItems"
+       on-check-all-items="_checkItems" 
+      on-uncheck-all-items="_uncheckItems"
       on-changed-search-query="_searchQueryChanged"
       on-clear-search-query="_searchQueryCleared"> 
     </socobo-element-search>
@@ -74,12 +74,12 @@
         <socobo-element-list-item
           class="singleItem"
           obj="{{item}}"
-          isChecked="{{valueOfCheckBox}}"
-          on-check="handleCheck"
-          on-uncheck="handleUncheck"
-          on-show_request="clicked"
-          on-delete_request="removeRecipe"
-          on-edit_request="edit"
+          isChecked="{{_valueOfCheckBox}}"
+          on-check="_handleCheck"
+          on-uncheck="_handleUncheck"
+          on-show_request="_clicked"
+          on-delete_request="_removeRecipe"
+          on-edit_request="_edit"
           hidden="{{_setHidden(item, query)}}">
         </socobo-element-list-item>
       </template>
@@ -88,13 +88,13 @@
     <paper-fab
       id="add"
       icon="add"
-      on-tap="addRecipe">
+      on-tap="_addRecipe">
     </paper-fab>
     <!-- Clear -->
     <paper-fab
       id="clear"
       icon="clear"
-      on-tap="removeAllChecked">
+      on-tap="_removeAllChecked">
     </paper-fab>
     <!-- Notification -->
     <paper-toast id="errorNotification"></paper-toast>
@@ -105,7 +105,12 @@
     Polymer({
       is: 'socobo-recipe-overview',
       /**
-       *
+       *Public properties
+       * - reicpes [Array]
+       * - userLogin {Object}
+       *Private properties
+       * - _valueOfCheckBox {Object}
+       * - _checkedBoxes (boolean)
        */
       properties: {
         recipes: {
@@ -116,60 +121,68 @@
           type: Object,
           value: {}
         },
-        checkedBoxes: {
+        _checkedBoxes: {
           type: Object,
           value: {
             number: 0,
             refs: []
           }
         },
-        valueOfCheckBox: {
+        _valueOfCheckBox: {
           type: Boolean,
           value: false
         }
       },
       /**
-       *
+       * Handles the number of checked boxes if one box is checked
+       * @private
        * @param e
        */
-      handleCheck: function (e) {
-        this.checkedBoxes.number++;
-        this.checkedBoxes.refs.push(e.detail);
-        this.trackCheckedBoxes();
+      _handleCheck: function (e) {
+        this._checkedBoxes.number++;
+        this._checkedBoxes.refs.push(e.detail);
+        this._trackCheckedBoxes();
       },
       /**
-       *
+       * Handles the number of checked boxes if one box is unchecked
+       * @private
        * @param e
        */
-      handleUncheck: function (e) {
-        this.checkedBoxes.number--;
-        this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
-        this.trackCheckedBoxes();
+      _handleUncheck: function (e) {
+        this._checkedBoxes.number--;
+        this._updateAfterDeletion(e.detail, this._checkedBoxes.refs, "_checkedBoxes.refs");
+        this._trackCheckedBoxes();
       },
       /**
-       *
+       * Keeps track of the number of checked checkboxes and
+       * handles the kind of the main action button appropriately
+       * @private
        */
-      trackCheckedBoxes: function () {
-        if (this.checkedBoxes.number > 0) {
-          this.switchButton(this.$.clear, this.$.add);
+      _trackCheckedBoxes: function () {
+        if (this._checkedBoxes.number > 0) {
+          this._switchButton(this.$.clear, this.$.add);
         } else {
-          this.switchButton(this.$.add, this.$.clear);
+          this._switchButton(this.$.add, this.$.clear);
         }
       },
       /**
-       *
+       * Handler for the click event fired by the item-element.
+       * Opens the show dialog for the recipe given in the event.
+       * @private
        * @param e
        */
-      clicked: function (e) {
+      _clicked: function (e) {
         this.$.showDialog.state = "show";
         this.$.showDialog.toggleDialog();
         this.$.showDialog.recipe = e.detail;
       },
       /**
-       *
+       * Handler for the edit event fired by the item-element.
+       * Opens the edit dialog for the recipe given in the event.
+       * @private
        * @param e
        */
-      edit: function (e) {
+      _edit: function (e) {
         //Create clone of the e.detail object
         var eClone = CloneModule.clone(e.detail);
         //Alternative: var eClone = (JSON.parse(JSON.stringify(e.detail)));
@@ -181,21 +194,18 @@
         this.$.editDialog.initImage();
       },
       /**
-       *
+       * Handle for the add event fired by the main action button.
+       * Opens en empty add dialog to create a recipe.
+       * @private
        */
-      addRecipe: function () {
+      _addRecipe: function () {
         this.$.addDialog.state = "add";
         this.$.addDialog.toggleDialog();
         this.$.addDialog.clearInputFields();
       },
       /**
-       *
-       */
-      buttonAni: function () {
-        this.playAnimation('entry');
-      },
-      /**
-       *
+       * Loads all recipes from the database and updates them
+       * automatically.
        */
       getRecipes: function () {
         RecipeDao.getInstance(this.userLogin)
@@ -208,25 +218,29 @@
           }.bind(this));
       },
       /**
-       *
+       * Handler for the add event fired by the item-element.
+       * Triggers the removal of this item.
+       * @private
        * @param e
        */
-      removeRecipe: function (e) {
+      _removeRecipe: function (e) {
         RecipeDao.getInstance(this.userLogin)
           .remove(e.detail)
           .then(function (success) {
             this._notify(success.value);
-            this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
+            this._updateAfterDeletion(e.detail, this.recipes, 'recipes');
           }.bind(this))
           .catch(function (error) {
             this._notify(error.value);
           }.bind(this));
       },
       /**
-       *
+       * Hanlder for the add event fired by the add dialog.
+       * Triggers the addition of the created recipe.
+       * @private
        * @param e
        */
-      addNewRecipe: function (e) {
+      _addNewRecipe: function (e) {
         RecipeDao.getInstance(this.userLogin)
           .add(e.detail)
           .then(function (success) {
@@ -248,10 +262,13 @@
           }.bind(this));
       },
       /**
-       *
+       * Handler for the edit event fired by the edit dialog.
+       * Triggers the update of the related recipe in the database with
+       * the newly created one.
+       * @private
        * @param e
        */
-      editRecipe: function (e) {
+      _editRecipe: function (e) {
         RecipeDao.getInstance(this.userLogin)
           .update(e.detail)
           .then(function (success) {
@@ -273,12 +290,15 @@
           }.bind(this));
       },
       /**
-       *
+       * Updates a given given property (array) with another given
+       * array of values for the assigned element where the reference of
+       * one element of the given array is equal to the reference of the element.
        * @param el
        * @param arr
        * @param pathToProperty
+       * @private
        */
-      updateAfterDeletion: function (el, arr, pathToProperty) {
+      _updateAfterDeletion: function (el, arr, pathToProperty) {
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].ref == el.ref) {
             this.splice(pathToProperty, i, 1);
@@ -286,13 +306,14 @@
         }
       },
       /**
-       *
+       * Removes all checked items from the database
+       * @private
        */
-      removeAllChecked: function () {
+      _removeAllChecked: function () {
         // array to collect the remove promises
         var removePromises = [];
         // iterate over the checked recipes references
-        this.checkedBoxes.refs.forEach(function (item) {
+        this._checkedBoxes.refs.forEach(function (item) {
           // push remove promise to array
           removePromises.push(RecipeDao.getInstance(this.userLogin).remove(item));
         }.bind(this));
@@ -303,11 +324,11 @@
             // iterate over successful removed recipes
             success.forEach(function (recipe) {
               // cut recipe from bounded arrays
-              this.updateAfterDeletion(recipe.item, this.recipes, 'recipes');
-              this.updateAfterDeletion(recipe.item, this.checkedBoxes.refs, "checkedBoxes.refs");
-              this.checkedBoxes.number--;
+              this._updateAfterDeletion(recipe.item, this.recipes, 'recipes');
+              this._updateAfterDeletion(recipe.item, this._checkedBoxes.refs, "_checkedBoxes.refs");
+              this._checkedBoxes.number--;
               // check to change FAB
-              this.trackCheckedBoxes();
+              this._trackCheckedBoxes();
             }.bind(this));
             // notify user
             this._notify("Elements successfully removed!");
@@ -317,16 +338,17 @@
           }.bind(this));
       },
       /**
-       *
+       * Toggles the main action button
        * @param enableButton
        * @param disableButton
+       * @private
        */
-      switchButton: function (enableButton, disableButton) {
+      _switchButton: function (enableButton, disableButton) {
         disableButton.style.display = "none";
         enableButton.style.display = "block";
       },
       /**
-       *
+       * Shows a given message as paper-toast element
        * @param msg
        * @private
        */
@@ -334,7 +356,11 @@
         this.$.errorNotification.text = msg;
         this.$.errorNotification.show();
       },
-      checkItems: function () {
+      /**
+       * Enables all checkboxes on checking the main checkbox of the search bar
+       * @private
+       */
+      _checkItems: function () {
         var el = Polymer.dom(this.root).querySelectorAll(".singleItem");
         for (e in el) {
           var listItem = el[e];
@@ -342,11 +368,16 @@
           if (internalEl.checked == false) {
             listItem.isChecked = true;
             internalEl.checked = true;
-            this.checkedBoxes.number++;
-            this.trackCheckedBoxes();
+            this._checkedBoxes.number++;
+            this._trackCheckedBoxes();
           }
         }
-      }, uncheckItems: function () {
+      },
+      /**
+       * Disables all checkboxes on checking the main checkbox of the search bar
+       * @private
+       */
+      _uncheckItems: function () {
         var el = Polymer.dom(this.root).querySelectorAll(".singleItem");
         for (e in el) {
           var listItem = el[e];
@@ -354,17 +385,38 @@
           if (internalEl.checked == true) {
             listItem.isChecked = false;
             internalEl.checked = false;
-            this.checkedBoxes.number--;
-            this.trackCheckedBoxes();
+            this._checkedBoxes.number--;
+            this._trackCheckedBoxes();
           }
         }
       },
+      /**
+       * Handler for the changed search query event of the search-element.
+       * Sets the query value to a local variable.
+       * @param e
+       * @private
+       */
       _searchQueryChanged: function(e) {
         this.query = e.detail.searchQuery;
       },
+      /**
+       * Handler for the clear search query event of the search-element.
+       * Resets the query to null.
+       * @param e
+       * @private
+       */
       _searchQueryCleared: function(e) {
         this._searchQueryChanged({detail: {searchQuery: null}})
       },
+      /**
+       * Sets the related item invisible or visible related on
+       * the match of the given query with the desc or info attributes
+       * of the item
+       * @param item
+       * @param searchquery
+       * @returns {boolean}
+       * @private
+       */
       _setHidden: function (item, searchquery) {
         //check the title of the item
         var lowerCaseQuery = searchquery.toLowerCase();
