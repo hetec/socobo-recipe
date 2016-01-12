@@ -60,6 +60,7 @@
     </socobo-recipe-details-edit>
     <!-- Search -->
     <socobo-element-search
+      id = "searchbar"
        on-check-all-items="_checkItems" 
       on-uncheck-all-items="_uncheckItems"
       on-changed-search-query="_searchQueryChanged"
@@ -330,6 +331,7 @@
               // check to change FAB
               this._trackCheckedBoxes();
             }.bind(this));
+            this._resetSearchElementCheckbox();
             // notify user
             this._notify("Elements successfully removed!");
           }.bind(this))
@@ -369,6 +371,7 @@
             listItem.isChecked = true;
             internalEl.checked = true;
             this._checkedBoxes.number++;
+            this._checkedBoxes.refs.push(listItem.obj);
             this._trackCheckedBoxes();
           }
         }
@@ -386,8 +389,20 @@
             listItem.isChecked = false;
             internalEl.checked = false;
             this._checkedBoxes.number--;
+            this._updateAfterDeletion(listItem.obj, this._checkedBoxes.refs, "_checkedBoxes.refs");
             this._trackCheckedBoxes();
           }
+        }
+      },
+      /**
+       * Resets the checkbox of the search element after removing all checked recipes.
+       * @private
+       */
+      _resetSearchElementCheckbox : function(){
+        var searchElement = this.$.searchbar;
+        var checkBox = Polymer.dom(searchElement.root).querySelector("#chbCheckAllItems");
+        if(checkBox.checked === true){
+          checkBox.checked = false;
         }
       },
       /**
