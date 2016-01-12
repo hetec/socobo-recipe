@@ -2,20 +2,20 @@
 
 <dom-module id="socobo-recipe-overview">
   <style>
-    :host{
+    :host {
       display: block;
     }
 
-    #recipe_list{
+    #recipe_list {
       z-index: 19;
       margin-top: 20px;
     }
 
-    #recipe_list:first-child{
+    #recipe_list:first-child {
       border-top: 2px solid #F4F0EC;
     }
 
-    #no_recipes{
+    #no_recipes {
       font-size: 40px;
       text-align: center;
       font-family: sans-serif;
@@ -24,19 +24,19 @@
       line-height: 80px;
     }
 
-    paper-fab{
+    paper-fab {
       position: absolute;
       bottom: 40px;
       right: 40px;
     }
 
-    paper-fab#add{
+    paper-fab#add {
       display: block;
       --paper-fab-background: var(--default-primary-color);
       --paper-fab-keyboard-focus-background: var(--default-primary-color);
     }
 
-    paper-fab#clear{
+    paper-fab#clear {
       display: none;
       --paper-fab-background: var(--accent-color);
       --paper-fab-keyboard-focus-background: var(--accent-color);
@@ -44,288 +44,339 @@
 
   </style>
   <template>
-      <!-- Show Dialog -->
-      <socobo-recipe-details-show
-        id="showDialog">
-      </socobo-recipe-details-show>
-      <!-- Add Dialog -->
-      <socobo-recipe-details-add
-        id="addDialog"
-        on-add_request="addNewRecipe">
-      </socobo-recipe-details-add>
-      <!-- Edit Dialog -->
-      <socobo-recipe-details-edit
-        id="editDialog"
-        on-add_edited_recipe="editRecipe">
-      </socobo-recipe-details-edit>
-      <!-- List -->
-      <div id="recipe_list">
-        <template is="dom-if" if="{{!recipes.length}}">
-          <p id="no_recipes">no recipes<br>available</p>
-        </template>
-        <template id="listItems" is="dom-repeat" items="{{recipes}}">
-          <socobo-element-list-item
-            class="singleItem"
-            obj="{{item}}"
-            isChecked="{{valueOfCheckBox}}"
-            on-check="handleCheck"
-            on-uncheck="handleUncheck"
-            on-show_request="clicked"
-            on-delete_request="removeRecipe"
-            on-edit_request="edit">
-          </socobo-element-list-item>
-        </template>
-      </div>
-      <!-- Add -->
-      <paper-fab
-        id="add"
-        icon="add"
-        on-tap="addRecipe">
-      </paper-fab>
-      <!-- Clear -->
-      <paper-fab
-        id="clear"
-        icon="clear"
-        on-tap="removeAllChecked">
-      </paper-fab>
-      <!-- Notification -->
-      <paper-toast id="errorNotification"></paper-toast>
+    <!-- Show Dialog -->
+    <socobo-recipe-details-show
+      id="showDialog">
+    </socobo-recipe-details-show>
+    <!-- Add Dialog -->
+    <socobo-recipe-details-add
+      id="addDialog"
+      on-add_request="addNewRecipe">
+    </socobo-recipe-details-add>
+    <!-- Edit Dialog -->
+    <socobo-recipe-details-edit
+      id="editDialog"
+      on-add_edited_recipe="editRecipe">
+    </socobo-recipe-details-edit>
+    <!-- Search -->
+    <socobo-element-search
+       on-check-all-items="checkItems" 
+      on-uncheck-all-items="uncheckItems"
+      on-changed-search-query="_searchQueryChanged"
+      on-clear-search-query="_searchQueryCleared"> 
+    </socobo-element-search>
+    <!-- List -->
+    <div id="recipe_list">
+      <template is="dom-if" if="{{!recipes.length}}">
+        <p id="no_recipes">no recipes<br>available</p>
+      </template>
+      <template id="listItems" is="dom-repeat" items="{{recipes}}">
+        <socobo-element-list-item
+          class="singleItem"
+          obj="{{item}}"
+          isChecked="{{valueOfCheckBox}}"
+          on-check="handleCheck"
+          on-uncheck="handleUncheck"
+          on-show_request="clicked"
+          on-delete_request="removeRecipe"
+          on-edit_request="edit"
+          hidden="{{_setHidden(item, query)}}">
+        </socobo-element-list-item>
+      </template>
+    </div>
+    <!-- Add -->
+    <paper-fab
+      id="add"
+      icon="add"
+      on-tap="addRecipe">
+    </paper-fab>
+    <!-- Clear -->
+    <paper-fab
+      id="clear"
+      icon="clear"
+      on-tap="removeAllChecked">
+    </paper-fab>
+    <!-- Notification -->
+    <paper-toast id="errorNotification"></paper-toast>
   </template>
 </dom-module>
 <script>
-(function() {
-  Polymer({
-    is: 'socobo-recipe-overview',
-    /**
-     *
-     */
-    properties: {
-      recipes : {
-        type : Array,
-        value : []
-      },
-      userLogin : {
-        type : Object,
-        value : {}
-      },
-      checkedBoxes : {
-        type : Object,
-        value :  {
-          number: 0,
-          refs: []
+  (function () {
+    Polymer({
+      is: 'socobo-recipe-overview',
+      /**
+       *
+       */
+      properties: {
+        recipes: {
+          type: Array,
+          value: []
+        },
+        userLogin: {
+          type: Object,
+          value: {}
+        },
+        checkedBoxes: {
+          type: Object,
+          value: {
+            number: 0,
+            refs: []
+          }
+        },
+        valueOfCheckBox: {
+          type: Boolean,
+          value: false
         }
       },
-      valueOfCheckBox : {
-        type : Boolean,
-        value : false
-      }
-    },
-    /**
-     *
-     * @param e
-     */
-    handleCheck : function(e) {
-      this.checkedBoxes.number++;
-      this.checkedBoxes.refs.push(e.detail);
-      this.trackCheckedBoxes();
-    },
-    /**
-     *
-     * @param e
-     */
-    handleUncheck : function(e) {
-      this.checkedBoxes.number--;
-      this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
-      this.trackCheckedBoxes();
-    },
-    /**
-     *
-     */
-    trackCheckedBoxes : function() {
-      if(this.checkedBoxes.number > 0){
-        this.switchButton(this.$.clear,this.$.add);
-      }else{
-        this.switchButton(this.$.add, this.$.clear);
-      }
-    },
-    /**
-     *
-     * @param e
-     */
-    clicked : function(e) {
-      this.$.showDialog.state = "show";
-      this.$.showDialog.toggleDialog();
-      this.$.showDialog.recipe = e.detail;
-    },
-    /**
-     *
-     * @param e
-     */
-    edit : function(e) {
-      //Create clone of the e.detail object
-      var eClone = CloneModule.clone(e.detail);
-      //Alternative: var eClone = (JSON.parse(JSON.stringify(e.detail)));
-      this.$.editDialog.toggleDialog();
-      //Pass clone object and original object to the recipe dialog
-      this.$.editDialog.recipe = {original: e.detail, clone: eClone};
-      this.$.editDialog.initSteps();
-      this.$.editDialog.initIngredients();
-      this.$.editDialog.initImage();
-    },
-    /**
-     *
-     */
-    addRecipe : function() {
-      this.$.addDialog.state = "add";
-      this.$.addDialog.toggleDialog();
-      this.$.addDialog.clearInputFields();
-    },
-    /**
-     *
-     */
-    buttonAni : function() {
-      this.playAnimation('entry');
-    },
-    /**
-     *
-     */
-    getRecipes: function() {
-      RecipeDao.getInstance(this.userLogin)
-        .getAll()
-        .then(function(recipes) {
-          this.set("recipes", recipes.value);
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
-    },
-    /**
-     *
-     * @param e
-     */
-    removeRecipe : function(e) {
-      RecipeDao.getInstance(this.userLogin)
-        .remove(e.detail)
-        .then(function(success) {
-          this._notify(success.value);
-          this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
-    },
-    /**
-     *
-     * @param e
-     */
-    addNewRecipe : function(e) {
-      RecipeDao.getInstance(this.userLogin)
-        .add(e.detail)
-        .then(function(success) {
-          this._notify(success.value);
-
-          RecipeDao.getInstance(this.userLogin)
-            .getAll()
-            .then(function(recipes) {
-              this.set("recipes", []);
-              this.set("recipes", recipes.value);
-            }.bind(this))
-            .catch(function(error) {
-              this._notify(error.value);
-            }.bind(this));
-
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
-    },
-    /**
-     *
-     * @param e
-     */
-    editRecipe : function(e) {
-      RecipeDao.getInstance(this.userLogin)
-        .update(e.detail)
-        .then(function(success) {
-          this._notify(success.value);
-
-          RecipeDao.getInstance(this.userLogin)
-            .getAll()
-            .then(function(recipes) {
-              this.set("recipes", []);
-              this.set("recipes", recipes.value);
-            }.bind(this))
-            .catch(function(error) {
-              this._notify(error.value);
-            }.bind(this));
-
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.value);
-        }.bind(this));
-    },
-    /**
-     *
-     * @param el
-     * @param arr
-     * @param pathToProperty
-     */
-    updateAfterDeletion : function(el, arr, pathToProperty) {
-      for(var i = 0; i < arr.length; i++){
-        if(arr[i].ref == el.ref){
-          this.splice(pathToProperty, i, 1);
+      /**
+       *
+       * @param e
+       */
+      handleCheck: function (e) {
+        this.checkedBoxes.number++;
+        this.checkedBoxes.refs.push(e.detail);
+        this.trackCheckedBoxes();
+      },
+      /**
+       *
+       * @param e
+       */
+      handleUncheck: function (e) {
+        this.checkedBoxes.number--;
+        this.updateAfterDeletion(e.detail, this.checkedBoxes.refs, "checkedBoxes.refs");
+        this.trackCheckedBoxes();
+      },
+      /**
+       *
+       */
+      trackCheckedBoxes: function () {
+        if (this.checkedBoxes.number > 0) {
+          this.switchButton(this.$.clear, this.$.add);
+        } else {
+          this.switchButton(this.$.add, this.$.clear);
         }
-      }
-    },
-    /**
-     *
-     */
-    removeAllChecked : function() {
-      // array to collect the remove promises
-      var removePromises = [];
-      // iterate over the checked recipes references
-      this.checkedBoxes.refs.forEach(function(item) {
-        // push remove promise to array
-        removePromises.push(RecipeDao.getInstance(this.userLogin).remove(item));
-      }.bind(this));
-
-      // collect all promises and perform data binding functions
-      Promise.all(removePromises)
-        .then(function(success) {
-          // iterate over successful removed recipes
-          success.forEach(function(recipe) {
-            // cut recipe from bounded arrays
-            this.updateAfterDeletion(recipe.item, this.recipes, 'recipes');
-            this.updateAfterDeletion(recipe.item, this.checkedBoxes.refs, "checkedBoxes.refs");
-            this.checkedBoxes.number--;
-            // check to change FAB
-            this.trackCheckedBoxes();
+      },
+      /**
+       *
+       * @param e
+       */
+      clicked: function (e) {
+        this.$.showDialog.state = "show";
+        this.$.showDialog.toggleDialog();
+        this.$.showDialog.recipe = e.detail;
+      },
+      /**
+       *
+       * @param e
+       */
+      edit: function (e) {
+        //Create clone of the e.detail object
+        var eClone = CloneModule.clone(e.detail);
+        //Alternative: var eClone = (JSON.parse(JSON.stringify(e.detail)));
+        this.$.editDialog.toggleDialog();
+        //Pass clone object and original object to the recipe dialog
+        this.$.editDialog.recipe = {original: e.detail, clone: eClone};
+        this.$.editDialog.initSteps();
+        this.$.editDialog.initIngredients();
+        this.$.editDialog.initImage();
+      },
+      /**
+       *
+       */
+      addRecipe: function () {
+        this.$.addDialog.state = "add";
+        this.$.addDialog.toggleDialog();
+        this.$.addDialog.clearInputFields();
+      },
+      /**
+       *
+       */
+      buttonAni: function () {
+        this.playAnimation('entry');
+      },
+      /**
+       *
+       */
+      getRecipes: function () {
+        RecipeDao.getInstance(this.userLogin)
+          .getAll()
+          .then(function (recipes) {
+            this.set("recipes", recipes.value);
+          }.bind(this))
+          .catch(function (error) {
+            this._notify(error.value);
           }.bind(this));
-          // notify user
-          this._notify("Elements successfully removed!");
-        }.bind(this))
-        .catch(function(error) {
-          this._notify(error.message);
+      },
+      /**
+       *
+       * @param e
+       */
+      removeRecipe: function (e) {
+        RecipeDao.getInstance(this.userLogin)
+          .remove(e.detail)
+          .then(function (success) {
+            this._notify(success.value);
+            this.updateAfterDeletion(e.detail, this.recipes, 'recipes');
+          }.bind(this))
+          .catch(function (error) {
+            this._notify(error.value);
+          }.bind(this));
+      },
+      /**
+       *
+       * @param e
+       */
+      addNewRecipe: function (e) {
+        RecipeDao.getInstance(this.userLogin)
+          .add(e.detail)
+          .then(function (success) {
+            this._notify(success.value);
+
+            RecipeDao.getInstance(this.userLogin)
+              .getAll()
+              .then(function (recipes) {
+                this.set("recipes", []);
+                this.set("recipes", recipes.value);
+              }.bind(this))
+              .catch(function (error) {
+                this._notify(error.value);
+              }.bind(this));
+
+          }.bind(this))
+          .catch(function (error) {
+            this._notify(error.value);
+          }.bind(this));
+      },
+      /**
+       *
+       * @param e
+       */
+      editRecipe: function (e) {
+        RecipeDao.getInstance(this.userLogin)
+          .update(e.detail)
+          .then(function (success) {
+            this._notify(success.value);
+
+            RecipeDao.getInstance(this.userLogin)
+              .getAll()
+              .then(function (recipes) {
+                this.set("recipes", []);
+                this.set("recipes", recipes.value);
+              }.bind(this))
+              .catch(function (error) {
+                this._notify(error.value);
+              }.bind(this));
+
+          }.bind(this))
+          .catch(function (error) {
+            this._notify(error.value);
+          }.bind(this));
+      },
+      /**
+       *
+       * @param el
+       * @param arr
+       * @param pathToProperty
+       */
+      updateAfterDeletion: function (el, arr, pathToProperty) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].ref == el.ref) {
+            this.splice(pathToProperty, i, 1);
+          }
+        }
+      },
+      /**
+       *
+       */
+      removeAllChecked: function () {
+        // array to collect the remove promises
+        var removePromises = [];
+        // iterate over the checked recipes references
+        this.checkedBoxes.refs.forEach(function (item) {
+          // push remove promise to array
+          removePromises.push(RecipeDao.getInstance(this.userLogin).remove(item));
         }.bind(this));
-    },
-    /**
-     *
-     * @param enableButton
-     * @param disableButton
-     */
-    switchButton : function(enableButton, disableButton) {
-      disableButton.style.display = "none";
-      enableButton.style.display = "block";
-    },
-    /**
-     *
-     * @param msg
-     * @private
-     */
-    _notify : function(msg) {
-      this.$.errorNotification.text = msg;
-      this.$.errorNotification.show();
-    }
-  });
-})();
+
+        // collect all promises and perform data binding functions
+        Promise.all(removePromises)
+          .then(function (success) {
+            // iterate over successful removed recipes
+            success.forEach(function (recipe) {
+              // cut recipe from bounded arrays
+              this.updateAfterDeletion(recipe.item, this.recipes, 'recipes');
+              this.updateAfterDeletion(recipe.item, this.checkedBoxes.refs, "checkedBoxes.refs");
+              this.checkedBoxes.number--;
+              // check to change FAB
+              this.trackCheckedBoxes();
+            }.bind(this));
+            // notify user
+            this._notify("Elements successfully removed!");
+          }.bind(this))
+          .catch(function (error) {
+            this._notify(error.message);
+          }.bind(this));
+      },
+      /**
+       *
+       * @param enableButton
+       * @param disableButton
+       */
+      switchButton: function (enableButton, disableButton) {
+        disableButton.style.display = "none";
+        enableButton.style.display = "block";
+      },
+      /**
+       *
+       * @param msg
+       * @private
+       */
+      _notify: function (msg) {
+        this.$.errorNotification.text = msg;
+        this.$.errorNotification.show();
+      },
+      checkItems: function () {
+        var el = Polymer.dom(this.root).querySelectorAll(".singleItem");
+        for (e in el) {
+          var listItem = el[e];
+          var internalEl = Polymer.dom(listItem.root).querySelector(".check paper-checkbox");
+          if (internalEl.checked == false) {
+            listItem.isChecked = true;
+            internalEl.checked = true;
+            this.checkedBoxes.number++;
+            this.trackCheckedBoxes();
+          }
+        }
+      }, uncheckItems: function () {
+        var el = Polymer.dom(this.root).querySelectorAll(".singleItem");
+        for (e in el) {
+          var listItem = el[e];
+          var internalEl = Polymer.dom(listItem.root).querySelector(".check paper-checkbox");
+          if (internalEl.checked == true) {
+            listItem.isChecked = false;
+            internalEl.checked = false;
+            this.checkedBoxes.number--;
+            this.trackCheckedBoxes();
+          }
+        }
+      },
+      _searchQueryChanged: function(e) {
+        this.query = e.detail.searchQuery;
+      },
+      _searchQueryCleared: function(e) {
+        this._searchQueryChanged({detail: {searchQuery: null}})
+      },
+      _setHidden: function (item, query) {
+        //check the title of the item
+        var checkDesc = !(query === null
+          || typeof query === 'undefined'
+          || item.desc.indexOf(query) != -1);
+        var checkInfo = false;
+        //if info is available it will be checked else not
+        if(item.info !== undefined){
+          checkInfo = !(item.info.indexOf(query) != -1);
+        }
+        return checkDesc || checkInfo;
+      },
+    });
+  })();
 </script>
