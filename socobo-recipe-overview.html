@@ -424,7 +424,11 @@
        */
       _setHidden: function (item, searchquery) {
         //check the title of the item
-        var lowerCaseQuery = searchquery.toLowerCase();
+        if(searchquery !== null){
+          var lowerCaseQuery = searchquery.toLowerCase();
+        }else{
+          lowerCaseQuery = searchquery;
+        }
         var checkDesc = !(lowerCaseQuery === null
           || typeof lowerCaseQuery === 'undefined'
           || (item.desc).toLowerCase().indexOf(lowerCaseQuery) != -1);
